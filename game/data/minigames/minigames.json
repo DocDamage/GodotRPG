@@ -1,0 +1,96 @@
+{
+  "asset_root": "C:/dev/Godot Game/Assets/PIXEL PERFECT ULTIMATE GAME COMPONENT KIT'",
+  "minigames": {
+    "memory_cards_tetra": {
+      "id": "memory_cards_tetra",
+      "name": "Memory Cards",
+      "kind": "card_battle",
+      "description": "A Tetra Master-style museum card game built from monsters, relics, and recovered memories.",
+      "locations": ["museum_hub", "modern_arcade", "game_room"],
+      "unlock_chapter": 0,
+      "scene_path": "res://scenes/minigames/tetra_play_screen.tscn",
+      "asset_folder": "Playing Cards",
+      "story_use": "Museum staff and refugees use it to trade cataloged monster memories without fighting."
+    },
+    "archive_reversi": {
+      "id": "archive_reversi",
+      "name": "Archive Reversi",
+      "kind": "board_control",
+      "description": "A compact territory-flip board game for living rooms, waiting rooms, and museum lounges.",
+      "locations": ["living_room", "game_room", "museum_hub", "roman_social_hall"],
+      "unlock_chapter": 1,
+      "asset_folder": "Backgammon and Reversi",
+      "story_use": "NPCs use it as a quiet metaphor for how one record can overwrite another."
+    },
+    "checkers_of_empire": {
+      "id": "checkers_of_empire",
+      "name": "Checkers of Empire",
+      "kind": "board_capture",
+      "description": "A fast capture game suited to Roman plazas, barracks, homes, and school-like museum exhibits.",
+      "locations": ["roman_social_hall", "living_room", "park", "game_room"],
+      "unlock_chapter": 2,
+      "asset_folder": "Chess and Checkers",
+      "story_use": "Cassian treats it as training in formations until the player starts sacrificing pieces on purpose."
+    },
+    "park_chess": {
+      "id": "park_chess",
+      "name": "Park Chess",
+      "kind": "strategy_board",
+      "description": "A slower optional strategy game for parks, bedrooms, studies, and late-modern common rooms.",
+      "locations": ["park", "bedroom", "living_room", "modern_arcade"],
+      "unlock_chapter": 6,
+      "asset_folder": "Chess and Checkers",
+      "story_use": "Modern Wing NPCs play against opponents who never arrive."
+    },
+    "trench_dominoes": {
+      "id": "trench_dominoes",
+      "name": "Trench Dominoes",
+      "kind": "tile_matching",
+      "description": "A short downtime tile game for trenches, bunkers, kitchens, and refugee tables.",
+      "locations": ["trench_dugout", "bunker", "living_room", "museum_hub"],
+      "unlock_chapter": 5,
+      "asset_folder": "Dominoes",
+      "story_use": "Vale recognizes the pieces as something soldiers used when there was no safe way to sleep."
+    },
+    "bunker_poker": {
+      "id": "bunker_poker",
+      "name": "Bunker Poker",
+      "kind": "card_wager",
+      "description": "A social card minigame for saloons, bunkers, ships, living rooms, and hidden rooms.",
+      "locations": ["bunker", "game_room", "living_room", "pirate_tavern", "wild_west_saloon"],
+      "unlock_chapter": 6,
+      "asset_folder": "Poker",
+      "story_use": "Useful for optional NPC tells, information trades, and low-stakes resource wagers."
+    },
+    "museum_pool": {
+      "id": "museum_pool",
+      "name": "Museum Pool",
+      "kind": "physics_table",
+      "description": "A pool/snooker table game for game rooms, bars, lounges, and future recreation decks.",
+      "locations": ["game_room", "modern_arcade", "future_lounge", "wild_west_saloon"],
+      "unlock_chapter": 6,
+      "asset_folder": "Pool and Snooker",
+      "story_use": "Works as a repeatable skill challenge where NPCs talk between shots."
+    },
+    "bingo_night": {
+      "id": "bingo_night",
+      "name": "Bingo Night",
+      "kind": "social_luck",
+      "description": "A lightweight social minigame for community centers, refugee nights, elder homes, and cruise spaces.",
+      "locations": ["living_room", "modern_arcade", "cruise_lounge", "museum_hub"],
+      "unlock_chapter": 6,
+      "asset_folder": "Bingo",
+      "story_use": "A hub event format for mixed-era NPC banter and small prizes."
+    },
+    "dice_of_fate": {
+      "id": "dice_of_fate",
+      "name": "Dice of Fate",
+      "kind": "dice_push_your_luck",
+      "description": "A quick dice game that fits taverns, camps, parks, bedrooms, and market tables.",
+      "locations": ["viking_longhouse", "pirate_tavern", "park", "bedroom", "game_room"],
+      "unlock_chapter": 3,
+      "asset_folder": "Dice",
+      "story_use": "Brynja dislikes calling it luck, which makes it useful for fate-themed banter."
+    }
+  }
+}

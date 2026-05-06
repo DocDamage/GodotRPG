@@ -1,0 +1,25 @@
+{
+  "curator_breach": {
+    "speaker": "The Curator",
+    "lines": [
+      "Docent unit, you are awake. A breach has opened in the Plague Wing.",
+      "Seal the exhibit. Preserve the approved record."
+    ],
+    "choices": []
+  },
+  "apothecary_intro": {
+    "speaker": "Plague Apothecary",
+    "lines": [
+      "You are not from this town. Good. Then perhaps you can remember what changes.",
+      "I died yesterday. The bell rang, the fever took me, and now morning has returned."
+    ],
+    "choices": []
+  },
+  "curator_correction": {
+    "speaker": "The Curator",
+    "lines": [
+      "Unauthorized truth recovered. Correction required."
+    ],
+    "choices": []
+  }
+}

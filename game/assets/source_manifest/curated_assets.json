@@ -1,0 +1,25 @@
+{
+  "policy": "Raw packs remain outside the Godot project. Only reviewed runtime files are copied under assets/vendor.",
+  "curated": [
+    {
+      "source": "C:/dev/Godot Game/Assets/hero knight - whole game asset sheet/herospritesheetrpg.png",
+      "target": "res://assets/vendor/cute_sckr/characters/herospritesheetrpg.png",
+      "usage": "lead hero full sprite preset"
+    },
+    {
+      "source": "C:/dev/Godot Game/Assets/UI/Mini-Medieval-User-Interface-8x8/Frames.png",
+      "target": "res://assets/vendor/cute_sckr/ui/Frames.png",
+      "usage": "prototype UI frame source"
+    },
+    {
+      "source": "C:/dev/Godot Game/Assets/Monsters/wild monsters/Wild Pack - Size Small/Wild_Pack_Small_1.png",
+      "target": "res://assets/vendor/cute_sckr/monsters/Wild_Pack_Small_1.png",
+      "usage": "normal battle enemy placeholder"
+    },
+    {
+      "source": "C:/dev/Godot Game/Assets/ansimuz assets/Cyberpunk streets/cyberpunk-street-files/Assets/Version 2/Previews/city.png",
+      "target": "res://assets/vendor/ansimuz/cyberpunk_streets/city.png",
+      "usage": "future teaser mood reference"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "title": "The Last World Museum",
+  "slice_name": "The Bell Saint",
+  "premise": "A museum outside normal time preserves history, myth, and hidden wounds until the exhibits begin bleeding together.",
+  "core_rule": "The Archive Makes Belief Physical",
+  "theme": "History is not just what happened. It is what people choose to remember.",
+  "protagonist": {
+    "id": "uncatalogued",
+    "title": "The Uncatalogued",
+    "origin": "A stolen child raised by the museum with no official exhibit tag.",
+    "arc": "I am not an error just because I do not fit your records."
+  },
+  "chapter": {
+    "id": "plague_wing",
+    "name": "The Plague Wing",
+    "historical_base": "A fictionalized plague-era European town.",
+    "fact": "A quarantined town faces disease, fear, and failing institutions.",
+    "myth": "The town believes plague is divine punishment.",
+    "wound": "The museum edits medical truth and human guilt into a clean religious exhibit."
+  },
+  "flow": [
+    "empty_rotunda",
+    "broken_exhibit_door",
+    "plague_town_street",
+    "apothecary_house",
+    "chapel",
+    "underchapel_drain",
+    "hidden_hospital_corridor",
+    "bell_tower_boss_room"
+  ],
+  "phase_metadata": {
+    "empty_rotunda": {
+      "display_name": "Empty Rotunda",
+      "mood": "sterile museum breach",
+      "beat": "The protagonist wakes during an emergency alarm. Exhibit doors are sealed and docents are missing."
+    },
+    "broken_exhibit_door": {
+      "display_name": "Broken Exhibit Door",
+      "mood": "history leaking into the hub",
+      "beat": "A plague-fogged door breaks open and the Curator orders the player to seal the Plague Wing."
+    },
+    "plague_town_street": {
+      "display_name": "Plague Town Street",
+      "mood": "quarantine day repeating",
+      "beat": "The town is trapped in the same quarantine day while townspeople blame sickness on spiritual corruption."
+    },
+    "apothecary_house": {
+      "display_name": "Apothecary House",
+      "mood": "medicine against superstition",
+      "beat": "The Plague Apothecary remembers dying yesterday and joins because the loop is starting to crack."
+    },
+    "chapel": {
+      "display_name": "Chapel",
+      "mood": "faith turned into machinery",
+      "beat": "The church warden insists the infected are spiritually corrupt while the chapel hides impossible architecture."
+    },
+    "underchapel_drain": {
+      "display_name": "Underchapel Drain",
+      "mood": "plague water and museum pipes",
+      "beat": "A sewer beneath Hallowmere mixes chapel runoff, hospital waste, and impossible museum infrastructure."
+    },
+    "hidden_hospital_corridor": {
+      "display_name": "Hidden Hospital Corridor",
+      "mood": "erased care beneath doctrine",
+      "beat": "A hospital corridor behind the chapel proves the museum has been editing the town's history."
+    },
+    "bell_tower_boss_room": {
+      "display_name": "Bell Tower Boss Room",
+      "mood": "prayer, guilt, and disease made physical",
+      "beat": "The church warden rings the plague bell and the archive manifests The Bell Saint."
+    }
+  },
+  "characters": [
+    {"id": "protagonist", "name": "The Uncatalogued", "role": "player"},
+    {"id": "plague_apothecary", "name": "Plague Apothecary", "role": "healer_companion"},
+    {"id": "curator", "name": "The Curator", "role": "antagonist_voice"},
+    {"id": "church_warden", "name": "Church Warden", "role": "local_authority"},
+    {"id": "infected_townspeople", "name": "Infected Townspeople", "role": "town_npcs"}
+  ],
+  "anchor_relic": {
+    "id": "bell_clapper",
+    "name": "Bell Clapper",
+    "meaning": "Fear, faith, and death"
+  },
+  "boss": {
+    "id": "bell_saint",
+    "name": "The Bell Saint",
+    "source_layers": ["myth", "wound"],
+    "description": "A saint-like monster made from prayer, guilt, disease, and the quarantine bell."
+  },
+  "curator_hook": "Unauthorized truth recovered. Correction required."
+}

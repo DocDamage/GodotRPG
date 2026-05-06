@@ -1,0 +1,66 @@
+{
+  "locked_door": {
+    "display_name": "A Locked Door",
+    "type": "Damaged Memory",
+    "source": "uncatalogued_profile",
+    "effect": {
+      "guard_bonus": 1
+    },
+    "description": "A damaged Memory Card showing a door the museum refuses to label."
+  },
+  "calling_name": {
+    "display_name": "Someone Calling",
+    "type": "Damaged Memory",
+    "source": "uncatalogued_profile",
+    "effect": {
+      "turn_priority_bonus": 1
+    },
+    "description": "A damaged Memory Card holding a voice just before it becomes a name."
+  },
+  "ink_hands": {
+    "display_name": "Ink on Hands",
+    "type": "Damaged Memory",
+    "source": "uncatalogued_profile",
+    "effect": {
+      "catalog_discovery_bonus": 0.05
+    },
+    "description": "A damaged Memory Card stained by records copied too many times."
+  },
+  "bell_under_water": {
+    "display_name": "Bell Under Water",
+    "type": "Damaged Memory",
+    "source": "uncatalogued_profile",
+    "effect": {
+      "disease_damage_multiplier": 0.98
+    },
+    "description": "A damaged Memory Card where a bell rings from below a black surface."
+  },
+  "bell_saint": {
+    "display_name": "The Bell Saint",
+    "type": "Monster Memory",
+    "source": "plague_wing",
+    "effect": {
+      "disease_damage_multiplier": 0.9
+    },
+    "description": "A town prayed for mercy. The museum preserved the prayer, the fear, and the bell. It forgot to preserve the difference between healing and punishment."
+  },
+  "the_empty_train": {
+    "display_name": "The Empty Train",
+    "type": "Era Memory",
+    "source": "modern_wing",
+    "effect": {
+      "escape_chance_bonus": 0.05,
+      "turn_priority_bonus": 1
+    },
+    "description": "The platform remained. The announcement remained. The schedule remained. The passengers did not."
+  },
+  "the_uncatalogued_child": {
+    "display_name": "The Uncatalogued Child",
+    "type": "Forbidden Memory",
+    "source": "museum_backrooms",
+    "effect": {
+      "unlock_hidden_skill_tree": "sev"
+    },
+    "description": "No birth record. No death record. No exhibit origin. Still alive."
+  }
+}

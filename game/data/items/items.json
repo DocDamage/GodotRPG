@@ -1,0 +1,62 @@
+{
+  "potion": {"display_name": "Potion", "kind": "consumable", "heal_hp": 50},
+  "iron_ring": {"display_name": "Iron Ring", "kind": "equipment", "defense": 1},
+  "clean_bandage": {
+    "display_name": "Clean Bandage",
+    "kind": "consumable",
+    "heal_hp": 35,
+    "description": "A strip of boiled cloth. Not heroic. Not rare. Often the difference between a wound and a funeral."
+  },
+  "bitter_draught": {
+    "display_name": "Bitter Draught",
+    "kind": "consumable",
+    "heal_hp": 60,
+    "description": "A harsh medicinal drink brewed from old herbs and older desperation. Tastes like punishment."
+  },
+  "fever_char": {
+    "display_name": "Fever Charm",
+    "kind": "accessory",
+    "resist": {"disease": 0.05},
+    "description": "A small charm worn by Hallowmere villagers. It does not prevent illness, but holding it makes the hand feel less empty."
+  },
+  "rusted_scalpel": {
+    "display_name": "Rusted Scalpel",
+    "kind": "weapon",
+    "strength": 4,
+    "description": "A surgical blade from the white corridor. Too precise for the town above. Too stained for the hospital below."
+  },
+  "museum_token": {
+    "display_name": "Museum Token",
+    "kind": "currency",
+    "description": "A stamped token accepted by systems that still pretend the museum has visitors."
+  },
+  "cracked_saber": {
+    "display_name": "Cracked Saber",
+    "kind": "starting_relic",
+    "strength": 5,
+    "description": "A balanced relic blade with a broken museum seal. It feels issued, then stolen."
+  },
+  "archive_needle": {
+    "display_name": "Archive Needle",
+    "kind": "starting_relic",
+    "magic": 4,
+    "description": "A precise relic for careful strikes and contradiction work. It hums near sealed records."
+  },
+  "guard_shard": {
+    "display_name": "Guard Shard",
+    "kind": "starting_relic",
+    "defense": 4,
+    "description": "A defensive relic fragment that remembers how to block things the user has never seen."
+  },
+  "signal_knife": {
+    "display_name": "Signal Knife",
+    "kind": "starting_relic",
+    "speed": 2,
+    "description": "A fast relic tuned to cuts, interrupts, and weak signals from rooms that should be empty."
+  },
+  "bell_clapper": {
+    "display_name": "Bell Clapper",
+    "kind": "anchor_relic",
+    "description": "The broken heart of Hallowmere's plague bell. The Curator calls it an anchor relic. Mira calls it evidence."
+  }
+}

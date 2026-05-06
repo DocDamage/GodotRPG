@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://tetra_card_view"]
+
+[ext_resource type="Script" path="res://scripts/cards/tetra_card_view.gd" id="1_tetra_card_view"]
+
+[node name="TetraCardView" type="Control"]
+custom_minimum_size = Vector2(160, 224)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_tetra_card_view")

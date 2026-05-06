@@ -1,0 +1,110 @@
+{
+  "assets": {
+    "plague_town_ground": {
+      "id": "plague_town_ground",
+      "display_name": "Hallowmere Ground Tiles",
+      "runtime_path": "res://assets/tilesets/first_slice/plague_town/ground_tiles.png",
+      "source_path": "Assets/stages/Level Map Assets Pixel Art/1 Tiles/Map_tile_01.png",
+      "use": "muddy plague-town street base",
+      "tile_size": 16
+    },
+    "plague_town_house_01": {
+      "id": "plague_town_house_01",
+      "display_name": "Hallowmere House Prop",
+      "runtime_path": "res://assets/tilesets/first_slice/plague_town/house_01.png",
+      "source_path": "Assets/stages/Level Map Assets Pixel Art/2 Objects/Houses/1.png",
+      "use": "town street house landmark",
+      "tile_size": 16
+    },
+    "plague_town_house_02": {
+      "id": "plague_town_house_02",
+      "display_name": "Hallowmere Second House Prop",
+      "runtime_path": "res://assets/tilesets/first_slice/plague_town/house_02.png",
+      "source_path": "Assets/stages/Level Map Assets Pixel Art/2 Objects/Houses/2.png",
+      "use": "town street building mass",
+      "tile_size": 16
+    },
+    "plague_town_rock_01": {
+      "id": "plague_town_rock_01",
+      "display_name": "Hallowmere Road Stone",
+      "runtime_path": "res://assets/tilesets/first_slice/plague_town/rock_01.png",
+      "source_path": "Assets/stages/Level Map Assets Pixel Art/2 Objects/Rocks/1.png",
+      "use": "road edge and landmark dressing",
+      "tile_size": 16
+    },
+    "plague_town_grave_01": {
+      "id": "plague_town_grave_01",
+      "display_name": "Hallowmere Grave Marker",
+      "runtime_path": "res://assets/tilesets/first_slice/plague_town/grave_01.png",
+      "source_path": "Assets/stages/undead land objects/PNG/Objects_separately/grave1_shadow1.png",
+      "use": "plague grave marker",
+      "tile_size": 16
+    },
+    "plague_town_coffin_01": {
+      "id": "plague_town_coffin_01",
+      "display_name": "Hallowmere Coffin",
+      "runtime_path": "res://assets/tilesets/first_slice/plague_town/coffin_01.png",
+      "source_path": "Assets/stages/undead land objects/PNG/Objects_separately/coffin1_shadow1.png",
+      "use": "coffin maker and plague street dressing",
+      "tile_size": 16
+    },
+    "underchapel_sewer_tiles": {
+      "id": "underchapel_sewer_tiles",
+      "display_name": "Underchapel Sewer Tiles",
+      "runtime_path": "res://assets/tilesets/first_slice/underchapel/sewer_tiles.png",
+      "source_path": "Assets/ansimuz assets/Sewers Action Pack/Sewers pack files/GameProject/Layers/tileset.png",
+      "use": "museum pipes and plague drainage",
+      "tile_size": 16
+    },
+    "hidden_hospital_lab_tiles": {
+      "id": "hidden_hospital_lab_tiles",
+      "display_name": "Hidden Hospital Lab Tiles",
+      "runtime_path": "res://assets/tilesets/first_slice/hospital/lab_tiles.png",
+      "source_path": "Assets/use this/future fantasy characters/FutureFantasy/100/tilesets/future_tileB_lab.png",
+      "use": "white corridor hospital contamination",
+      "tile_size": 16
+    },
+    "chapel_gothic_corridor_tiles": {
+      "id": "chapel_gothic_corridor_tiles",
+      "display_name": "Sainted Bell Gothic Tiles",
+      "runtime_path": "res://assets/tilesets/first_slice/chapel/gothic_corridor_tiles.png",
+      "source_path": "Assets/ansimuz assets/Gothicvania Cold Corridors/Cold Corridors Files/Assets/Layers/tileset.png",
+      "use": "chapel, cellar, and bell tower stonework",
+      "tile_size": 16
+    },
+    "museum_modern_inside_tiles": {
+      "id": "museum_modern_inside_tiles",
+      "display_name": "Museum Interior Tiles",
+      "runtime_path": "res://assets/tilesets/first_slice/museum/modern_inside_tiles.png",
+      "source_path": "Assets/use this/future fantasy characters/FutureFantasy/100/tilesets/modern_tileA5_inside.png",
+      "use": "sterile museum maintenance and rotunda floor",
+      "tile_size": 16
+    },
+    "apothecary_furniture_fixtures": {
+      "id": "apothecary_furniture_fixtures",
+      "display_name": "Apothecary Furniture Fixtures",
+      "runtime_path": "res://assets/tilesets/first_slice/apothecary/furniture_fixtures.png",
+      "source_path": "Assets/stages/Dungeon Asset Pack/Furniture and fixtures.png",
+      "use": "bed, work table, shelving, and interior dressing",
+      "tile_size": 16
+    },
+    "apothecary_jars_pots": {
+      "id": "apothecary_jars_pots",
+      "display_name": "Apothecary Jars and Pots",
+      "runtime_path": "res://assets/tilesets/first_slice/apothecary/jars_pots.png",
+      "source_path": "Assets/stages/Dungeon Asset Pack/Jars, pots and urns.png",
+      "use": "medicine jars and shelf dressing",
+      "tile_size": 16
+    }
+  },
+  "map_assets": {
+    "empty_rotunda": ["museum_modern_inside_tiles"],
+    "broken_exhibit_door": ["museum_modern_inside_tiles", "chapel_gothic_corridor_tiles"],
+    "hallowmere_street": ["plague_town_ground", "plague_town_house_01", "plague_town_house_02", "plague_town_rock_01", "plague_town_grave_01", "plague_town_coffin_01"],
+    "mira_apothecary": ["museum_modern_inside_tiles", "apothecary_furniture_fixtures", "apothecary_jars_pots"],
+    "sainted_bell_chapel": ["chapel_gothic_corridor_tiles"],
+    "underchapel_drain": ["underchapel_sewer_tiles"],
+    "hidden_hospital_corridor": ["hidden_hospital_lab_tiles"],
+    "bell_tower_boss_room": ["chapel_gothic_corridor_tiles"]
+  }
+}

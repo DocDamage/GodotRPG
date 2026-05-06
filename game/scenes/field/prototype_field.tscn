@@ -1,0 +1,83 @@
+[gd_scene load_steps=6 format=3 uid="uid://jrpg_prototype_field"]
+
+[ext_resource type="Script" path="res://scripts/field/prototype_field.gd" id="1_field"]
+[ext_resource type="Script" path="res://scripts/field/field_player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/field/treasure_chest.gd" id="2_chest"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
+size = Vector2(12, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_chest"]
+size = Vector2(14, 12)
+
+[node name="PrototypeField" type="Node2D"]
+script = ExtResource("1_field")
+
+[node name="Ground" type="ColorRect" parent="."]
+offset_left = -1024.0
+offset_top = -1024.0
+offset_right = 1024.0
+offset_bottom = 1024.0
+color = Color(0.16, 0.24, 0.17, 1)
+
+[node name="Player" type="CharacterBody2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(64, 64)
+script = ExtResource("1_player")
+
+[node name="PlayerBody" type="ColorRect" parent="Player"]
+offset_left = -6.0
+offset_top = -10.0
+offset_right = 6.0
+offset_bottom = 6.0
+color = Color(0.84, 0.7, 0.35, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("RectangleShape2D_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+enabled = true
+zoom = Vector2(3, 3)
+
+[node name="TreasureChest" type="Area2D" parent="." groups=["interactables"]]
+position = Vector2(96, 64)
+script = ExtResource("2_chest")
+
+[node name="Body" type="ColorRect" parent="TreasureChest"]
+unique_name_in_owner = true
+offset_left = -7.0
+offset_top = -6.0
+offset_right = 7.0
+offset_bottom = 6.0
+color = Color(0.75, 0.48, 0.18, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TreasureChest"]
+shape = SubResource("RectangleShape2D_chest")
+
+[node name="StatusLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 28.0
+offset_right = 260.0
+offset_bottom = 56.0
+theme_override_font_sizes/font_size = 14
+text = ""
+
+[node name="ObjectiveLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 64.0
+offset_right = 520.0
+offset_bottom = 96.0
+theme_override_font_sizes/font_size = 14
+text = "Objective"
+
+[node name="PhaseLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 500.0
+offset_right = 880.0
+offset_bottom = 704.0
+theme_override_font_sizes/font_size = 14
+autowrap_mode = 3
+text = "Prototype Field"

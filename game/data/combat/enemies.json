@@ -1,0 +1,11 @@
+{
+  "slime": {"name": "Slime", "max_hp": 35, "strength": 6, "defense": 2, "speed": 6, "xp": 20},
+  "cave_bat": {"name": "Cave Bat", "max_hp": 28, "strength": 5, "defense": 1, "speed": 12, "xp": 18},
+  "chronal_warden": {"name": "Chronal Warden", "max_hp": 260, "strength": 14, "defense": 8, "speed": 9, "xp": 150},
+  "fever_wretch": {"name": "Fever Wretch", "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "tags": ["plague", "historical_contradiction"]},
+  "prayer_bound_corpse": {"name": "Prayer-Bound Corpse", "max_hp": 58, "strength": 8, "defense": 4, "speed": 4, "xp": 32, "tags": ["plague", "undead", "mythic_contradiction"]},
+  "rot_choir": {"name": "Rot Choir", "max_hp": 64, "strength": 6, "defense": 3, "speed": 5, "xp": 38, "tags": ["plague", "support"]},
+  "bell_touched": {"name": "Bell-Touched", "max_hp": 72, "strength": 10, "defense": 5, "speed": 6, "xp": 45, "tags": ["plague", "bell"]},
+  "clean_man": {"name": "Clean Man", "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "tags": ["museum", "sanitation"]},
+  "bell_saint": {"name": "The Bell Saint", "max_hp": 420, "strength": 16, "defense": 8, "speed": 9, "xp": 180, "boss": true, "next_flow": "truth_recovered", "relic": "bell_clapper", "memory_card": "bell_saint", "tags": ["boss", "plague", "mythic_contradiction"]}
+}

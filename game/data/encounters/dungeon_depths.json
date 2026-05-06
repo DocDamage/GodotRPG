@@ -1,0 +1,9 @@
+{
+  "region_id": "dungeon_depths",
+  "step_threshold": 12,
+  "entries": [
+    {"id": "slime_pair", "weight": 3},
+    {"id": "bat_swarm", "weight": 1}
+  ],
+  "boss": "chronal_warden"
+}

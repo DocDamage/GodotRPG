@@ -1,0 +1,37 @@
+{
+  "vistas": {
+    "vista_gallery": {
+      "id": "vista_gallery",
+      "display_name": "Vista Gallery",
+      "curator_claim": "History, optimized for comprehension.",
+      "visible_lie": "Beautiful windows show distant forests, oceans, neon streets, mountains, stars, and a peaceful plague town.",
+      "truth": "The Vista Engines make tragedy look composed so visitors keep looking.",
+      "asset_hint": "Industrial Parallax background / curated museum vista panes"
+    },
+    "plague_wing_distant": {
+      "id": "plague_wing_distant",
+      "display_name": "Hallowmere Vista",
+      "curator_claim": "Pestilence, Faith, and Late Medieval Mortality. Distant view preferred.",
+      "visible_lie": "Hallowmere appears quiet from afar, with fog softening the streets and bell tower.",
+      "truth": "The clean distant view hides mud, locked doors, graves, coughs, accusation, and the hospital machinery beneath the chapel.",
+      "asset_hint": "Medieval Plague Town / Gothicvania Cold Corridors / Sewers Action Pack"
+    },
+    "underchapel_drain": {
+      "id": "underchapel_drain",
+      "display_name": "Underchapel Drain",
+      "curator_claim": "Transition compression infrastructure. Visitor traversal not intended.",
+      "visible_lie": "A sewer-service route that looks like ordinary drainage below Hallowmere.",
+      "truth": "Plague water, hospital waste, and museum maintenance pipes all share the same impossible system.",
+      "asset_hint": "Sewers Action Pack"
+    }
+  },
+  "phase_map": {
+    "empty_rotunda": "vista_gallery",
+    "broken_exhibit_door": "vista_gallery",
+    "plague_town_street": "plague_wing_distant",
+    "apothecary_house": "plague_wing_distant",
+    "chapel": "plague_wing_distant",
+    "hidden_hospital_corridor": "underchapel_drain",
+    "bell_tower_boss_room": "plague_wing_distant"
+  }
+}

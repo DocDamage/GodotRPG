@@ -1,0 +1,36 @@
+{
+  "phase_objectives": {
+    "empty_rotunda": {
+      "id": "enter_plague_wing",
+      "text": "Enter the breached Plague Wing."
+    },
+    "broken_exhibit_door": {
+      "id": "seal_breach",
+      "text": "Enter the fog leaking from the broken exhibit door."
+    },
+    "plague_town_street": {
+      "id": "enter_hallowmere",
+      "text": "Find a way into Hallowmere."
+    },
+    "apothecary_house": {
+      "id": "speak_with_apothecary",
+      "text": "Speak with the apothecary."
+    },
+    "chapel": {
+      "id": "investigate_chapel_cellar",
+      "text": "Investigate the chapel cellar."
+    },
+    "underchapel_drain": {
+      "id": "cross_underchapel_drain",
+      "text": "Follow the impossible drain beneath the chapel."
+    },
+    "hidden_hospital_corridor": {
+      "id": "explore_white_corridor",
+      "text": "Explore the white corridor beneath the town."
+    },
+    "bell_tower_boss_room": {
+      "id": "defeat_bell_saint",
+      "text": "Recover the anchor relic from the Bell Saint."
+    }
+  }
+}

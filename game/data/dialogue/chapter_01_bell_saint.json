@@ -1,0 +1,100 @@
+{
+  "prologue": {
+    "sev_wakes": {
+      "location": "Museum Maintenance Room",
+      "lines": [
+        {"speaker": "CURATOR", "text": "Emergency preservation protocol active."},
+        {"speaker": "CURATOR", "text": "Docent units one through sixteen: offline."},
+        {"speaker": "CURATOR", "text": "Docent unit seventeen: responsive."},
+        {"speaker": "CURATOR", "text": "Wake."},
+        {"speaker": "SEV", "text": "I was not asleep."},
+        {"speaker": "CURATOR", "text": "Correction. You were inactive."},
+        {"speaker": "SEV", "text": "That is not better."}
+      ]
+    },
+    "curator_objective": {
+      "location": "Empty Rotunda",
+      "lines": [
+        {"speaker": "CURATOR", "text": "Enter the wing. Locate the anchor relic. Restore exhibit loop integrity. Remove contradictions."},
+        {"speaker": "SEV", "text": "Define contradictions."},
+        {"speaker": "CURATOR", "text": "Objects, persons, memories, or events that do not belong."},
+        {"speaker": "SEV", "text": "And if the contradiction is alive?"},
+        {"speaker": "CURATOR", "text": "Remove it."},
+        {"speaker": "SEV", "text": "You mean kill it."}
+      ]
+    }
+  },
+  "plague_wing": {
+    "hallowmere_gate": {
+      "location": "Hallowmere Gate",
+      "lines": [
+        {"speaker": "WARDEN HALVIK", "text": "By order of the Sainted Bell, Hallowmere is sealed."},
+        {"speaker": "SEV", "text": "People are sick inside."},
+        {"speaker": "WARDEN HALVIK", "text": "People are sinful inside."},
+        {"speaker": "SEV", "text": "Disease is not sin."}
+      ]
+    },
+    "apothecary_first_meeting": {
+      "location": "Apothecary Exterior",
+      "lines": [
+        {"speaker": "ACOLYTE", "text": "The Warden has forbidden treatment of the marked."},
+        {"speaker": "MIRA", "text": "The Warden has forbidden rain before. It still fell."},
+        {"speaker": "ACOLYTE", "text": "You will answer for blasphemy."},
+        {"speaker": "MIRA", "text": "I answer to fevers, wounds, and mothers holding dying children. Your Warden can wait in line."},
+        {"speaker": "SEV", "text": "You are Mira Venn."},
+        {"speaker": "MIRA", "text": "Depends who is asking."}
+      ]
+    },
+    "mira_joins": {
+      "location": "Apothecary House",
+      "party_member": "mira_venn",
+      "lines": [
+        {"speaker": "MIRA", "text": "I am going back under the chapel."},
+        {"speaker": "SEV", "text": "That is where the breach is."},
+        {"speaker": "MIRA", "text": "That is where the sick went."},
+        {"speaker": "SEV", "text": "You may die."},
+        {"speaker": "MIRA", "text": "I may also find medicine."}
+      ]
+    },
+    "hidden_hospital_reveal": {
+      "location": "Abandoned Hospital Corridor",
+      "lines": [
+        {"speaker": "MIRA", "text": "White walls. Metal beds. Glass bottles."},
+        {"speaker": "SEV", "text": "Hospital."},
+        {"speaker": "MIRA", "text": "Then why does it feel like a place that makes sickness?"},
+        {"speaker": "CURATOR", "text": "The hospital segment is not part of the Plague Wing."},
+        {"speaker": "SEV", "text": "It always implies relevance."}
+      ]
+    },
+    "bell_saint_battle": {
+      "location": "Bell Tower",
+      "boss": "bell_saint",
+      "lines": [
+        {"speaker": "BELL SAINT", "text": "CONFESS."},
+        {"speaker": "SEV", "text": "No."},
+        {"speaker": "MIRA", "text": "What are we killing?"},
+        {"speaker": "SEV", "text": "A lie with a bell around it."},
+        {"speaker": "BELL SAINT", "text": "MERCY IS QUARANTINE."},
+        {"speaker": "MIRA", "text": "Mercy is opening the door."}
+      ]
+    }
+  },
+  "rewards": {
+    "memory_card_unlock": {
+      "reward_card": "bell_saint",
+      "reward_relic": "bell_clapper",
+      "lines": [
+        {"speaker": "MIRA", "text": "And now it is a reward?"},
+        {"speaker": "SEV", "text": "No."},
+        {"speaker": "MIRA", "text": "Then what?"},
+        {"speaker": "SEV", "text": "Evidence."},
+        {"speaker": "CURATOR", "text": "Memory Card acquired: The Bell Saint."},
+        {"speaker": "MIRA", "text": "Do not make it sound clean."}
+      ]
+    }
+  },
+  "battle_barks": {
+    "sev": ["Move.", "I see it.", "This ends now.", "Still here."],
+    "mira": ["Wound first. Pride later.", "Boil, bind, breathe.", "You are not dying here.", "Rot has rules. I know them."]
+  }
+}

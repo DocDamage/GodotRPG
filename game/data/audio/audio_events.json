@@ -1,0 +1,120 @@
+{
+  "events": {
+    "ui_confirm": {
+      "layer": "Museum",
+      "bus": "UI",
+      "path": "res://assets/audio/ui/ui_confirm_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/UI/sci_fi_confirm.wav"
+    },
+    "ui_cancel": {
+      "layer": "Museum",
+      "bus": "UI",
+      "path": "res://assets/audio/ui/ui_cancel_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/UI/sci_fi_cancel.wav"
+    },
+    "curator_warning": {
+      "layer": "Museum",
+      "bus": "UI",
+      "path": "res://assets/audio/ui/curator_warning_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/UI/synth_warning.wav"
+    },
+    "memory_card_reveal": {
+      "layer": "Museum",
+      "bus": "UI",
+      "path": "res://assets/audio/cards/memory_card_reveal_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Card and Board/card_draw_1.wav"
+    },
+    "bell_clapper_relic": {
+      "layer": "Museum",
+      "bus": "SFX",
+      "path": "res://assets/audio/relics/bell_clapper_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Musical Effects/brass_chime_positive.wav"
+    },
+    "plague_cough": {
+      "layer": "Exhibit",
+      "bus": "Environment",
+      "path": "res://assets/audio/human/plague_cough_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Human/cough_short.wav"
+    },
+    "weapon_slice": {
+      "layer": "Exhibit",
+      "bus": "Combat",
+      "path": "res://assets/audio/combat/weapon_slice_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Weapons/sword_slice.wav"
+    },
+    "hit_impact": {
+      "layer": "Exhibit",
+      "bus": "Combat",
+      "path": "res://assets/audio/combat/hit_impact_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Combat and Gore/punch.wav"
+    },
+    "item_pickup": {
+      "layer": "Museum",
+      "bus": "SFX",
+      "path": "res://assets/audio/items/item_pickup_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Items/gem_collect.wav"
+    },
+    "voice_sev_soft_synthetic": {
+      "layer": "Dialogue",
+      "bus": "Dialogue",
+      "path": "res://assets/audio/dialogue/voice_sev_soft_synthetic_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Super Dialogue Audio Pack v1/Audio Files/1 - Completion/Female/Karen Cenon/completion_1_karen.wav"
+    },
+    "voice_sev_warm_human": {
+      "layer": "Dialogue",
+      "bus": "Dialogue",
+      "path": "res://assets/audio/dialogue/voice_sev_warm_human_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Super Dialogue Audio Pack v1/Audio Files/1 - Completion/Female/Meghan Christian/completion_1_meghan.wav"
+    },
+    "voice_sev_low_quiet": {
+      "layer": "Dialogue",
+      "bus": "Dialogue",
+      "path": "res://assets/audio/dialogue/voice_sev_low_quiet_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Super Dialogue Audio Pack v1/Audio Files/1 - Completion/Male/Ian Lampert/completion_1_ian.wav"
+    },
+    "voice_sev_sharp_clear": {
+      "layer": "Dialogue",
+      "bus": "Dialogue",
+      "path": "res://assets/audio/dialogue/voice_sev_sharp_clear_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Super Dialogue Audio Pack v1/Audio Files/1 - Completion/Male/Alex Brodie/completion_1_alex.wav"
+    },
+    "voice_curator": {
+      "layer": "Museum",
+      "bus": "Dialogue",
+      "path": "res://assets/audio/dialogue/voice_curator_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/100 ui fx/036_Dialogue_01_Single.wav"
+    },
+    "voice_mira": {
+      "layer": "Dialogue",
+      "bus": "Dialogue",
+      "path": "res://assets/audio/dialogue/voice_mira_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Super Dialogue Audio Pack v1/Audio Files/1 - Completion/Female/Karen Cenon/completion_2_karen.wav"
+    },
+    "voice_toll": {
+      "layer": "Dialogue",
+      "bus": "Dialogue",
+      "path": "res://assets/audio/dialogue/voice_toll_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Super Dialogue Audio Pack v1/Audio Files/1 - Completion/Male/Sean Lenhart/completion_1_sean.wav"
+    }
+  },
+  "chapters": {
+    "bell_saint": [
+      "ui_confirm",
+      "ui_cancel",
+      "curator_warning",
+      "memory_card_reveal",
+      "bell_clapper_relic",
+      "plague_cough",
+      "weapon_slice",
+      "hit_impact",
+      "item_pickup",
+      "voice_sev_soft_synthetic",
+      "voice_sev_warm_human",
+      "voice_sev_low_quiet",
+      "voice_sev_sharp_clear",
+      "voice_curator",
+      "voice_mira",
+      "voice_toll"
+    ]
+  }
+}

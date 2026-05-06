@@ -1,0 +1,40 @@
+{
+  "phase_triggers": {
+    "empty_rotunda": {
+      "id": "curator_objective",
+      "dialogue_section": "prologue",
+      "dialogue_scene": "curator_objective",
+      "once": true
+    },
+    "plague_town_street": {
+      "id": "hallowmere_gate",
+      "dialogue_section": "plague_wing",
+      "dialogue_scene": "hallowmere_gate",
+      "once": true
+    },
+    "apothecary_house": {
+      "id": "apothecary_first_meeting",
+      "dialogue_section": "plague_wing",
+      "dialogue_scene": "apothecary_first_meeting",
+      "once": true
+    },
+    "chapel": {
+      "id": "mira_joins",
+      "dialogue_section": "plague_wing",
+      "dialogue_scene": "mira_joins",
+      "once": true
+    },
+    "hidden_hospital_corridor": {
+      "id": "hidden_hospital_reveal",
+      "dialogue_section": "plague_wing",
+      "dialogue_scene": "hidden_hospital_reveal",
+      "once": true
+    },
+    "bell_tower_boss_room": {
+      "id": "bell_saint_battle",
+      "dialogue_section": "plague_wing",
+      "dialogue_scene": "bell_saint_battle",
+      "once": true
+    }
+  }
+}

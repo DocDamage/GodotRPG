@@ -1,0 +1,6 @@
+{
+  "vanguard": {"display_name": "Vanguard", "role": "durable front-line attacker"},
+  "spellblade": {"display_name": "Spellblade", "role": "hybrid physical and magic attacker"},
+  "mystic": {"display_name": "Mystic", "role": "magic-focused damage and support"},
+  "warden": {"display_name": "Warden", "role": "defensive support"}
+}

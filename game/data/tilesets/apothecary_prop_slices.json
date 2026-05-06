@@ -1,0 +1,45 @@
+{
+  "source_note": "Curated regions from large prop sheets. These are repeatable exports, not final approvals.",
+  "slices": [
+    {
+      "id": "medicine_shelf",
+      "source_path": "res://assets/tilesets/first_slice/apothecary/jars_pots.png",
+      "output_path": "res://assets/tilesets/first_slice/apothecary/sliced/medicine_shelf.png",
+      "rect": {"x": 64, "y": 48, "w": 96, "h": 96},
+      "trim": true,
+      "max_width": 160,
+      "max_height": 160,
+      "review_status": "needs_visual_review"
+    },
+    {
+      "id": "rest_bed",
+      "source_path": "res://assets/tilesets/first_slice/apothecary/furniture_fixtures.png",
+      "output_path": "res://assets/tilesets/first_slice/apothecary/sliced/rest_bed.png",
+      "rect": {"x": 1184, "y": 112, "w": 128, "h": 128},
+      "trim": true,
+      "max_width": 160,
+      "max_height": 160,
+      "review_status": "needs_visual_review"
+    },
+    {
+      "id": "work_table",
+      "source_path": "res://assets/tilesets/first_slice/apothecary/furniture_fixtures.png",
+      "output_path": "res://assets/tilesets/first_slice/apothecary/sliced/work_table.png",
+      "rect": {"x": 864, "y": 400, "w": 144, "h": 128},
+      "trim": true,
+      "max_width": 180,
+      "max_height": 160,
+      "review_status": "needs_visual_review"
+    },
+    {
+      "id": "boiling_basin",
+      "source_path": "res://assets/tilesets/first_slice/apothecary/jars_pots.png",
+      "output_path": "res://assets/tilesets/first_slice/apothecary/sliced/boiling_basin.png",
+      "rect": {"x": 64, "y": 800, "w": 96, "h": 96},
+      "trim": true,
+      "max_width": 128,
+      "max_height": 128,
+      "review_status": "needs_visual_review"
+    }
+  ]
+}

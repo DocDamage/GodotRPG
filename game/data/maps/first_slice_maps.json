@@ -1,0 +1,267 @@
+{
+  "phase_map": {
+    "empty_rotunda": "empty_rotunda",
+    "broken_exhibit_door": "broken_exhibit_door",
+    "plague_town_street": "hallowmere_street",
+    "apothecary_house": "mira_apothecary",
+    "chapel": "sainted_bell_chapel",
+    "underchapel_drain": "underchapel_drain",
+    "hidden_hospital_corridor": "hidden_hospital_corridor",
+    "bell_tower_boss_room": "bell_tower_boss_room"
+  },
+  "maps": {
+    "empty_rotunda": {
+      "id": "empty_rotunda",
+      "display_name": "Empty Rotunda",
+      "kind": "hub",
+      "palette": "sterile_museum",
+      "spawn": {"x": 64, "y": 64},
+      "layout": {
+        "tile_size": 16,
+        "floor_rects": [
+          {"x": 1, "y": 2, "w": 14, "h": 7},
+          {"x": 15, "y": 3, "w": 4, "h": 5}
+        ],
+        "wall_rects": [
+          {"x": 0, "y": 1, "w": 20, "h": 1},
+          {"x": 0, "y": 9, "w": 20, "h": 1},
+          {"x": 0, "y": 1, "w": 1, "h": 9},
+          {"x": 19, "y": 1, "w": 1, "h": 9}
+        ]
+      },
+      "npcs": [
+        {"id": "broken_docent", "name": "Broken Docent Unit", "position": {"x": 96, "y": 64}, "line": "Welcome to the Last World Museum."}
+      ],
+      "interactables": [
+        {"id": "museum_sign", "name": "Wall Sign", "position": {"x": 128, "y": 64}, "line": "Preserving humanity from origin to ending."}
+      ],
+      "transitions": [
+        {"id": "to_broken_exhibit_door", "target_phase": "broken_exhibit_door", "rect": {"x": 176, "y": 48, "w": 32, "h": 32}, "spawn": {"x": 32, "y": 64}}
+      ]
+    },
+    "broken_exhibit_door": {
+      "id": "broken_exhibit_door",
+      "display_name": "Broken Exhibit Door",
+      "kind": "hub_breach",
+      "palette": "museum_plague_breach",
+      "spawn": {"x": 48, "y": 64},
+      "layout": {
+        "tile_size": 16,
+        "floor_rects": [
+          {"x": 1, "y": 2, "w": 10, "h": 5},
+          {"x": 8, "y": 1, "w": 4, "h": 3}
+        ],
+        "wall_rects": [
+          {"x": 0, "y": 1, "w": 13, "h": 1},
+          {"x": 0, "y": 7, "w": 13, "h": 1},
+          {"x": 0, "y": 1, "w": 1, "h": 7},
+          {"x": 12, "y": 1, "w": 1, "h": 7}
+        ]
+      },
+      "npcs": [],
+      "interactables": [
+        {"id": "plague_door", "name": "Broken Exhibit Door", "position": {"x": 128, "y": 64}, "line": "Plague fog leaks from a door that should be sealed."}
+      ],
+      "transitions": [
+        {"id": "to_hallowmere", "target_phase": "plague_town_street", "rect": {"x": 144, "y": 48, "w": 32, "h": 32}, "spawn": {"x": 32, "y": 96}}
+      ]
+    },
+    "hallowmere_street": {
+      "id": "hallowmere_street",
+      "display_name": "Hallowmere Street",
+      "kind": "town",
+      "palette": "plague_mud",
+      "spawn": {"x": 48, "y": 96},
+      "layout": {
+        "tile_size": 16,
+        "floor_rects": [
+          {"x": 1, "y": 4, "w": 28, "h": 5},
+          {"x": 4, "y": 2, "w": 7, "h": 3},
+          {"x": 13, "y": 6, "w": 5, "h": 5},
+          {"x": 20, "y": 3, "w": 8, "h": 4}
+        ],
+        "wall_rects": [
+          {"x": 0, "y": 1, "w": 30, "h": 1},
+          {"x": 0, "y": 11, "w": 30, "h": 1},
+          {"x": 0, "y": 1, "w": 1, "h": 11},
+          {"x": 29, "y": 1, "w": 1, "h": 11},
+          {"x": 11, "y": 2, "w": 2, "h": 3},
+          {"x": 18, "y": 3, "w": 2, "h": 3}
+        ]
+      },
+      "npcs": [
+        {"id": "sick_woman", "name": "Sick Woman", "position": {"x": 112, "y": 80}, "line": "Do not come near."},
+        {"id": "old_man_well", "name": "Old Man by Well", "position": {"x": 160, "y": 112}, "line": "The water was sweet before the priests blessed it."},
+        {"id": "coffin_maker", "name": "Coffin Maker", "position": {"x": 216, "y": 96}, "line": "Small, medium, or merciful?"},
+        {"id": "praying_villager", "name": "Praying Villager", "position": {"x": 272, "y": 72}, "line": "The bell will cleanse us."}
+      ],
+      "interactables": [
+        {"id": "town_well", "name": "Town Well", "position": {"x": 176, "y": 128}, "line": "The well rope is damp. The bucket smells of iron and old prayers."},
+        {"id": "toll_stall", "name": "Toll's Stall", "position": {"x": 320, "y": 96}, "line": "Buying or bleeding?"}
+      ],
+      "transitions": [
+        {"id": "to_apothecary", "target_phase": "apothecary_house", "rect": {"x": 352, "y": 80, "w": 32, "h": 32}, "spawn": {"x": 48, "y": 64}},
+        {"id": "to_chapel", "target_phase": "chapel", "rect": {"x": 416, "y": 48, "w": 32, "h": 48}, "spawn": {"x": 48, "y": 96}}
+      ]
+    },
+    "mira_apothecary": {
+      "id": "mira_apothecary",
+      "display_name": "Mira's Apothecary",
+      "kind": "interior",
+      "palette": "warm_medicine",
+      "spawn": {"x": 48, "y": 64},
+      "layout": {
+        "tile_size": 16,
+        "floor_rects": [
+          {"x": 1, "y": 2, "w": 11, "h": 6},
+          {"x": 7, "y": 8, "w": 5, "h": 3}
+        ],
+        "wall_rects": [
+          {"x": 0, "y": 1, "w": 13, "h": 1},
+          {"x": 0, "y": 11, "w": 13, "h": 1},
+          {"x": 0, "y": 1, "w": 1, "h": 11},
+          {"x": 12, "y": 1, "w": 1, "h": 11}
+        ]
+      },
+      "npcs": [
+        {"id": "mira_venn", "name": "Mira Venn", "position": {"x": 96, "y": 64}, "line": "Fear is not an excuse to stand still."}
+      ],
+      "interactables": [
+        {"id": "medicine_shelf", "name": "Medicine Shelf", "position": {"x": 128, "y": 64}, "line": "Empty bottles, boiled cloth, and one sharp knife."},
+        {"id": "rest_bed", "name": "Back Room Bed", "position": {"x": 160, "y": 96}, "line": "Unsafe sleep is still better than none."}
+      ],
+      "transitions": [
+        {"id": "to_hallowmere", "target_phase": "plague_town_street", "rect": {"x": 24, "y": 48, "w": 24, "h": 32}, "spawn": {"x": 352, "y": 96}}
+      ]
+    },
+    "sainted_bell_chapel": {
+      "id": "sainted_bell_chapel",
+      "display_name": "Chapel of the Sainted Bell",
+      "kind": "interior",
+      "palette": "cold_chapel",
+      "spawn": {"x": 48, "y": 96},
+      "layout": {
+        "tile_size": 16,
+        "floor_rects": [
+          {"x": 1, "y": 4, "w": 16, "h": 5},
+          {"x": 6, "y": 1, "w": 6, "h": 4},
+          {"x": 12, "y": 7, "w": 4, "h": 3}
+        ],
+        "wall_rects": [
+          {"x": 0, "y": 0, "w": 18, "h": 1},
+          {"x": 0, "y": 10, "w": 18, "h": 1},
+          {"x": 0, "y": 0, "w": 1, "h": 11},
+          {"x": 17, "y": 0, "w": 1, "h": 11},
+          {"x": 5, "y": 1, "w": 1, "h": 3},
+          {"x": 12, "y": 1, "w": 1, "h": 3}
+        ]
+      },
+      "npcs": [
+        {"id": "warden_halvik", "name": "Warden Halvik", "position": {"x": 128, "y": 64}, "line": "The cellar is sealed."},
+        {"id": "bell_nun", "name": "Bell Nun", "position": {"x": 176, "y": 80}, "line": "When the bell rings, the pure are spared."}
+      ],
+      "interactables": [
+        {"id": "cellar_door", "name": "Cellar Door", "position": {"x": 224, "y": 112}, "line": "No hinges. No lock. It opens by recognition."}
+      ],
+      "transitions": [
+        {"id": "to_underchapel", "target_phase": "underchapel_drain", "rect": {"x": 216, "y": 104, "w": 32, "h": 32}, "spawn": {"x": 48, "y": 96}},
+        {"id": "to_hallowmere", "target_phase": "plague_town_street", "rect": {"x": 24, "y": 80, "w": 24, "h": 32}, "spawn": {"x": 416, "y": 80}}
+      ]
+    },
+    "underchapel_drain": {
+      "id": "underchapel_drain",
+      "display_name": "Underchapel Drain",
+      "kind": "dungeon",
+      "palette": "sewer_museum_pipes",
+      "spawn": {"x": 48, "y": 96},
+      "encounter_table": "plague_wing_underchapel",
+      "layout": {
+        "tile_size": 16,
+        "floor_rects": [
+          {"x": 1, "y": 5, "w": 22, "h": 3},
+          {"x": 7, "y": 3, "w": 5, "h": 2},
+          {"x": 14, "y": 7, "w": 6, "h": 3}
+        ],
+        "wall_rects": [
+          {"x": 0, "y": 2, "w": 24, "h": 1},
+          {"x": 0, "y": 10, "w": 24, "h": 1},
+          {"x": 0, "y": 2, "w": 1, "h": 9},
+          {"x": 23, "y": 2, "w": 1, "h": 9},
+          {"x": 12, "y": 3, "w": 2, "h": 2}
+        ]
+      },
+      "npcs": [],
+      "interactables": [
+        {"id": "museum_pipe", "name": "Museum Pipe", "position": {"x": 128, "y": 96}, "line": "Pipes that should not know Latin, hymns, and blood type."}
+      ],
+      "transitions": [
+        {"id": "to_hospital", "target_phase": "hidden_hospital_corridor", "rect": {"x": 320, "y": 80, "w": 32, "h": 48}, "spawn": {"x": 48, "y": 96}},
+        {"id": "to_chapel", "target_phase": "chapel", "rect": {"x": 24, "y": 80, "w": 24, "h": 32}, "spawn": {"x": 224, "y": 112}}
+      ]
+    },
+    "hidden_hospital_corridor": {
+      "id": "hidden_hospital_corridor",
+      "display_name": "Hidden Hospital Corridor",
+      "kind": "dungeon",
+      "palette": "white_corridor",
+      "spawn": {"x": 48, "y": 96},
+      "encounter_table": "plague_wing_hospital",
+      "layout": {
+        "tile_size": 16,
+        "floor_rects": [
+          {"x": 1, "y": 4, "w": 24, "h": 4},
+          {"x": 6, "y": 2, "w": 5, "h": 2},
+          {"x": 14, "y": 8, "w": 6, "h": 2}
+        ],
+        "wall_rects": [
+          {"x": 0, "y": 1, "w": 26, "h": 1},
+          {"x": 0, "y": 10, "w": 26, "h": 1},
+          {"x": 0, "y": 1, "w": 1, "h": 10},
+          {"x": 25, "y": 1, "w": 1, "h": 10},
+          {"x": 11, "y": 2, "w": 2, "h": 2}
+        ]
+      },
+      "npcs": [
+        {"id": "patient_echo", "name": "Patient Echo", "position": {"x": 112, "y": 80}, "line": "Do not let them ring the bell."}
+      ],
+      "interactables": [
+        {"id": "medical_chart", "name": "Medical Chart", "position": {"x": 160, "y": 96}, "line": "Containment trial. Memory fever. Religious overlay contamination."},
+        {"id": "medicine_cabinet", "name": "Medicine Cabinet", "position": {"x": 224, "y": 80}, "line": "Sealed bottles. Sharp and clean."}
+      ],
+      "transitions": [
+        {"id": "to_bell_tower", "target_phase": "bell_tower_boss_room", "rect": {"x": 344, "y": 80, "w": 32, "h": 48}, "spawn": {"x": 48, "y": 96}},
+        {"id": "to_underchapel", "target_phase": "underchapel_drain", "rect": {"x": 24, "y": 80, "w": 24, "h": 32}, "spawn": {"x": 320, "y": 96}}
+      ]
+    },
+    "bell_tower_boss_room": {
+      "id": "bell_tower_boss_room",
+      "display_name": "Bell Tower",
+      "kind": "boss_room",
+      "palette": "bell_saint",
+      "spawn": {"x": 48, "y": 96},
+      "boss": "bell_saint",
+      "layout": {
+        "tile_size": 16,
+        "floor_rects": [
+          {"x": 1, "y": 4, "w": 15, "h": 5},
+          {"x": 6, "y": 1, "w": 5, "h": 4}
+        ],
+        "wall_rects": [
+          {"x": 0, "y": 0, "w": 17, "h": 1},
+          {"x": 0, "y": 9, "w": 17, "h": 1},
+          {"x": 0, "y": 0, "w": 1, "h": 10},
+          {"x": 16, "y": 0, "w": 1, "h": 10},
+          {"x": 5, "y": 1, "w": 1, "h": 3},
+          {"x": 11, "y": 1, "w": 1, "h": 3}
+        ]
+      },
+      "npcs": [
+        {"id": "warden_halvik_boss", "name": "Warden Halvik", "position": {"x": 144, "y": 64}, "line": "The bell will judge you."}
+      ],
+      "interactables": [
+        {"id": "plague_bell", "name": "Plague Bell", "position": {"x": 192, "y": 64}, "line": "The bell is full of stolen grief."}
+      ],
+      "transitions": []
+    }
+  }
+}

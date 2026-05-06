@@ -1,0 +1,16 @@
+{
+  "title": "The Last World Museum",
+  "slice_name": "The Bell Saint",
+  "flow": [
+    "character_creator",
+    "empty_rotunda",
+    "broken_exhibit_door",
+    "plague_town_street",
+    "apothecary_house",
+    "chapel",
+    "hidden_hospital_corridor",
+    "bell_tower_boss_room",
+    "battle",
+    "truth_recovered"
+  ]
+}

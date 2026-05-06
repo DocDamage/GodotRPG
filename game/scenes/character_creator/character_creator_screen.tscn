@@ -1,0 +1,406 @@
+[gd_scene load_steps=2 format=3 uid="uid://last_world_character_creator"]
+
+[ext_resource type="Script" path="res://scripts/character_creator/character_creator_screen.gd" id="1_screen"]
+
+[node name="CharacterCreatorScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_screen")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.055, 0.06, 0.065, 1)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 40
+
+[node name="Layout" type="HBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="PreviewColumn" type="VBoxContainer" parent="Margin/Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Margin/Layout/PreviewColumn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "The Uncatalogued"
+
+[node name="Subtitle" type="Label" parent="Margin/Layout/PreviewColumn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "CURATOR: Your physical profile remains unstable. Selection is not recommended."
+autowrap_mode = 3
+
+[node name="SevLine" type="Label" parent="Margin/Layout/PreviewColumn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "SEV: That was not a no."
+autowrap_mode = 3
+
+[node name="PreviewPanel" type="Panel" parent="Margin/Layout/PreviewColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 320)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SpritePreview" type="TextureRect" parent="Margin/Layout/PreviewColumn/PreviewPanel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -96.0
+offset_right = 96.0
+offset_bottom = 96.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch_mode = 5
+
+[node name="PortraitPreview" type="TextureRect" parent="Margin/Layout/PreviewColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="OptionsColumn" type="VBoxContainer" parent="Margin/Layout"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 14
+
+[node name="NameLabel" type="Label" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Uncatalogued Name"
+
+[node name="NameEdit" type="LineEdit" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Sev"
+max_length = 24
+
+[node name="PronounsRow" type="HBoxContainer" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+
+[node name="PronounsPrevious" type="Button" parent="Margin/Layout/OptionsColumn/PronounsRow"]
+layout_mode = 2
+text = "<"
+
+[node name="PronounsValue" type="Label" parent="Margin/Layout/OptionsColumn/PronounsRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "they/them"
+horizontal_alignment = 1
+
+[node name="PronounsNext" type="Button" parent="Margin/Layout/OptionsColumn/PronounsRow"]
+layout_mode = 2
+text = ">"
+
+[node name="ClassRow" type="HBoxContainer" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+
+[node name="ClassPrevious" type="Button" parent="Margin/Layout/OptionsColumn/ClassRow"]
+layout_mode = 2
+text = "<"
+
+[node name="ClassValue" type="Label" parent="Margin/Layout/OptionsColumn/ClassRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vanguard"
+horizontal_alignment = 1
+
+[node name="ClassNext" type="Button" parent="Margin/Layout/OptionsColumn/ClassRow"]
+layout_mode = 2
+text = ">"
+
+[node name="ClassDescription" type="Label" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Shielded relic bearer. Reliable front-line defense and steady strikes."
+autowrap_mode = 3
+
+[node name="StatsHeader" type="Label" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Starting Parameters"
+
+[node name="StatsValue" type="Label" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "HP 150   MP 18   STR 16   MAG 6   DEF 14   SPD 8"
+autowrap_mode = 3
+
+[node name="LoadoutEffectValue" type="Label" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Loadout Effects: STR +5"
+autowrap_mode = 3
+
+[node name="RecordHeader" type="Label" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Museum Record"
+
+[node name="RecordValue" type="Label" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "Sev / they/them / copper hair. Exhibit origin unresolved."
+autowrap_mode = 3
+
+[node name="ValidationValue" type="Label" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Record can be confirmed."
+autowrap_mode = 3
+
+[node name="SpriteRow" type="HBoxContainer" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+
+[node name="SpritePrevious" type="Button" parent="Margin/Layout/OptionsColumn/SpriteRow"]
+layout_mode = 2
+text = "<"
+
+[node name="SpriteValue" type="Label" parent="Margin/Layout/OptionsColumn/SpriteRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hero Knight"
+horizontal_alignment = 1
+
+[node name="SpriteNext" type="Button" parent="Margin/Layout/OptionsColumn/SpriteRow"]
+layout_mode = 2
+text = ">"
+
+[node name="OriginEchoRow" type="HBoxContainer" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+
+[node name="OriginEchoPrevious" type="Button" parent="Margin/Layout/OptionsColumn/OriginEchoRow"]
+layout_mode = 2
+text = "<"
+
+[node name="OriginEchoValue" type="Label" parent="Margin/Layout/OptionsColumn/OriginEchoRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Static Hum"
+horizontal_alignment = 1
+
+[node name="OriginEchoNext" type="Button" parent="Margin/Layout/OptionsColumn/OriginEchoRow"]
+layout_mode = 2
+text = ">"
+
+[node name="OriginEchoDescription" type="Label" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "A clean machine tone under every memory."
+autowrap_mode = 3
+
+[node name="StartingRelicRow" type="HBoxContainer" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+
+[node name="StartingRelicPrevious" type="Button" parent="Margin/Layout/OptionsColumn/StartingRelicRow"]
+layout_mode = 2
+text = "<"
+
+[node name="StartingRelicValue" type="Label" parent="Margin/Layout/OptionsColumn/StartingRelicRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cracked Saber"
+horizontal_alignment = 1
+
+[node name="StartingRelicNext" type="Button" parent="Margin/Layout/OptionsColumn/StartingRelicRow"]
+layout_mode = 2
+text = ">"
+
+[node name="StartingRelicDescription" type="Label" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "A balanced relic blade with a broken museum seal."
+autowrap_mode = 3
+
+[node name="VoiceBlipRow" type="HBoxContainer" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+
+[node name="VoiceBlipPrevious" type="Button" parent="Margin/Layout/OptionsColumn/VoiceBlipRow"]
+layout_mode = 2
+text = "<"
+
+[node name="VoiceBlipValue" type="Label" parent="Margin/Layout/OptionsColumn/VoiceBlipRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Soft Synthetic"
+horizontal_alignment = 1
+
+[node name="VoiceBlipNext" type="Button" parent="Margin/Layout/OptionsColumn/VoiceBlipRow"]
+layout_mode = 2
+text = ">"
+
+[node name="VoiceBlipDescription" type="Label" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "A restrained synthetic text tone, close to Museum speech."
+autowrap_mode = 3
+
+[node name="StartingMemoryCardRow" type="HBoxContainer" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+
+[node name="StartingMemoryCardPrevious" type="Button" parent="Margin/Layout/OptionsColumn/StartingMemoryCardRow"]
+layout_mode = 2
+text = "<"
+
+[node name="StartingMemoryCardValue" type="Label" parent="Margin/Layout/OptionsColumn/StartingMemoryCardRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "A Locked Door"
+horizontal_alignment = 1
+
+[node name="StartingMemoryCardNext" type="Button" parent="Margin/Layout/OptionsColumn/StartingMemoryCardRow"]
+layout_mode = 2
+text = ">"
+
+[node name="StartingMemoryCardDescription" type="Label" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "A damaged Memory Card showing a door the museum refuses to label."
+autowrap_mode = 3
+
+[node name="PortraitRow" type="HBoxContainer" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+
+[node name="PortraitPrevious" type="Button" parent="Margin/Layout/OptionsColumn/PortraitRow"]
+layout_mode = 2
+text = "<"
+
+[node name="PortraitValue" type="Label" parent="Margin/Layout/OptionsColumn/PortraitRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Portrait D-01"
+horizontal_alignment = 1
+
+[node name="PortraitNext" type="Button" parent="Margin/Layout/OptionsColumn/PortraitRow"]
+layout_mode = 2
+text = ">"
+
+[node name="DialoguePreviewHeader" type="Label" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Dialogue Preview"
+
+[node name="DialoguePreviewValue" type="Label" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "CURATOR: Sev remains outside assigned parameters. they should report for correction."
+autowrap_mode = 3
+
+[node name="MuseumIdValue" type="Label" parent="Margin/Layout/PreviewColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "MUSEUM ID"
+autowrap_mode = 3
+
+[node name="DossierValue" type="Label" parent="Margin/Layout/PreviewColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "DOSSIER"
+autowrap_mode = 3
+
+[node name="PaletteRow" type="HBoxContainer" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+
+[node name="PalettePrevious" type="Button" parent="Margin/Layout/OptionsColumn/PaletteRow"]
+layout_mode = 2
+text = "<"
+
+[node name="PaletteValue" type="Label" parent="Margin/Layout/OptionsColumn/PaletteRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Copper hair / Navy coat"
+horizontal_alignment = 1
+
+[node name="PaletteNext" type="Button" parent="Margin/Layout/OptionsColumn/PaletteRow"]
+layout_mode = 2
+text = ">"
+
+[node name="CompletionControls" type="HBoxContainer" parent="Margin/Layout/OptionsColumn"]
+layout_mode = 2
+
+[node name="Randomize" type="Button" parent="Margin/Layout/OptionsColumn/CompletionControls"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Randomize Record"
+
+[node name="Reset" type="Button" parent="Margin/Layout/OptionsColumn/CompletionControls"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Reset"
+
+[node name="Confirm" type="Button" parent="Margin/Layout/OptionsColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Confirm Record"
+
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/PronounsRow/PronounsPrevious" to="." method="_on_pronouns_previous_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/PronounsRow/PronounsNext" to="." method="_on_pronouns_next_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/ClassRow/ClassPrevious" to="." method="_on_class_previous_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/ClassRow/ClassNext" to="." method="_on_class_next_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/SpriteRow/SpritePrevious" to="." method="_on_sprite_previous_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/SpriteRow/SpriteNext" to="." method="_on_sprite_next_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/OriginEchoRow/OriginEchoPrevious" to="." method="_on_origin_echo_previous_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/OriginEchoRow/OriginEchoNext" to="." method="_on_origin_echo_next_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/StartingRelicRow/StartingRelicPrevious" to="." method="_on_starting_relic_previous_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/StartingRelicRow/StartingRelicNext" to="." method="_on_starting_relic_next_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/VoiceBlipRow/VoiceBlipPrevious" to="." method="_on_voice_blip_previous_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/VoiceBlipRow/VoiceBlipNext" to="." method="_on_voice_blip_next_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/StartingMemoryCardRow/StartingMemoryCardPrevious" to="." method="_on_starting_memory_card_previous_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/StartingMemoryCardRow/StartingMemoryCardNext" to="." method="_on_starting_memory_card_next_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/PortraitRow/PortraitPrevious" to="." method="_on_portrait_previous_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/PortraitRow/PortraitNext" to="." method="_on_portrait_next_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/PaletteRow/PalettePrevious" to="." method="_on_palette_previous_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/PaletteRow/PaletteNext" to="." method="_on_palette_next_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/CompletionControls/Randomize" to="." method="_on_randomize_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/CompletionControls/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="Margin/Layout/OptionsColumn/Confirm" to="." method="_on_confirm_pressed"]

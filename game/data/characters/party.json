@@ -1,0 +1,5 @@
+{
+  "guardian": {"name": "Rowan", "class_id": "vanguard", "role": "tank_support"},
+  "arcanist": {"name": "Selene", "class_id": "mystic", "role": "offensive_magic"},
+  "scout": {"name": "Kade", "class_id": "spellblade", "role": "fast_attacker"}
+}

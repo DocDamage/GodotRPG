@@ -1,0 +1,55 @@
+{
+  "cards": {
+    "goblin_wretch": {
+      "id": 1,
+      "name": "Goblin Wretch",
+      "power": 1,
+      "physical_defense": 2,
+      "magic_defense": 0,
+      "card_type": "PHYSICAL",
+      "directions": [true, false, true, false, true, false, false, false],
+      "image": "res://assets/portraits/creator/portrait_orc_01.png"
+    },
+    "bell_acolyte": {
+      "id": 2,
+      "name": "Bell Acolyte",
+      "power": 2,
+      "physical_defense": 1,
+      "magic_defense": 3,
+      "card_type": "MAGICAL",
+      "directions": [true, true, false, false, false, false, true, false],
+      "image": "res://assets/portraits/creator/portrait_fairy_01.png"
+    },
+    "archive_docent": {
+      "id": 3,
+      "name": "Archive Docent",
+      "power": 3,
+      "physical_defense": 2,
+      "magic_defense": 2,
+      "card_type": "FLEXIBLE",
+      "directions": [false, true, false, true, false, true, false, true],
+      "image": "res://assets/portraits/creator/portrait_dwarf_01.png"
+    },
+    "rot_choir": {
+      "id": 4,
+      "name": "Rot Choir",
+      "power": 4,
+      "physical_defense": 1,
+      "magic_defense": 4,
+      "card_type": "MAGICAL",
+      "directions": [false, false, true, true, true, false, false, true],
+      "image": "res://assets/portraits/creator/portrait_demon_01.png"
+    },
+    "clean_man": {
+      "id": 5,
+      "name": "Clean Man",
+      "power": 5,
+      "physical_defense": 4,
+      "magic_defense": 1,
+      "card_type": "ASSAULT",
+      "directions": [true, false, false, true, false, true, true, false],
+      "image": "res://assets/portraits/creator/portrait_halfling_01.png"
+    }
+  },
+  "starter_deck": ["goblin_wretch", "bell_acolyte", "archive_docent", "rot_choir", "clean_man"]
+}
