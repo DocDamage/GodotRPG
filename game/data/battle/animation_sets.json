@@ -1,5 +1,5 @@
 {
-  "sev_placeholder": {
+  "sev_generated": {
     "frame_size": [
       72,
       80
@@ -9,60 +9,60 @@
         "fps": 6,
         "loop": true,
         "frames": [
-          "res://assets/battle/animations/sev_placeholder/idle_01.png",
-          "res://assets/battle/animations/sev_placeholder/idle_02.png",
-          "res://assets/battle/animations/sev_placeholder/idle_03.png",
-          "res://assets/battle/animations/sev_placeholder/idle_04.png"
+          "res://assets/battle/animations/sev_generated/idle_01.png",
+          "res://assets/battle/animations/sev_generated/idle_02.png",
+          "res://assets/battle/animations/sev_generated/idle_03.png",
+          "res://assets/battle/animations/sev_generated/idle_04.png"
         ]
       },
       "attack": {
         "fps": 9,
         "loop": false,
         "frames": [
-          "res://assets/battle/animations/sev_placeholder/attack_01.png",
-          "res://assets/battle/animations/sev_placeholder/attack_02.png",
-          "res://assets/battle/animations/sev_placeholder/attack_03.png",
-          "res://assets/battle/animations/sev_placeholder/attack_04.png"
+          "res://assets/battle/animations/sev_generated/attack_01.png",
+          "res://assets/battle/animations/sev_generated/attack_02.png",
+          "res://assets/battle/animations/sev_generated/attack_03.png",
+          "res://assets/battle/animations/sev_generated/attack_04.png"
         ]
       },
       "hurt": {
         "fps": 9,
         "loop": false,
         "frames": [
-          "res://assets/battle/animations/sev_placeholder/hurt_01.png",
-          "res://assets/battle/animations/sev_placeholder/hurt_02.png",
-          "res://assets/battle/animations/sev_placeholder/hurt_03.png",
-          "res://assets/battle/animations/sev_placeholder/hurt_04.png"
+          "res://assets/battle/animations/sev_generated/hurt_01.png",
+          "res://assets/battle/animations/sev_generated/hurt_02.png",
+          "res://assets/battle/animations/sev_generated/hurt_03.png",
+          "res://assets/battle/animations/sev_generated/hurt_04.png"
         ]
       },
       "cast": {
         "fps": 9,
         "loop": true,
         "frames": [
-          "res://assets/battle/animations/sev_placeholder/cast_01.png",
-          "res://assets/battle/animations/sev_placeholder/cast_02.png",
-          "res://assets/battle/animations/sev_placeholder/cast_03.png",
-          "res://assets/battle/animations/sev_placeholder/cast_04.png"
+          "res://assets/battle/animations/sev_generated/cast_01.png",
+          "res://assets/battle/animations/sev_generated/cast_02.png",
+          "res://assets/battle/animations/sev_generated/cast_03.png",
+          "res://assets/battle/animations/sev_generated/cast_04.png"
         ]
       },
       "ko": {
         "fps": 9,
         "loop": false,
         "frames": [
-          "res://assets/battle/animations/sev_placeholder/ko_01.png",
-          "res://assets/battle/animations/sev_placeholder/ko_02.png",
-          "res://assets/battle/animations/sev_placeholder/ko_03.png",
-          "res://assets/battle/animations/sev_placeholder/ko_04.png"
+          "res://assets/battle/animations/sev_generated/ko_01.png",
+          "res://assets/battle/animations/sev_generated/ko_02.png",
+          "res://assets/battle/animations/sev_generated/ko_03.png",
+          "res://assets/battle/animations/sev_generated/ko_04.png"
         ]
       },
       "defeated": {
         "fps": 9,
         "loop": false,
         "frames": [
-          "res://assets/battle/animations/sev_placeholder/defeated_01.png",
-          "res://assets/battle/animations/sev_placeholder/defeated_02.png",
-          "res://assets/battle/animations/sev_placeholder/defeated_03.png",
-          "res://assets/battle/animations/sev_placeholder/defeated_04.png"
+          "res://assets/battle/animations/sev_generated/defeated_01.png",
+          "res://assets/battle/animations/sev_generated/defeated_02.png",
+          "res://assets/battle/animations/sev_generated/defeated_03.png",
+          "res://assets/battle/animations/sev_generated/defeated_04.png"
         ]
       }
     }

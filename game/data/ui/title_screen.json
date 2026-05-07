@@ -1,0 +1,46 @@
+{
+  "title": "The Last World Museum",
+  "title_top": "THE LAST",
+  "title_bottom": "WORLD MUSEUM",
+  "tagline": "History was preserved. Truth was archived separately.",
+  "status": "ARCHIVE STATUS: UNSTABLE | PLAGUE WING BREACH DETECTED",
+  "panes": [
+    {
+      "id": "plague",
+      "label": "PLAGUE",
+      "state": "active",
+      "texture": "res://assets/title_screen/panes/pane_plague.png"
+    },
+    {
+      "id": "rome",
+      "label": "ROME",
+      "state": "locked",
+      "texture": "res://assets/title_screen/panes/pane_rome.png"
+    },
+    {
+      "id": "saga",
+      "label": "SAGA",
+      "state": "locked",
+      "texture": "res://assets/title_screen/panes/pane_saga.png"
+    },
+    {
+      "id": "war",
+      "label": "WAR",
+      "state": "locked",
+      "texture": "res://assets/title_screen/panes/pane_war.png"
+    },
+    {
+      "id": "modern",
+      "label": "MODERN",
+      "state": "locked",
+      "texture": "res://assets/title_screen/panes/pane_modern.png"
+    },
+    {
+      "id": "future",
+      "label": "FUTURE",
+      "state": "locked",
+      "texture": "res://assets/title_screen/panes/pane_future.png"
+    }
+  ],
+  "museum_backdrop": "res://assets/title_screen/panes/pane_museum.png"
+}

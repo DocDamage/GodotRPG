@@ -10,6 +10,7 @@ const MapCatalog = preload("res://scripts/field/map_catalog.gd")
 const TileAssetCatalog = preload("res://scripts/field/tile_asset_catalog.gd")
 const FieldObjectiveCatalog = preload("res://scripts/field/field_objective_catalog.gd")
 const FieldStoryTriggerCatalog = preload("res://scripts/field/field_story_trigger_catalog.gd")
+const FieldAtmosphereCatalog = preload("res://scripts/field/field_atmosphere_catalog.gd")
 const MapInteractable = preload("res://scripts/field/map_interactable.gd")
 const DialogueBoxScene = preload("res://scenes/dialogue/dialogue_box.tscn")
 const AUTHORED_MAP_SCENES := {
@@ -48,6 +49,9 @@ var has_encounter_player_position := false
 var game_state_override = null
 var last_map_ambience_audio_event := ""
 var last_map_entry_audio_event := ""
+var atmosphere_catalog := FieldAtmosphereCatalog.new()
+var atmosphere_time := 0.0
+var debug_overlay_visible := false
 
 const FIRST_SLICE_ROUTE := [
 	"empty_rotunda",
@@ -105,9 +109,33 @@ func _physics_process(_delta: float) -> void:
 		return
 	record_player_travel_for_encounters()
 
+func _process(delta: float) -> void:
+	atmosphere_time += delta
+	_animate_field_atmosphere()
+
 func _unhandled_input(event: InputEvent) -> void:
+	if _is_debug_toggle_event(event):
+		toggle_debug_overlay()
+		if is_inside_tree():
+			get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("interact"):
 		try_context_action()
+
+func toggle_debug_overlay() -> void:
+	set_debug_overlay_visible(not debug_overlay_visible)
+
+func set_debug_overlay_visible(value: bool) -> void:
+	debug_overlay_visible = value
+	_resolve_late_bound_nodes()
+	if phase_label != null:
+		phase_label.visible = debug_overlay_visible
+
+func _is_debug_toggle_event(event: InputEvent) -> bool:
+	if not event is InputEventKey:
+		return false
+	var key_event := event as InputEventKey
+	return key_event.pressed and not key_event.echo and key_event.physical_keycode == KEY_F3
 
 func try_context_action() -> bool:
 	if is_dialogue_active():
@@ -363,31 +391,49 @@ func _render_phase_metadata() -> void:
 	_resolve_late_bound_nodes()
 	if phase_label == null:
 		return
+	phase_label.visible = debug_overlay_visible
 	var display_name: String = phase_metadata.get("display_name", "Prototype Field")
 	if not current_map.is_empty():
 		display_name = current_map.get("display_name", display_name)
 	var mood: String = phase_metadata.get("mood", "")
 	var beat: String = phase_metadata.get("beat", "")
 	var map_kind: String = current_map.get("kind", "")
+	var atmosphere_text := _atmosphere_metadata_text()
 	var map_line := ""
 	if not current_map.is_empty():
 		map_line = "Map: %s%s" % [display_name, " / %s" % map_kind if not map_kind.is_empty() else ""]
 	if vista_metadata.is_empty():
-		phase_label.text = "%s\n%s\n%s\n%s\n\n%s" % [display_name, mood, beat, map_line, _sev_record_line()]
+		phase_label.text = "%s\n%s\n%s\n%s\n%s\n\n%s" % [display_name, mood, beat, map_line, atmosphere_text, _sev_record_line()]
 		return
 	var vista_name: String = vista_metadata.get("display_name", "")
 	var visible_lie: String = vista_metadata.get("visible_lie", "")
 	var truth: String = vista_metadata.get("truth", "")
-	phase_label.text = "%s\n%s\n%s\n%s\n\nVista: %s\n%s\nTruth: %s\n\n%s" % [
+	phase_label.text = "%s\n%s\n%s\n%s\n%s\n\nVista: %s\n%s\nTruth: %s\n\n%s" % [
 		display_name,
 		mood,
 		beat,
 		map_line,
+		atmosphere_text,
 		vista_name,
 		visible_lie,
 		truth,
 		_sev_record_line(),
 	]
+
+func _atmosphere_metadata_text() -> String:
+	var profile := atmosphere_catalog.profile_for_phase(map_phase_id)
+	if profile.is_empty():
+		return ""
+	return "Atmosphere: %s\nLighting: %s\nTime: %s" % [
+		_profile_label(String(profile.get("weather_profile", ""))),
+		_profile_label(String(profile.get("lighting_profile", ""))),
+		_profile_label(String(profile.get("time_of_day", ""))),
+	]
+
+func _profile_label(value: String) -> String:
+	if value.is_empty():
+		return "None"
+	return value.replace("_", " ").capitalize()
 
 func _sev_record_line() -> String:
 	if not is_inside_tree():
@@ -675,6 +721,9 @@ func _phase_display_name(phase_id: String) -> String:
 
 func _render_map_content(spawn_override: Variant = null) -> void:
 	var roots := _ensure_map_content_nodes()
+	_clear_children(roots.vista_parallax)
+	_clear_children(roots.weather_layer)
+	_reset_lighting_overlay(roots.lighting_overlay)
 	_clear_children(roots.authored_map)
 	_clear_children(roots.real_art)
 	_clear_children(roots.graybox)
@@ -684,6 +733,7 @@ func _render_map_content(spawn_override: Variant = null) -> void:
 	active_transition_zones.clear()
 	if current_map.is_empty():
 		return
+	_render_field_atmosphere(roots)
 	_render_authored_map(roots.authored_map)
 	_render_real_tile_art(roots.real_art)
 	_render_graybox_layout(roots.graybox)
@@ -703,7 +753,13 @@ func _ensure_map_content_nodes() -> Dictionary:
 		content = Node2D.new()
 		content.name = "MapContent"
 		add_child(content)
-	var graybox := content.get_node_or_null("Graybox")
+	var vista_parallax := content.get_node_or_null("VistaParallax")
+	if vista_parallax == null:
+		vista_parallax = Node2D.new()
+		vista_parallax.name = "VistaParallax"
+		vista_parallax.z_index = -80
+		content.add_child(vista_parallax)
+		content.move_child(vista_parallax, 0)
 	var authored_map := content.get_node_or_null("AuthoredMap")
 	if authored_map == null:
 		authored_map = Node2D.new()
@@ -716,6 +772,20 @@ func _ensure_map_content_nodes() -> Dictionary:
 		real_art.name = "RealTileArt"
 		content.add_child(real_art)
 		content.move_child(real_art, min(1, content.get_child_count() - 1))
+	var graybox := content.get_node_or_null("Graybox")
+	var weather_layer := content.get_node_or_null("WeatherLayer")
+	if weather_layer == null:
+		weather_layer = Node2D.new()
+		weather_layer.name = "WeatherLayer"
+		weather_layer.z_index = 70
+		content.add_child(weather_layer)
+	var lighting_overlay := content.get_node_or_null("LightingOverlay")
+	if lighting_overlay == null:
+		lighting_overlay = ColorRect.new()
+		lighting_overlay.name = "LightingOverlay"
+		lighting_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		lighting_overlay.z_index = 90
+		content.add_child(lighting_overlay)
 	if graybox == null:
 		graybox = Node2D.new()
 		graybox.name = "Graybox"
@@ -737,18 +807,128 @@ func _ensure_map_content_nodes() -> Dictionary:
 		transitions.name = "Transitions"
 		content.add_child(transitions)
 	return {
+		"vista_parallax": vista_parallax,
 		"authored_map": authored_map,
 		"real_art": real_art,
 		"graybox": graybox,
 		"npcs": npcs,
 		"interactables": interactables,
 		"transitions": transitions,
+		"weather_layer": weather_layer,
+		"lighting_overlay": lighting_overlay,
 	}
 
 func _clear_children(parent: Node) -> void:
 	for child in parent.get_children():
 		parent.remove_child(child)
 		child.free()
+
+func _reset_lighting_overlay(overlay: ColorRect) -> void:
+	overlay.color = Color(0, 0, 0, 0)
+	overlay.offset_left = 0
+	overlay.offset_top = 0
+	overlay.offset_right = 0
+	overlay.offset_bottom = 0
+	overlay.set_meta("lighting_profile", "")
+	overlay.set_meta("time_of_day", "")
+
+func _render_field_atmosphere(roots: Dictionary) -> void:
+	var profile := atmosphere_catalog.profile_for_phase(map_phase_id)
+	if profile.is_empty():
+		return
+	_render_vista_parallax(roots.vista_parallax, profile)
+	_render_weather_layer(roots.weather_layer, profile)
+	_render_lighting_overlay(roots.lighting_overlay, profile)
+
+func _render_vista_parallax(parent: Node2D, profile: Dictionary) -> void:
+	parent.set_meta("vista_id", String(profile.get("vista_id", "")))
+	parent.set_meta("time_of_day", String(profile.get("time_of_day", "")))
+	for layer_data in profile.get("parallax_layers", []):
+		var rect := _rect_from_dict(layer_data.get("rect", {}))
+		var texture_path := String(layer_data.get("texture_path", ""))
+		var band: Control
+		var texture := _load_runtime_texture(texture_path)
+		if texture != null:
+			var texture_band := TextureRect.new()
+			texture_band.texture = texture
+			texture_band.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			texture_band.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+			texture_band.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+			texture_band.modulate = _color_from_array(layer_data.get("color", [1.0, 1.0, 1.0, 1.0]))
+			texture_band.set_meta("texture_path", texture_path)
+			band = texture_band
+		else:
+			var color_band := ColorRect.new()
+			color_band.color = _color_from_array(layer_data.get("color", [0.1, 0.1, 0.1, 0.5]))
+			band = color_band
+		band.name = String(layer_data.get("id", "ParallaxBand")).to_pascal_case()
+		band.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		band.offset_left = rect.position.x
+		band.offset_top = rect.position.y
+		band.offset_right = rect.position.x + rect.size.x
+		band.offset_bottom = rect.position.y + rect.size.y
+		band.set_meta("scroll_speed", float(layer_data.get("scroll_speed", 0.0)))
+		band.set_meta("base_rect", rect)
+		band.set_meta("vista_id", String(profile.get("vista_id", "")))
+		parent.add_child(band)
+
+func _render_weather_layer(parent: Node2D, profile: Dictionary) -> void:
+	parent.set_meta("weather_profile", String(profile.get("weather_profile", "")))
+	parent.set_meta("time_of_day", String(profile.get("time_of_day", "")))
+	for patch_data in profile.get("weather_patches", []):
+		var rect := _rect_from_dict(patch_data.get("rect", {}))
+		var patch := ColorRect.new()
+		patch.name = String(patch_data.get("id", "WeatherPatch")).to_pascal_case()
+		patch.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		patch.offset_left = rect.position.x
+		patch.offset_top = rect.position.y
+		patch.offset_right = rect.position.x + rect.size.x
+		patch.offset_bottom = rect.position.y + rect.size.y
+		patch.color = _color_from_array(patch_data.get("color", [0.5, 0.5, 0.5, 0.1]))
+		patch.set_meta("base_rect", rect)
+		patch.set_meta("drift_speed", float(patch_data.get("drift_speed", 3.0)))
+		patch.set_meta("weather_profile", String(profile.get("weather_profile", "")))
+		parent.add_child(patch)
+
+func _render_lighting_overlay(overlay: ColorRect, profile: Dictionary) -> void:
+	var lighting: Dictionary = profile.get("lighting", {})
+	var rect := _rect_from_dict(lighting.get("rect", {"x": -16, "y": -16, "w": 480, "h": 304}))
+	overlay.offset_left = rect.position.x
+	overlay.offset_top = rect.position.y
+	overlay.offset_right = rect.position.x + rect.size.x
+	overlay.offset_bottom = rect.position.y + rect.size.y
+	overlay.color = _color_from_array(lighting.get("color", [0, 0, 0, 0]))
+	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	overlay.set_meta("lighting_profile", String(profile.get("lighting_profile", "")))
+	overlay.set_meta("time_of_day", String(profile.get("time_of_day", "")))
+	overlay.set_meta("base_color", overlay.color)
+	overlay.set_meta("pulse_strength", float(lighting.get("pulse_strength", 0.025)))
+	overlay.set_meta("pulse_speed", float(lighting.get("pulse_speed", 1.5)))
+
+func _animate_field_atmosphere() -> void:
+	var vista := get_node_or_null("MapContent/VistaParallax")
+	if vista != null:
+		for child in vista.get_children():
+			if child is Control:
+				_apply_drift_to_rect(child, float(child.get_meta("scroll_speed", 0.0)))
+	var weather := get_node_or_null("MapContent/WeatherLayer")
+	if weather != null:
+		for child in weather.get_children():
+			if child is ColorRect:
+				_apply_drift_to_rect(child, float(child.get_meta("drift_speed", 0.0)))
+	var lighting = get_node_or_null("MapContent/LightingOverlay")
+	if lighting is ColorRect:
+		var base_color: Color = lighting.get_meta("base_color", lighting.color)
+		var pulse_strength := float(lighting.get_meta("pulse_strength", 0.0))
+		var pulse_speed := float(lighting.get_meta("pulse_speed", 1.0))
+		var pulse := sin(atmosphere_time * pulse_speed) * pulse_strength
+		lighting.color = Color(base_color.r, base_color.g, base_color.b, clampf(base_color.a + pulse, 0.0, 1.0))
+
+func _apply_drift_to_rect(rect_node: Control, speed: float) -> void:
+	var base_rect: Rect2 = rect_node.get_meta("base_rect", Rect2(rect_node.offset_left, rect_node.offset_top, rect_node.size.x, rect_node.size.y))
+	var drift := sin(atmosphere_time * 0.7 + speed) * speed
+	rect_node.offset_left = base_rect.position.x + drift
+	rect_node.offset_right = base_rect.position.x + base_rect.size.x + drift
 
 func _create_interactable_marker(entry: Dictionary, kind: String) -> Node2D:
 	var marker := MapInteractable.new()
@@ -938,6 +1118,11 @@ func _rect_from_dict(value) -> Rect2:
 			float(value.get("h", 0.0))
 		)
 	return Rect2()
+
+func _color_from_array(value) -> Color:
+	if value is Array and value.size() >= 4:
+		return Color(float(value[0]), float(value[1]), float(value[2]), float(value[3]))
+	return Color(1, 1, 1, 1)
 
 func _tile_rect_from_dict(value: Dictionary, tile_size: float) -> Rect2:
 	return Rect2(

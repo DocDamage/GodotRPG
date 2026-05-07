@@ -37,12 +37,27 @@ func _run_tests() -> void:
 	_test_character_creator_scene_confirm_emits_complete_profile()
 	_test_character_creator_scene_assigns_controller_focus()
 	_test_character_creator_renders_controller_help_prompt()
+	_test_title_screen_catalog_defines_blurred_wings()
+	_test_title_screen_scene_renders_panes_and_menu()
+	_test_title_screen_memory_catalog_opens_and_closes()
+	_test_title_screen_memory_catalog_renders_owned_cards()
+	_test_title_screen_options_updates_and_persists_settings()
+	_test_title_screen_options_reopen_does_not_duplicate_controls()
+	_test_title_screen_cancel_closes_submenu()
+	_test_title_screen_missing_texture_loads_null_without_error()
+	_test_app_root_loads_saved_title_settings_on_boot()
+	_test_app_root_starts_on_title_screen()
+	_test_app_root_title_new_game_advances_to_character_creator()
+	_test_app_root_title_continue_loads_manual_slot()
 	_test_app_root_confirmed_creator_starts_game_flow()
+	_test_app_root_title_to_reward_flow_keeps_single_scene_mounted()
 	_test_input_map_defines_modern_controller_actions()
 	_test_input_prompt_service_formats_controller_labels()
 	_test_input_prompt_service_resolves_saved_glyph_preference()
 	_test_player_profile_persists_uncatalogued_dossier()
 	_test_accessibility_settings_persist_controller_options()
+	_test_accessibility_settings_sanitize_title_options()
+	_test_game_state_rejects_corrupt_settings_slot()
 	_test_game_state_save_roundtrip_preserves_controller_accessibility()
 	_test_sev_record_service_summarizes_creator_loadout()
 	_test_content_catalog_loads_recruitable_party_members()
@@ -96,6 +111,18 @@ func _run_tests() -> void:
 	_test_first_slice_blocking_props_do_not_cover_spawns_or_transitions()
 	_test_first_slice_tile_asset_catalog_defines_runtime_tiles()
 	_test_prototype_field_renders_real_tile_art_layer()
+	_test_field_atmosphere_catalog_defines_first_slice_profiles()
+	_test_field_atmosphere_profiles_reference_existing_vista_textures()
+	_test_first_slice_ansimuz_vista_assets_are_curated()
+	_test_field_atmosphere_profiles_do_not_depend_on_title_pane_art()
+	_test_prototype_field_mounts_vista_weather_and_lighting_layers()
+	_test_prototype_field_renders_texture_backed_parallax_layers()
+	_test_prototype_field_atmosphere_layers_refresh_on_map_change()
+	_test_prototype_field_phase_label_surfaces_active_atmosphere()
+	_test_prototype_field_phase_debug_label_is_toggleable()
+	_test_prototype_field_f3_toggles_phase_debug_label()
+	_test_prototype_field_atmosphere_layers_are_non_interactive()
+	_test_prototype_field_animates_atmosphere_layers()
 	_test_hallowmere_authored_map_scene_renders_curated_props()
 	_test_hallowmere_authored_map_defines_story_landmarks()
 	_test_hallowmere_promoted_props_manifest_defines_runtime_assets()
@@ -108,6 +135,7 @@ func _run_tests() -> void:
 	_test_underchapel_promoted_props_manifest_defines_runtime_assets()
 	_test_underchapel_authored_map_scene_renders_sliced_props()
 	_test_bell_tower_promoted_props_manifest_defines_runtime_assets()
+	_test_first_slice_promoted_props_have_no_placeholder_review_status()
 	_test_pixellab_promoted_assets_manifest_defines_runtime_assets()
 	_test_bell_tower_authored_map_scene_renders_sliced_props()
 	_test_apothecary_sliced_props_exist_and_render()
@@ -180,6 +208,7 @@ func _run_tests() -> void:
 	_test_battle_screen_records_animation_hooks()
 	_test_battle_screen_updates_party_animation_set_for_active_member()
 	_test_battle_animation_assets_are_cataloged()
+	_test_runtime_battle_animation_sets_have_no_placeholder_ids()
 	_test_combat_enemies_have_animation_sets()
 	_test_battle_screen_renders_generated_enemy_sprite()
 	_test_battle_screen_renders_and_targets_multiple_enemies()
@@ -207,6 +236,7 @@ func _run_tests() -> void:
 	_test_app_root_bell_saint_completion_recruits_mira_and_records_reward_scene()
 	_test_app_root_bell_saint_completion_records_boss_defeat()
 	_test_app_root_bell_saint_completion_records_autosave_feedback()
+	_test_app_root_bell_saint_autosave_restores_reward_phase()
 	_test_app_root_renders_bell_saint_reward_scene()
 	_test_app_root_reward_scene_summarizes_evidence_progress()
 	_test_app_root_reward_scene_renders_acknowledgement_prompt()
@@ -275,6 +305,7 @@ func _run_tests() -> void:
 	_test_authored_slice_maps_expose_audio_profiles()
 	_test_authored_slice_props_expose_story_inspection_metadata()
 	_test_vista_catalog_defines_bell_saint_vistas()
+	_test_vista_catalog_maps_underchapel_phase()
 
 func _assert(condition: bool, message: String) -> void:
 	if not condition:
@@ -722,7 +753,8 @@ func _test_app_root_confirmed_creator_starts_game_flow() -> void:
 	var story_flow = StoryFlowService.new()
 	var game_state = GameStateScript.new()
 	story_flow.load_first_slice()
-	_assert(story_flow.current_phase() == "character_creator", "app root starts in character creator")
+	_assert(story_flow.current_phase() == "title", "story flow starts on title screen")
+	story_flow.go_to_phase("character_creator")
 	var profile = PlayerProfile.from_dict({"name": "Sev", "class_id": "spellblade"})
 	game_state.start_new_game(profile)
 	story_flow.advance()
@@ -731,6 +763,256 @@ func _test_app_root_confirmed_creator_starts_game_flow() -> void:
 	_assert(story_flow.current_phase() != "character_creator", "app root leaves creator after confirmation")
 	_assert(game_state.party[0].class_id == "spellblade", "app root starts game with creator class")
 	game_state.free()
+
+func _test_app_root_title_to_reward_flow_keeps_single_scene_mounted() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var PlayerProfile = load("res://scripts/core/player_profile.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app._ready()
+	var host = app.get_node("%SceneHost")
+	_assert(host.get_child_count() == 1 and host.get_child(0).name == "TitleScreen", "title-to-slice flow starts with one mounted title scene")
+	app._on_title_new_game_requested()
+	_assert(host.get_child_count() == 1 and host.get_child(0).name == "CharacterCreatorScreen", "New Game swaps title for one character creator scene")
+	app._on_character_profile_confirmed(PlayerProfile.from_dict({"name": "Sev", "class_id": "vanguard"}))
+	_assert(host.get_child_count() == 1 and host.get_child(0).name == "PrototypeField", "creator confirmation swaps into one field scene")
+	for phase_id in [
+		"broken_exhibit_door",
+		"plague_town_street",
+		"apothecary_house",
+		"chapel",
+		"underchapel_drain",
+		"hidden_hospital_corridor",
+		"bell_tower_boss_room",
+	]:
+		_assert(app.story_flow.go_to_phase(phase_id), "%s is a reachable title-to-slice phase" % phase_id)
+		game_state.map_id = phase_id
+		app._sync_scene()
+		_assert(host.get_child_count() == 1 and host.get_child(0).name == "PrototypeField", "%s keeps exactly one field scene mounted" % phase_id)
+	app.story_flow.go_to_phase("battle")
+	game_state.map_id = "battle"
+	app._sync_scene()
+	_assert(host.get_child_count() == 1 and host.get_child(0).name == "PrototypeBattle", "battle phase keeps exactly one battle scene mounted")
+	app._on_battle_completed({"xp": 200, "loot": {}, "relics": ["bell_clapper"], "memory_cards": ["bell_saint"], "next_flow": "truth_recovered", "party_state": [{"id": "lead", "hp": 88}]})
+	_assert(host.get_child_count() == 1 and host.get_child(0).name == "RewardScenePanel", "Bell Saint completion swaps into one reward scene")
+	app.queue_free()
+	game_state.free()
+
+func _test_title_screen_catalog_defines_blurred_wings() -> void:
+	_assert(ResourceLoader.exists("res://data/ui/title_screen.json"), "title screen catalog exists")
+	var file := FileAccess.open("res://data/ui/title_screen.json", FileAccess.READ)
+	var data = JSON.parse_string(file.get_as_text())
+	_assert(data.title == "The Last World Museum", "title screen catalog uses game title")
+	_assert(data.panes.size() == 6, "title screen catalog defines six vista panes")
+	var active: Array = []
+	var locked: Array = []
+	for pane in data.panes:
+		_assert(FileAccess.file_exists(String(pane.texture)), "title pane texture exists for %s" % String(pane.id))
+		if pane.state == "active":
+			active.append(pane.id)
+		elif pane.state == "locked":
+			locked.append(pane.id)
+	_assert(active == ["plague"], "title screen starts with Plague as the clear active pane")
+	_assert(locked.size() == 5 and locked.has("future"), "title screen keeps future wings present but locked")
+
+func _test_title_screen_scene_renders_panes_and_menu() -> void:
+	_assert(ResourceLoader.exists("res://scenes/title/title_screen.tscn"), "title screen scene exists")
+	var TitleScene = load("res://scenes/title/title_screen.tscn")
+	var screen = TitleScene.instantiate()
+	root.add_child(screen)
+	screen._ready()
+	screen.set_continue_available(false)
+	_assert(screen.pane_count() == 6, "title screen renders six vista panes")
+	_assert(screen.active_pane_ids() == ["plague"], "title screen exposes active Plague pane")
+	_assert(screen.locked_pane_ids().size() == 5, "title screen exposes five locked panes")
+	_assert(screen.get_node("%NewGameButton") is Button, "title screen renders New Game button")
+	_assert(screen.get_node("%ContinueButton").disabled, "title screen disables Continue without manual save")
+	screen.queue_free()
+
+func _test_title_screen_memory_catalog_opens_and_closes() -> void:
+	var TitleScene = load("res://scenes/title/title_screen.tscn")
+	var screen = TitleScene.instantiate()
+	root.add_child(screen)
+	screen._ready()
+	screen.open_memory_catalog()
+	var submenu = screen.get_node_or_null("%SubmenuPanel")
+	_assert(submenu is PanelContainer and submenu.visible, "title Memory Catalog opens a real submenu")
+	_assert(screen.get_node("%SubmenuTitle").text == "Memory Catalog", "Memory Catalog submenu has a title")
+	_assert(screen.get_node("%SubmenuBody").text.contains("No memory cards recovered"), "empty Memory Catalog explains missing cards")
+	screen.close_submenu()
+	_assert(not screen.get_node("%SubmenuPanel").visible, "Memory Catalog Back closes submenu")
+	screen.queue_free()
+
+func _test_title_screen_memory_catalog_renders_owned_cards() -> void:
+	var TitleScene = load("res://scenes/title/title_screen.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	game_state.memory_cards["owned"] = ["bell_saint"]
+	var screen = TitleScene.instantiate()
+	screen.game_state_override = game_state
+	root.add_child(screen)
+	screen._ready()
+	screen.open_memory_catalog()
+	var body := String(screen.get_node("%SubmenuBody").text)
+	_assert(body.contains("Recovered Memory Cards"), "owned Memory Catalog uses recovered-card heading")
+	_assert(body.contains("The Bell Saint"), "owned Memory Catalog renders Bell Saint display name")
+	_assert(body.contains("A town prayed for mercy"), "owned Memory Catalog renders card description")
+	screen.queue_free()
+	game_state.free()
+
+func _test_title_screen_options_updates_and_persists_settings() -> void:
+	var TitleScene = load("res://scenes/title/title_screen.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var settings_path := "user://settings.save"
+	if FileAccess.file_exists(settings_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(settings_path))
+	var game_state = GameStateScript.new()
+	game_state.name = "GameState"
+	root.add_child(game_state)
+	var screen = TitleScene.instantiate()
+	screen.game_state_override = game_state
+	root.add_child(screen)
+	screen._ready()
+	screen.open_options_menu()
+	_assert(screen.get_node("%SubmenuTitle").text == "Options", "Options opens a real submenu")
+	screen.set_option_value("controller_glyph_family", "playstation")
+	screen.set_option_value("controller_deadzone", 0.33)
+	screen.set_option_value("atb_mode", "active")
+	screen.set_option_value("high_contrast_ui", true)
+	screen.set_option_value("window_mode", "fullscreen")
+	screen.set_option_value("master_volume", 0.65)
+	screen.set_option_value("ui_volume", 0.45)
+	screen.save_options()
+	var restored = GameStateScript.new()
+	_assert(restored.load_settings_slot(), "Options writes a reusable settings slot")
+	_assert(restored.accessibility.controller_glyph_family == "playstation", "Options persists controller glyph family")
+	_assert(is_equal_approx(restored.accessibility.controller_deadzone, 0.33), "Options persists controller deadzone")
+	_assert(restored.accessibility.atb_mode == "active", "Options persists ATB mode")
+	_assert(restored.accessibility.high_contrast_ui, "Options persists high contrast setting")
+	_assert(restored.accessibility.window_mode == "fullscreen", "Options persists window mode")
+	_assert(is_equal_approx(restored.accessibility.master_volume, 0.65), "Options persists master volume")
+	_assert(is_equal_approx(restored.accessibility.ui_volume, 0.45), "Options persists UI volume")
+	screen.close_submenu()
+	_assert(not screen.get_node("%SubmenuPanel").visible, "Options Back closes submenu")
+	restored.free()
+	screen.queue_free()
+	game_state.queue_free()
+	if FileAccess.file_exists(settings_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(settings_path))
+
+func _test_title_screen_options_reopen_does_not_duplicate_controls() -> void:
+	var TitleScene = load("res://scenes/title/title_screen.tscn")
+	var screen = TitleScene.instantiate()
+	root.add_child(screen)
+	screen._ready()
+	screen.open_options_menu()
+	var first_count: int = screen.get_node("%SubmenuControls").get_child_count()
+	screen.open_memory_catalog()
+	screen.open_options_menu()
+	var second_count: int = screen.get_node("%SubmenuControls").get_child_count()
+	_assert(first_count == second_count, "reopening Options does not duplicate old controls")
+	screen.queue_free()
+
+func _test_title_screen_cancel_closes_submenu() -> void:
+	var TitleScene = load("res://scenes/title/title_screen.tscn")
+	var screen = TitleScene.instantiate()
+	root.add_child(screen)
+	screen._ready()
+	screen.open_memory_catalog()
+	var event := InputEventAction.new()
+	event.action = "cancel"
+	event.pressed = true
+	screen._unhandled_input(event)
+	_assert(not screen.get_node("%SubmenuPanel").visible, "cancel closes open title submenu")
+	screen.queue_free()
+
+func _test_title_screen_missing_texture_loads_null_without_error() -> void:
+	var TitleScene = load("res://scenes/title/title_screen.tscn")
+	var screen = TitleScene.instantiate()
+	_assert(screen._load_texture("res://assets/title_screen/panes/missing.png") == null, "missing title texture returns null")
+	screen.queue_free()
+
+func _test_app_root_loads_saved_title_settings_on_boot() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var settings_path := "user://settings.save"
+	if FileAccess.file_exists(settings_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(settings_path))
+	var game_state = GameStateScript.new()
+	game_state.accessibility.controller_glyph_family = "switch"
+	game_state.accessibility.controller_deadzone = 0.42
+	_assert(game_state.save_settings_slot() == OK, "boot settings test writes settings slot")
+	game_state.accessibility.controller_glyph_family = "auto"
+	game_state.accessibility.controller_deadzone = 0.2
+	var app = AppRootScene.instantiate()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app._ready()
+	_assert(game_state.accessibility.controller_glyph_family == "switch", "AppRoot loads saved glyph settings on boot")
+	_assert(is_equal_approx(game_state.accessibility.controller_deadzone, 0.42), "AppRoot loads saved controller deadzone on boot")
+	app.queue_free()
+	game_state.free()
+	if FileAccess.file_exists(settings_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(settings_path))
+
+func _test_app_root_starts_on_title_screen() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app._ready()
+	_assert(app.story_flow.current_phase() == "title", "AppRoot starts story flow at title")
+	_assert(app.get_node("%SceneHost").get_child(0).name == "TitleScreen", "AppRoot mounts title screen first")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_title_new_game_advances_to_character_creator() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app._ready()
+	app._on_title_new_game_requested()
+	_assert(app.story_flow.current_phase() == "character_creator", "title New Game advances to character creator")
+	_assert(game_state.map_id == "character_creator", "title New Game records character creator map id")
+	_assert(app.get_node("%SceneHost").get_child(0).name == "CharacterCreatorScreen", "AppRoot mounts character creator after title New Game")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_title_continue_loads_manual_slot() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var SaveService = load("res://scripts/save/save_service.gd")
+	var save_service = SaveService.new()
+	var manual_path := "user://manual_slot.save"
+	var previous_payload: Dictionary = save_service.load_slot(manual_path)
+	var saved_state = GameStateScript.new()
+	saved_state.map_id = "underchapel_drain"
+	saved_state.player_position = Vector2(176, 92)
+	_assert(save_service.save_slot(manual_path, saved_state.to_save_state()) == OK, "continue test writes manual slot")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app._ready()
+	app._on_title_continue_requested()
+	_assert(app.story_flow.current_phase() == "underchapel_drain", "title Continue routes to saved phase")
+	_assert(game_state.map_id == "underchapel_drain", "title Continue restores saved map id")
+	_assert(game_state.player_position == Vector2(176, 92), "title Continue restores saved position")
+	app.queue_free()
+	game_state.free()
+	saved_state.free()
+	if previous_payload.is_empty():
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(manual_path))
+	else:
+		save_service.save_slot(manual_path, previous_payload)
 
 func _test_player_profile_persists_uncatalogued_dossier() -> void:
 	var PlayerProfile = load("res://scripts/core/player_profile.gd")
@@ -760,6 +1042,41 @@ func _test_accessibility_settings_persist_controller_options() -> void:
 	var saved: Dictionary = settings.to_dict()
 	_assert(is_equal_approx(float(saved.controller_deadzone), 0.23), "accessibility settings save controller deadzone")
 	_assert(saved.controller_glyph_family == "playstation", "accessibility settings save controller glyph family")
+
+func _test_accessibility_settings_sanitize_title_options() -> void:
+	var AccessibilitySettings = load("res://scripts/accessibility/accessibility_settings.gd")
+	var settings = AccessibilitySettings.from_dict({
+		"atb_mode": "invalid",
+		"window_mode": "borderless",
+		"controller_deadzone": 3.0,
+		"master_volume": 4.0,
+		"ui_volume": -2.0,
+		"high_contrast_ui": "false",
+	})
+	_assert(settings.atb_mode == "wait", "accessibility sanitizes invalid ATB mode")
+	_assert(settings.window_mode == "windowed", "accessibility sanitizes invalid window mode")
+	_assert(is_equal_approx(settings.controller_deadzone, 0.6), "accessibility clamps oversized controller deadzone")
+	_assert(is_equal_approx(settings.master_volume, 1.0), "accessibility clamps oversized master volume")
+	_assert(is_equal_approx(settings.ui_volume, 0.0), "accessibility clamps negative UI volume")
+	_assert(not settings.high_contrast_ui, "accessibility parses false string as false")
+
+func _test_game_state_rejects_corrupt_settings_slot() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var settings_path := "user://settings.save"
+	if FileAccess.file_exists(settings_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(settings_path))
+	var file := FileAccess.open(settings_path, FileAccess.WRITE)
+	file.store_var(["not", "a", "settings", "payload"])
+	file.close()
+	var state = GameStateScript.new()
+	state.accessibility.controller_glyph_family = "switch"
+	state.accessibility.master_volume = 0.4
+	_assert(not state.load_settings_slot(), "corrupt settings slot is rejected")
+	_assert(state.accessibility.controller_glyph_family == "switch", "corrupt settings slot does not overwrite existing glyph settings")
+	_assert(is_equal_approx(state.accessibility.master_volume, 0.4), "corrupt settings slot does not overwrite existing volume settings")
+	state.free()
+	if FileAccess.file_exists(settings_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(settings_path))
 
 func _test_game_state_save_roundtrip_preserves_controller_accessibility() -> void:
 	var GameStateScript = load("res://scripts/core/game_state.gd")
@@ -1678,6 +1995,242 @@ func _test_prototype_field_renders_real_tile_art_layer() -> void:
 	_assert(sprite.get_meta("source_map") == "hallowmere_street", "real tile art records source map metadata")
 	field_scene.queue_free()
 
+func _test_field_atmosphere_catalog_defines_first_slice_profiles() -> void:
+	_assert(ResourceLoader.exists("res://data/field/atmosphere_profiles.json"), "field atmosphere profile data exists")
+	_assert(ResourceLoader.exists("res://scripts/field/field_atmosphere_catalog.gd"), "field atmosphere catalog script exists")
+	var AtmosphereCatalog = load("res://scripts/field/field_atmosphere_catalog.gd")
+	var catalog = AtmosphereCatalog.new()
+	for phase_id in [
+		"empty_rotunda",
+		"broken_exhibit_door",
+		"plague_town_street",
+		"apothecary_house",
+		"chapel",
+		"underchapel_drain",
+		"hidden_hospital_corridor",
+		"bell_tower_boss_room",
+	]:
+		var profile: Dictionary = catalog.profile_for_phase(phase_id)
+		_assert(not profile.is_empty(), "%s has a field atmosphere profile" % phase_id)
+		_assert(not String(profile.get("vista_id", "")).is_empty(), "%s has a vista id" % phase_id)
+		_assert(not String(profile.get("weather_profile", "")).is_empty(), "%s has a weather profile" % phase_id)
+		_assert(not String(profile.get("lighting_profile", "")).is_empty(), "%s has a lighting profile" % phase_id)
+		_assert(not String(profile.get("time_of_day", "")).is_empty(), "%s has a time-of-day state" % phase_id)
+		_assert(profile.get("parallax_layers", []).size() > 0, "%s has at least one parallax layer" % phase_id)
+	var plague: Dictionary = catalog.profile_for_phase("plague_town_street")
+	_assert(plague.weather_profile == "plague_fog", "Hallowmere street uses plague fog weather")
+	var hospital: Dictionary = catalog.profile_for_phase("hidden_hospital_corridor")
+	_assert(hospital.lighting_profile == "flickering_hospital_white", "hidden hospital uses flickering hospital lighting")
+	_assert(catalog.profile_for_phase("missing_phase").is_empty(), "missing phase has no atmosphere profile")
+
+func _test_field_atmosphere_profiles_reference_existing_vista_textures() -> void:
+	var AtmosphereCatalog = load("res://scripts/field/field_atmosphere_catalog.gd")
+	var catalog = AtmosphereCatalog.new()
+	for phase_id in ["empty_rotunda", "broken_exhibit_door", "plague_town_street", "apothecary_house", "chapel", "bell_tower_boss_room"]:
+		var profile: Dictionary = catalog.profile_for_phase(phase_id)
+		var layers: Array = profile.get("parallax_layers", [])
+		var textured_layers := layers.filter(func(layer): return not String(layer.get("texture_path", "")).is_empty())
+		_assert(not textured_layers.is_empty(), "%s uses at least one texture-backed parallax layer" % phase_id)
+		for layer in textured_layers:
+			_assert(FileAccess.file_exists(String(layer.texture_path)), "%s texture-backed parallax layer exists" % phase_id)
+
+func _test_first_slice_ansimuz_vista_assets_are_curated() -> void:
+	for path in [
+		"res://assets/vistas/first_slice/industrial/bg.png",
+		"res://assets/vistas/first_slice/industrial/far_buildings.png",
+		"res://assets/vistas/first_slice/mountain_dusk/sky.png",
+		"res://assets/vistas/first_slice/mountain_dusk/far_mountains.png",
+		"res://assets/vistas/first_slice/sewer/back.png",
+		"res://assets/vistas/first_slice/sewer/middle.png",
+		"res://assets/vistas/first_slice/gothic/back.png",
+		"res://assets/vistas/first_slice/gothic/middle.png",
+		"res://assets/vistas/first_slice/gothic/near.png",
+	]:
+		_assert(FileAccess.file_exists(path), "%s curated Ansimuz vista layer exists" % path)
+	var AtmosphereCatalog = load("res://scripts/field/field_atmosphere_catalog.gd")
+	var catalog = AtmosphereCatalog.new()
+	var rotunda: Dictionary = catalog.profile_for_phase("empty_rotunda")
+	_assert(rotunda.parallax_layers.any(func(layer): return String(layer.get("texture_path", "")).contains("/industrial/")), "museum atmosphere uses curated industrial parallax art")
+	var drain: Dictionary = catalog.profile_for_phase("underchapel_drain")
+	_assert(drain.parallax_layers.any(func(layer): return String(layer.get("texture_path", "")).contains("/sewer/")), "Underchapel atmosphere uses curated sewer parallax art")
+	var hospital: Dictionary = catalog.profile_for_phase("hidden_hospital_corridor")
+	_assert(hospital.parallax_layers.any(func(layer): return String(layer.get("texture_path", "")).contains("/gothic/")), "hospital/cold corridor atmosphere uses curated gothic parallax art")
+
+func _test_field_atmosphere_profiles_do_not_depend_on_title_pane_art() -> void:
+	var AtmosphereCatalog = load("res://scripts/field/field_atmosphere_catalog.gd")
+	var catalog = AtmosphereCatalog.new()
+	for phase_id in [
+		"empty_rotunda",
+		"broken_exhibit_door",
+		"plague_town_street",
+		"apothecary_house",
+		"chapel",
+		"underchapel_drain",
+		"hidden_hospital_corridor",
+		"bell_tower_boss_room",
+	]:
+		var profile: Dictionary = catalog.profile_for_phase(phase_id)
+		for layer in profile.get("parallax_layers", []):
+			var texture_path := String(layer.get("texture_path", ""))
+			if texture_path.is_empty():
+				continue
+			_assert(texture_path.begins_with("res://assets/vistas/first_slice/"), "%s field atmosphere texture is curated under first-slice vista runtime assets" % phase_id)
+			_assert(not texture_path.contains("title_screen"), "%s field atmosphere does not depend on title-screen pane art" % phase_id)
+
+func _test_prototype_field_mounts_vista_weather_and_lighting_layers() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "plague_town_street")
+	field_scene.load_phase_map()
+	var vista = field_scene.get_node_or_null("MapContent/VistaParallax")
+	var weather = field_scene.get_node_or_null("MapContent/WeatherLayer")
+	var lighting = field_scene.get_node_or_null("MapContent/LightingOverlay")
+	_assert(vista is Node2D, "prototype field mounts VistaParallax layer")
+	_assert(weather is Node2D, "prototype field mounts WeatherLayer")
+	_assert(lighting is ColorRect, "prototype field mounts LightingOverlay")
+	if vista is Node2D:
+		_assert(vista.get_child_count() >= 2, "VistaParallax renders multiple parallax bands")
+		_assert(vista.get_child(0).has_meta("scroll_speed"), "parallax bands record scroll speed metadata")
+		_assert(vista.get_meta("vista_id") == "plague_wing_distant", "VistaParallax records active vista id")
+	if weather is Node2D:
+		_assert(weather.get_child_count() >= 3, "WeatherLayer renders weather patches")
+		_assert(weather.get_meta("weather_profile") == "plague_fog", "WeatherLayer records weather profile")
+	if lighting is ColorRect:
+		_assert(lighting.get_meta("lighting_profile") == "sick_gray_day", "LightingOverlay records lighting profile")
+		_assert(lighting.get_meta("time_of_day") == "quarantine_day", "LightingOverlay records time-of-day state")
+		_assert(lighting.mouse_filter == Control.MOUSE_FILTER_IGNORE, "LightingOverlay ignores pointer interaction")
+	field_scene.queue_free()
+
+func _test_prototype_field_renders_texture_backed_parallax_layers() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "plague_town_street")
+	field_scene.load_phase_map()
+	var vista = field_scene.get_node_or_null("MapContent/VistaParallax")
+	_assert(vista is Node2D, "texture-backed parallax test has VistaParallax")
+	if vista is Node2D:
+		var textured := false
+		for child in vista.get_children():
+			if child is TextureRect:
+				textured = true
+				_assert(child.texture != null, "texture-backed parallax layer loads texture")
+				_assert(String(child.get_meta("texture_path", "")).contains("/mountain_dusk/"), "plague field vista uses curated outdoor parallax art")
+				_assert(child.has_meta("scroll_speed"), "texture-backed parallax layer keeps scroll metadata")
+				break
+		_assert(textured, "prototype field renders at least one TextureRect parallax layer")
+	field_scene.queue_free()
+
+func _test_prototype_field_atmosphere_layers_refresh_on_map_change() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "plague_town_street")
+	field_scene.load_phase_map()
+	var first_weather = field_scene.get_node_or_null("MapContent/WeatherLayer")
+	_assert(first_weather != null and first_weather.get_meta("weather_profile") == "plague_fog", "initial map mounts plague fog weather")
+	field_scene.set("max_unlocked_route_index", 7)
+	field_scene.change_to_phase("underchapel_drain", Vector2(48, 96))
+	var vista = field_scene.get_node_or_null("MapContent/VistaParallax")
+	var weather = field_scene.get_node_or_null("MapContent/WeatherLayer")
+	var lighting = field_scene.get_node_or_null("MapContent/LightingOverlay")
+	_assert(vista != null and vista.get_meta("vista_id") == "underchapel_drain", "map change refreshes vista metadata")
+	_assert(weather != null and weather.get_meta("weather_profile") == "sewer_mist", "map change refreshes weather metadata")
+	_assert(lighting != null and lighting.get_meta("lighting_profile") == "green_black_drain", "map change refreshes lighting metadata")
+	_assert(weather.get_child_count() >= 3, "refreshed weather layer renders target map patches")
+	field_scene.queue_free()
+
+func _test_prototype_field_phase_label_surfaces_active_atmosphere() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "plague_town_street")
+	field_scene.load_phase_map()
+	var phase_text := String(field_scene.get_node("%PhaseLabel").text)
+	_assert(phase_text.contains("Atmosphere: Plague Fog"), "phase label surfaces active weather profile")
+	_assert(phase_text.contains("Lighting: Sick Gray Day"), "phase label surfaces active lighting profile")
+	_assert(phase_text.contains("Time: Quarantine Day"), "phase label surfaces active time state")
+	field_scene.set("max_unlocked_route_index", 7)
+	field_scene.change_to_phase("underchapel_drain", Vector2(48, 96))
+	phase_text = String(field_scene.get_node("%PhaseLabel").text)
+	_assert(phase_text.contains("Atmosphere: Sewer Mist"), "phase label refreshes weather profile after map change")
+	_assert(phase_text.contains("Lighting: Green Black Drain"), "phase label refreshes lighting profile after map change")
+	_assert(phase_text.contains("Time: Below Time"), "phase label refreshes time state after map change")
+	field_scene.queue_free()
+
+func _test_prototype_field_phase_debug_label_is_toggleable() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "plague_town_street")
+	field_scene.load_phase_map()
+	var phase_label: Label = field_scene.get_node("%PhaseLabel")
+	_assert(not phase_label.visible, "field phase debug label is hidden during normal play")
+	_assert(phase_label.text.contains("Atmosphere: Plague Fog"), "hidden phase debug label still keeps QA metadata current")
+	field_scene.toggle_debug_overlay()
+	_assert(phase_label.visible, "field debug toggle shows phase metadata")
+	field_scene.toggle_debug_overlay()
+	_assert(not phase_label.visible, "field debug toggle hides phase metadata again")
+	field_scene.queue_free()
+
+func _test_prototype_field_f3_toggles_phase_debug_label() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	var phase_label: Label = field_scene.get_node("%PhaseLabel")
+	var event := InputEventKey.new()
+	event.pressed = true
+	event.physical_keycode = KEY_F3
+	field_scene._unhandled_input(event)
+	_assert(phase_label.visible, "F3 shows field phase debug label")
+	field_scene._unhandled_input(event)
+	_assert(not phase_label.visible, "F3 hides field phase debug label")
+	field_scene.queue_free()
+
+func _test_prototype_field_atmosphere_layers_are_non_interactive() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "hidden_hospital_corridor")
+	field_scene.load_phase_map()
+	for layer_path in ["MapContent/VistaParallax", "MapContent/WeatherLayer", "MapContent/LightingOverlay"]:
+		var layer = field_scene.get_node_or_null(layer_path)
+		_assert(layer != null, "%s exists" % layer_path)
+		if layer == null:
+			continue
+		_assert(layer.find_children("*", "CollisionObject2D", true, false).is_empty(), "%s does not create collision objects" % layer_path)
+		_assert(layer.find_children("*", "Area2D", true, false).is_empty(), "%s does not create interaction areas" % layer_path)
+	field_scene.queue_free()
+
+func _test_prototype_field_animates_atmosphere_layers() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "bell_tower_boss_room")
+	field_scene.load_phase_map()
+	var vista = field_scene.get_node_or_null("MapContent/VistaParallax")
+	var weather = field_scene.get_node_or_null("MapContent/WeatherLayer")
+	var lighting = field_scene.get_node_or_null("MapContent/LightingOverlay")
+	_assert(vista != null and vista.get_child_count() > 0, "animated atmosphere test has vista children")
+	_assert(weather != null and weather.get_child_count() > 0, "animated atmosphere test has weather children")
+	_assert(lighting is ColorRect, "animated atmosphere test has lighting overlay")
+	if vista == null or weather == null or not lighting is ColorRect:
+		field_scene.queue_free()
+		return
+	var first_band = vista.get_child(0)
+	var first_patch = weather.get_child(0)
+	var band_x_before := float(first_band.get("offset_left"))
+	var patch_x_before := float(first_patch.get("offset_left"))
+	var lighting_alpha_before := Color(lighting.color).a
+	field_scene._process(1.0)
+	_assert(float(first_band.get("offset_left")) != band_x_before, "parallax band drifts during field processing")
+	_assert(float(first_patch.get("offset_left")) != patch_x_before, "weather patch drifts during field processing")
+	_assert(not is_equal_approx(Color(lighting.color).a, lighting_alpha_before), "lighting overlay pulses during field processing")
+	_assert(first_patch.has_meta("drift_speed"), "weather patch records drift speed metadata")
+	_assert(lighting.has_meta("pulse_strength"), "lighting overlay records pulse strength metadata")
+	field_scene.queue_free()
+
 func _test_hallowmere_authored_map_scene_renders_curated_props() -> void:
 	_assert(ResourceLoader.exists("res://scenes/field/maps/hallowmere_street_map.tscn"), "Hallowmere authored map scene exists")
 	var MapScene = load("res://scenes/field/maps/hallowmere_street_map.tscn")
@@ -1896,6 +2449,23 @@ func _test_bell_tower_promoted_props_manifest_defines_runtime_assets() -> void:
 		_assert(String(promotion.output_path).begins_with("res://assets/tilesets/first_slice/bell_tower/sliced/"), "%s promotion targets bell tower runtime sliced folder" % promotion.id)
 		_assert(FileAccess.file_exists(String(promotion.output_path)), "%s promoted output exists" % promotion.id)
 		_assert(FileAccess.file_exists(String(promotion.source_path)), "%s source cut sprite exists" % promotion.id)
+
+func _test_first_slice_promoted_props_have_no_placeholder_review_status() -> void:
+	for manifest_path in [
+		"res://data/tilesets/hallowmere_promoted_props.json",
+		"res://data/tilesets/apothecary_promoted_props.json",
+		"res://data/tilesets/hospital_promoted_props.json",
+		"res://data/tilesets/chapel_promoted_props.json",
+		"res://data/tilesets/underchapel_promoted_props.json",
+		"res://data/tilesets/bell_tower_promoted_props.json",
+	]:
+		_assert(FileAccess.file_exists(manifest_path), "%s exists for first-slice promotion review" % manifest_path)
+		var file := FileAccess.open(manifest_path, FileAccess.READ)
+		if file == null:
+			continue
+		var manifest = JSON.parse_string(file.get_as_text())
+		for promotion in manifest.get("promotions", []):
+			_assert(String(promotion.get("review_status", "")) != "placeholder", "%s/%s has a real review status before runtime use" % [manifest_path, String(promotion.get("id", ""))])
 
 func _test_pixellab_promoted_assets_manifest_defines_runtime_assets() -> void:
 	_assert(FileAccess.file_exists("res://data/generation/pixellab_promoted_assets.json"), "PixelLab promoted assets manifest exists")
@@ -3220,7 +3790,7 @@ func _test_battle_screen_records_animation_hooks() -> void:
 	var screen = BattleScene.instantiate()
 	root.add_child(screen)
 	screen.battle.start_battle(
-		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}],
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "animation_set": "sev_generated"}],
 		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png", "animation_set": "clean_man_generated"}]
 	)
 	_assert(screen.has_method("apply_battler_animation_hooks"), "battle screen exposes animation hook application")
@@ -3229,7 +3799,7 @@ func _test_battle_screen_records_animation_hooks() -> void:
 		var party_sprite = screen.get_node_or_null("Arena/Battlers/PartyAnchor/PartyBattler")
 		var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
 		if party_sprite is Sprite2D:
-			_assert(String(party_sprite.get_meta("animation_set", "")) == "sev_placeholder", "party battler records animation set")
+			_assert(String(party_sprite.get_meta("animation_set", "")) == "sev_generated", "party battler records animation set")
 			_assert(String(party_sprite.get_meta("animation_state", "")) == "idle", "party battler records idle animation state")
 		if enemy_sprite is Sprite2D:
 			_assert(String(enemy_sprite.get_meta("animation_set", "")) == "clean_man_generated", "enemy battler records animation set")
@@ -3242,7 +3812,7 @@ func _test_battle_screen_updates_party_animation_set_for_active_member() -> void
 	root.add_child(screen)
 	screen.battle.start_battle(
 		[
-			{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"},
+			{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "defense": 5, "speed": 20}, "animation_set": "sev_generated"},
 			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound"], "animation_set": "mira_placeholder"},
 		],
 		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "animation_set": "clean_man_generated"}]
@@ -3257,7 +3827,7 @@ func _test_battle_animation_assets_are_cataloged() -> void:
 	_assert(FileAccess.file_exists("res://data/battle/animation_sets.json"), "battle animation set data exists")
 	_assert(FileAccess.file_exists("res://assets/battle/animations/clean_man_generated/idle_01.png"), "Clean Man idle animation frame exists")
 	_assert(FileAccess.file_exists("res://assets/battle/animations/bell_saint_generated/attack_03.png"), "Bell Saint attack animation frame exists")
-	_assert(FileAccess.file_exists("res://assets/battle/animations/sev_placeholder/hurt_02.png"), "Sev placeholder hurt animation frame exists")
+	_assert(FileAccess.file_exists("res://assets/battle/animations/sev_generated/hurt_02.png"), "Sev generated hurt animation frame exists")
 	var ContentCatalog = load("res://scripts/core/content_catalog.gd")
 	var catalog = ContentCatalog.new()
 	var clean_set = catalog.battle_animation_set("clean_man_generated")
@@ -3267,7 +3837,7 @@ func _test_battle_animation_assets_are_cataloged() -> void:
 	var screen = BattleScene.instantiate()
 	root.add_child(screen)
 	screen.battle.start_battle(
-		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}],
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "animation_set": "sev_generated"}],
 		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "animation_set": "clean_man_generated"}]
 	)
 	screen.apply_battler_animation_hooks()
@@ -3278,6 +3848,22 @@ func _test_battle_animation_assets_are_cataloged() -> void:
 		_assert(String(enemy_sprite.get_meta("animation_state", "")) == "hurt", "enemy hurt animation state is applied")
 		_assert(enemy_sprite.texture != null, "enemy hurt animation frame is loaded")
 	screen.queue_free()
+
+func _test_runtime_battle_animation_sets_have_no_placeholder_ids() -> void:
+	var file := FileAccess.open("res://data/battle/animation_sets.json", FileAccess.READ)
+	_assert(file != null, "battle animation set data exists for placeholder scan")
+	if file == null:
+		return
+	var animation_sets = JSON.parse_string(file.get_as_text())
+	_assert(animation_sets is Dictionary, "battle animation set data parses for placeholder scan")
+	if not animation_sets is Dictionary:
+		return
+	for animation_set_id in animation_sets.keys():
+		_assert(not String(animation_set_id).contains("placeholder"), "%s is named as a runtime animation set, not a placeholder" % animation_set_id)
+		var states: Dictionary = animation_sets[animation_set_id].get("states", {})
+		for state_id in states.keys():
+			for frame_path in states[state_id].get("frames", []):
+				_assert(not String(frame_path).contains("placeholder"), "%s frame path is not in a placeholder runtime folder" % animation_set_id)
 
 func _test_combat_enemies_have_animation_sets() -> void:
 	var file := FileAccess.open("res://data/combat/enemies.json", FileAccess.READ)
@@ -3327,7 +3913,7 @@ func _test_battle_screen_renders_and_targets_multiple_enemies() -> void:
 	var screen = BattleScene.instantiate()
 	root.add_child(screen)
 	screen.battle.start_battle(
-		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "skills": ["archive_strike"], "animation_set": "sev_placeholder"}],
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "skills": ["archive_strike"], "animation_set": "sev_generated"}],
 		[
 			{"id": "wretch", "name": "Fever Wretch", "hp": 42, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
 			{"id": "choir", "name": "Rot Choir", "hp": 64, "max_hp": 64, "strength": 6, "defense": 3, "speed": 5, "xp": 38, "animation_set": "rot_choir"}
@@ -3353,7 +3939,7 @@ func _test_battle_screen_renders_target_buttons() -> void:
 	var screen = BattleScene.instantiate()
 	root.add_child(screen)
 	screen.battle.start_battle(
-		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "skills": ["archive_strike"], "animation_set": "sev_placeholder"}],
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "skills": ["archive_strike"], "animation_set": "sev_generated"}],
 		[
 			{"id": "wretch", "name": "Fever Wretch", "hp": 42, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
 			{"id": "choir", "name": "Rot Choir", "hp": 64, "max_hp": 64, "strength": 6, "defense": 3, "speed": 5, "xp": 38, "animation_set": "rot_choir"}
@@ -3381,7 +3967,7 @@ func _test_battle_screen_attack_uses_selected_enemy() -> void:
 	var screen = BattleScene.instantiate()
 	root.add_child(screen)
 	screen.battle.start_battle(
-		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}],
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_generated"}],
 		[
 			{"id": "wretch", "name": "Fever Wretch", "hp": 42, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
 			{"id": "choir", "name": "Rot Choir", "hp": 64, "max_hp": 64, "strength": 6, "defense": 3, "speed": 5, "xp": 38, "animation_set": "rot_choir"}
@@ -3400,7 +3986,7 @@ func _test_battle_screen_auto_selects_living_enemy_after_defeat() -> void:
 	var screen = BattleScene.instantiate()
 	root.add_child(screen)
 	screen.battle.start_battle(
-		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}],
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_generated"}],
 		[
 			{"id": "wretch", "name": "Fever Wretch", "hp": 6, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
 			{"id": "choir", "name": "Rot Choir", "hp": 64, "max_hp": 64, "strength": 6, "defense": 3, "speed": 5, "xp": 38, "animation_set": "rot_choir"}
@@ -3428,7 +4014,7 @@ func _test_battle_screen_retaliation_uses_living_enemy() -> void:
 	var screen = BattleScene.instantiate()
 	root.add_child(screen)
 	screen.battle.start_battle(
-		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 100, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}],
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 100, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_generated"}],
 		[
 			{"id": "wretch", "name": "Fever Wretch", "hp": 0, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
 			{"id": "choir", "name": "Rot Choir", "hp": 64, "max_hp": 64, "strength": 14, "defense": 3, "speed": 5, "xp": 38, "animation_set": "rot_choir"}
@@ -3446,7 +4032,7 @@ func _test_battle_screen_uses_pending_group_payload() -> void:
 	var GameStateScript = load("res://scripts/core/game_state.gd")
 	var game_state = GameStateScript.new()
 	game_state.name = "GameState"
-	var party: Array[Dictionary] = [{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}]
+	var party: Array[Dictionary] = [{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_generated"}]
 	game_state.party = party
 	game_state.flags["pending_battle_payload"] = {
 		"scene_path": "res://scenes/battle/prototype_battle.tscn",
@@ -3905,6 +4491,47 @@ func _test_app_root_bell_saint_completion_records_autosave_feedback() -> void:
 		_assert(text_label.text.contains("safe to stop"), "Bell Saint reward scene tells player it is safe to stop")
 	app.queue_free()
 	game_state.free()
+
+func _test_app_root_bell_saint_autosave_restores_reward_phase() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var SaveService = load("res://scripts/save/save_service.gd")
+	var manual_path := "user://manual_slot.save"
+	var save_service = SaveService.new()
+	var previous_payload: Dictionary = save_service.load_slot(manual_path)
+	if FileAccess.file_exists(manual_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(manual_path))
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120}}]
+	game_state.party = party
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("battle")
+	game_state.map_id = "battle"
+	app._on_battle_completed({
+		"xp": 180,
+		"loot": {},
+		"relics": ["bell_clapper"],
+		"memory_cards": ["bell_saint"],
+		"next_flow": "truth_recovered",
+		"party_state": [{"id": "lead", "hp": 90}]
+	})
+	var restored = GameStateScript.new()
+	_assert(restored.load_manual_slot(), "Bell Saint autosave writes a manual slot")
+	_assert(restored.map_id == "truth_recovered", "Bell Saint autosave restores to reward phase instead of battle")
+	_assert(restored.flags.get("chapter_01_complete", false), "Bell Saint autosave preserves chapter completion flag")
+	_assert(restored.flags.get("pending_reward_dialogue", {}).get("scene", "") == "memory_card_unlock", "Bell Saint autosave preserves reward dialogue")
+	_assert(String(restored.flags.get("last_save_status", "")).contains("safe to stop"), "Bell Saint autosave preserves visible safe-stop status")
+	app.queue_free()
+	game_state.free()
+	restored.free()
+	if previous_payload.is_empty():
+		if FileAccess.file_exists(manual_path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(manual_path))
+	else:
+		save_service.save_slot(manual_path, previous_payload)
 
 func _test_app_root_renders_bell_saint_reward_scene() -> void:
 	var AppRootScene = load("res://scenes/app/app_root.tscn")
@@ -4808,10 +5435,10 @@ func _test_story_flow_service_loads_and_advances_slice() -> void:
 	flow.load_first_slice()
 	_assert(flow.title == "The Last World Museum", "story flow loads title")
 	_assert(flow.slice_name == "The Bell Saint", "story flow loads slice name")
-	_assert(flow.current_phase() == "character_creator", "story flow starts at character creator")
-	_assert(flow.advance() == "empty_rotunda", "story flow advances into the empty rotunda")
+	_assert(flow.current_phase() == "title", "story flow starts at title screen")
+	_assert(flow.advance() == "character_creator", "story flow advances into character creator")
 	flow.advance()
-	_assert(flow.current_phase() == "broken_exhibit_door", "story flow advances through story data")
+	_assert(flow.current_phase() == "empty_rotunda", "story flow advances into first field phase")
 	_assert(flow.is_field_phase("plague_town_street"), "story flow classifies story maps as field phases")
 	_assert(flow.is_battle_phase("battle"), "story flow classifies battle phase")
 
@@ -5063,3 +5690,10 @@ func _test_vista_catalog_defines_bell_saint_vistas() -> void:
 	_assert(plague.id == "plague_wing_distant", "Plague street maps to plague vista")
 	_assert(plague.truth.contains("graves"), "Plague vista records hidden truth")
 	_assert(catalog.vista("missing_vista").is_empty(), "missing vista returns empty dictionary")
+
+func _test_vista_catalog_maps_underchapel_phase() -> void:
+	var VistaCatalog = load("res://scripts/core/vista_catalog.gd")
+	var catalog = VistaCatalog.new()
+	var underchapel = catalog.vista_for_phase("underchapel_drain")
+	_assert(underchapel.id == "underchapel_drain", "Underchapel phase maps to Underchapel Drain vista")
+	_assert(underchapel.truth.contains("museum maintenance pipes"), "Underchapel vista records hidden infrastructure truth")

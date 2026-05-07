@@ -1,0 +1,214 @@
+[gd_scene load_steps=2 format=3 uid="uid://last_world_title_screen"]
+
+[ext_resource type="Script" path="res://scripts/title/title_screen.gd" id="1_title"]
+
+[node name="TitleScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_title")
+
+[node name="Backdrop" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+modulate = Color(0.3, 0.36, 0.43, 0.55)
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Tint" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.018, 0.025, 0.82)
+
+[node name="RootMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 72
+theme_override_constants/margin_top = 38
+theme_override_constants/margin_right = 54
+theme_override_constants/margin_bottom = 34
+
+[node name="Layout" type="VBoxContainer" parent="RootMargin"]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="TitleBlock" type="VBoxContainer" parent="RootMargin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TitleTopLabel" type="Label" parent="RootMargin/Layout/TitleBlock"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.62, 0.72, 0.8, 1)
+text = "THE LAST"
+horizontal_alignment = 1
+
+[node name="TitleBottomLabel" type="Label" parent="RootMargin/Layout/TitleBlock"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 72
+theme_override_colors/font_color = Color(0.94, 0.88, 0.72, 1)
+text = "WORLD MUSEUM"
+horizontal_alignment = 1
+
+[node name="TaglineLabel" type="Label" parent="RootMargin/Layout/TitleBlock"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+theme_override_colors/font_color = Color(0.66, 0.72, 0.78, 1)
+text = "History was preserved. Truth was archived separately."
+horizontal_alignment = 1
+
+[node name="VistaLayer" type="Control" parent="RootMargin/Layout"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 336)
+
+[node name="PaneHost" type="HBoxContainer" parent="RootMargin/Layout/VistaLayer"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Door" type="PanelContainer" parent="RootMargin/Layout/VistaLayer"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.43
+anchor_top = 0.02
+anchor_right = 0.57
+anchor_bottom = 0.98
+
+[node name="DoorCore" type="ColorRect" parent="RootMargin/Layout/VistaLayer/Door"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 320)
+color = Color(0.002, 0.004, 0.008, 1)
+
+[node name="BottomRow" type="HBoxContainer" parent="RootMargin/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="Menu" type="VBoxContainer" parent="RootMargin/Layout/BottomRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(330, 0)
+theme_override_constants/separation = 8
+
+[node name="NewGameButton" type="Button" parent="RootMargin/Layout/BottomRow/Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "New Game"
+
+[node name="ContinueButton" type="Button" parent="RootMargin/Layout/BottomRow/Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Continue"
+
+[node name="MemoryCatalogButton" type="Button" parent="RootMargin/Layout/BottomRow/Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Memory Catalog"
+
+[node name="OptionsButton" type="Button" parent="RootMargin/Layout/BottomRow/Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Options"
+
+[node name="ExitButton" type="Button" parent="RootMargin/Layout/BottomRow/Menu"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Exit"
+
+[node name="StatusStack" type="VBoxContainer" parent="RootMargin/Layout/BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="StatusLabel" type="Label" parent="RootMargin/Layout/BottomRow/StatusStack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.58, 0.68, 0.76, 1)
+text = "ARCHIVE STATUS: UNSTABLE"
+horizontal_alignment = 2
+
+[node name="PromptLabel" type="Label" parent="RootMargin/Layout/BottomRow/StatusStack"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.46, 0.55, 0.62, 1)
+text = "Interact: select | Cancel: back"
+horizontal_alignment = 2
+
+[node name="SubmenuPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.22
+anchor_top = 0.14
+anchor_right = 0.78
+anchor_bottom = 0.86
+
+[node name="SubmenuMargin" type="MarginContainer" parent="SubmenuPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 18
+
+[node name="SubmenuScroll" type="ScrollContainer" parent="SubmenuPanel/SubmenuMargin"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="SubmenuControls" type="VBoxContainer" parent="SubmenuPanel/SubmenuMargin/SubmenuScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="SubmenuTitle" type="Label" parent="SubmenuPanel/SubmenuMargin/SubmenuScroll/SubmenuControls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.94, 0.88, 0.72, 1)
+text = "Submenu"
+
+[node name="SubmenuBody" type="Label" parent="SubmenuPanel/SubmenuMargin/SubmenuScroll/SubmenuControls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.72, 0.78, 0.84, 1)
+text = "Body"
+autowrap_mode = 3
+
+[node name="SubmenuBackButton" type="Button" parent="SubmenuPanel/SubmenuMargin/SubmenuScroll/SubmenuControls"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Back"

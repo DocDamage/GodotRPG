@@ -2,6 +2,7 @@
 /_reference/
 /Extracted Assets/
 /.secrets/
+/.superpowers/
 
 .godot/
 .import/

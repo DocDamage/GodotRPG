@@ -18,6 +18,8 @@ var inventory: Dictionary = {}
 var memory_cards: Dictionary = {"owned": [], "equipped": []}
 var flags: Dictionary = {}
 
+const SETTINGS_SLOT_PATH := "user://settings.save"
+
 func start_new_game(new_profile: PlayerProfile) -> void:
 	profile = new_profile
 	accessibility = new_profile.accessibility
@@ -86,6 +88,49 @@ func load_manual_slot() -> bool:
 		return false
 	apply_save_payload(payload)
 	return true
+
+func has_manual_slot() -> bool:
+	return not SaveService.new().load_slot("user://manual_slot.save").is_empty()
+
+func save_settings_slot() -> Error:
+	var file := FileAccess.open(SETTINGS_SLOT_PATH, FileAccess.WRITE)
+	if file == null:
+		return FileAccess.get_open_error()
+	file.store_var({"accessibility": accessibility.to_dict()})
+	apply_runtime_settings()
+	return OK
+
+func load_settings_slot() -> bool:
+	if not FileAccess.file_exists(SETTINGS_SLOT_PATH):
+		return false
+	var file := FileAccess.open(SETTINGS_SLOT_PATH, FileAccess.READ)
+	if file == null:
+		return false
+	var payload = file.get_var()
+	if not payload is Dictionary:
+		return false
+	accessibility = AccessibilitySettings.from_dict(payload.get("accessibility", {}))
+	apply_runtime_settings()
+	return true
+
+func apply_runtime_settings() -> void:
+	_apply_bus_volume("Master", accessibility.master_volume)
+	_apply_bus_volume("Music", accessibility.music_volume)
+	_apply_bus_volume("Ambience", accessibility.ambience_volume)
+	_apply_bus_volume("SFX", accessibility.sfx_volume)
+	_apply_bus_volume("UI", accessibility.ui_volume)
+	_apply_bus_volume("Dialogue", accessibility.dialogue_volume)
+	_apply_bus_volume("Combat", accessibility.combat_volume)
+	_apply_bus_volume("Environment", accessibility.environment_volume)
+	if DisplayServer.get_name() != "headless":
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if accessibility.window_mode == "fullscreen" else DisplayServer.WINDOW_MODE_WINDOWED)
+
+func _apply_bus_volume(bus_name: String, value: float) -> void:
+	var bus_index := AudioServer.get_bus_index(bus_name)
+	if bus_index < 0:
+		return
+	var linear := clampf(value, 0.0, 1.0)
+	AudioServer.set_bus_volume_db(bus_index, -80.0 if is_zero_approx(linear) else linear_to_db(linear))
 
 func add_inventory_items(items: Dictionary) -> void:
 	InventoryService.new().add_items(inventory, items)

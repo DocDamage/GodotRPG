@@ -148,3 +148,21 @@ git push -u origin codex/jrpg-vertical-slice-spec
 ```
 
 Expected: branch pushes to `https://github.com/DocDamage/GodotRPG.git`.
+
+### Task 7: Full Robustness Sweep
+
+**Files:**
+- Modify: `game/scripts/core/app_root.gd`
+- Modify: `game/scripts/battle/battle_screen.gd`
+- Modify: `game/data/battle/animation_sets.json`
+- Modify: `game/data/characters/party.json`
+- Modify: `game/data/tilesets/bell_tower_promoted_props.json`
+- Modify: `game/tests/test_runner.gd`
+- Modify: `README.md`
+
+- [x] Add title-to-reward scene churn coverage so AppRoot keeps exactly one mounted child while swapping title, creator, field, battle, and reward scenes.
+- [x] Add Bell Saint autosave regression coverage proving Continue restores `truth_recovered`, reward dialogue, chapter completion, and visible safe-stop status.
+- [x] Move Bell Saint completion autosave after phase routing so the manual slot is written from the player-facing reward scene.
+- [x] Add runtime promotion review coverage so first-slice props cannot ship with `review_status: placeholder`.
+- [x] Rename Sev battle animation runtime data from placeholder naming to generated runtime candidate naming.
+- [x] Run the full Godot test suite, verbose leak scan, and title/app/battle scene smoke checks.

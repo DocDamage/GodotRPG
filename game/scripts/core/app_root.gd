@@ -1,6 +1,7 @@
 extends Control
 
 const CharacterCreatorScene = preload("res://scenes/character_creator/character_creator_screen.tscn")
+const TitleScreenScene = preload("res://scenes/title/title_screen.tscn")
 const PrototypeFieldScene = preload("res://scenes/field/prototype_field.tscn")
 const PrototypeBattleScene = preload("res://scenes/battle/prototype_battle.tscn")
 const StoryFlowService = preload("res://scripts/core/story_flow_service.gd")
@@ -19,6 +20,9 @@ var game_state_override = null
 
 func _ready() -> void:
 	_resolve_late_bound_nodes()
+	var game_state = _game_state()
+	if game_state != null and game_state.has_method("load_settings_slot"):
+		game_state.load_settings_slot()
 	story_flow.load_first_slice()
 	_sync_scene()
 	_update_labels()
@@ -34,7 +38,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _advance_flow() -> void:
 	_play_audio("ui_confirm")
-	if story_flow.current_phase() == "character_creator":
+	if story_flow.current_phase() == "title" or story_flow.current_phase() == "character_creator":
 		return
 	elif story_flow.current_phase() == "truth_recovered":
 		var game_state = _game_state()
@@ -58,8 +62,42 @@ func _on_character_profile_confirmed(profile) -> void:
 	_sync_scene()
 	_update_labels()
 
+func _on_title_new_game_requested() -> void:
+	_play_audio("ui_confirm")
+	if not story_flow.go_to_phase("character_creator"):
+		story_flow.load_first_slice()
+		story_flow.go_to_phase("character_creator")
+	var game_state = _game_state()
+	if game_state != null:
+		game_state.map_id = "character_creator"
+	_sync_scene()
+	_update_labels()
+
+func _on_title_continue_requested() -> void:
+	var game_state = _game_state()
+	if game_state == null:
+		return
+	if not game_state.load_manual_slot():
+		_play_audio("curator_warning")
+		return
+	_play_audio("ui_confirm")
+	var saved_phase := String(game_state.map_id)
+	if saved_phase == "overworld":
+		saved_phase = "empty_rotunda"
+	if not story_flow.go_to_phase(saved_phase):
+		story_flow.go_to_phase("character_creator")
+		game_state.map_id = story_flow.current_phase()
+	_sync_scene()
+	_update_labels()
+
+func _on_title_status_only_requested() -> void:
+	_play_audio("curator_warning")
+
+func _on_title_exit_requested() -> void:
+	get_tree().quit()
+
 func _on_field_battle_launch_requested(payload: Dictionary) -> void:
-	if story_flow.phases.size() <= 1:
+	if story_flow.story_data.is_empty():
 		story_flow.load_first_slice()
 	var game_state = _game_state()
 	if game_state == null:
@@ -85,7 +123,7 @@ func _on_battle_completed(payload: Dictionary) -> void:
 	game_state.add_inventory_items(relic_loot)
 	for card_id in payload.get("memory_cards", []):
 		game_state.acquire_memory_card(String(card_id))
-	_apply_bell_saint_completion_state(game_state, payload)
+	var needs_completion_autosave := _apply_bell_saint_completion_state(game_state, payload)
 	game_state.flags.erase("pending_battle_payload")
 	var next_phase := String(payload.get("next_flow", ""))
 	if next_phase.is_empty():
@@ -97,12 +135,17 @@ func _on_battle_completed(payload: Dictionary) -> void:
 	if not story_flow.go_to_phase(next_phase):
 		story_flow.go_to_phase("truth_recovered")
 	game_state.map_id = story_flow.current_phase()
+	if needs_completion_autosave:
+		game_state.flags["last_save_status"] = "Autosaved. It is safe to stop here."
+		var save_error = game_state.save_manual_slot()
+		if save_error != OK:
+			game_state.flags["last_save_status"] = "Autosave failed. Open the menu to save again."
 	_sync_scene()
 	_update_labels()
 
-func _apply_bell_saint_completion_state(game_state, payload: Dictionary) -> void:
+func _apply_bell_saint_completion_state(game_state, payload: Dictionary) -> bool:
 	if not payload.get("relics", []).has("bell_clapper") and not payload.get("memory_cards", []).has("bell_saint"):
-		return
+		return false
 	game_state.recruit_party_member("mira_venn")
 	game_state.flags["mira_venn_recruited"] = true
 	game_state.flags["chapter_01_complete"] = true
@@ -111,8 +154,7 @@ func _apply_bell_saint_completion_state(game_state, payload: Dictionary) -> void
 		"section": "rewards",
 		"scene": "memory_card_unlock",
 	}
-	var save_error = game_state.save_manual_slot()
-	game_state.flags["last_save_status"] = "Autosaved. It is safe to stop here." if save_error == OK else "Autosave failed. Open the menu to save again."
+	return true
 
 func _update_labels() -> void:
 	_resolve_late_bound_nodes()
@@ -134,7 +176,15 @@ func _sync_scene() -> void:
 	for child in scene_host.get_children():
 		scene_host.remove_child(child)
 		child.queue_free()
-	if story_flow.current_phase() == "character_creator":
+	if story_flow.current_phase() == "title":
+		var title_scene := TitleScreenScene.instantiate()
+		title_scene.new_game_requested.connect(_on_title_new_game_requested)
+		title_scene.continue_requested.connect(_on_title_continue_requested)
+		title_scene.memory_catalog_requested.connect(_on_title_status_only_requested)
+		title_scene.options_requested.connect(_on_title_status_only_requested)
+		title_scene.exit_requested.connect(_on_title_exit_requested)
+		scene_host.add_child(title_scene)
+	elif story_flow.current_phase() == "character_creator":
 		var creator_scene := CharacterCreatorScene.instantiate()
 		creator_scene.profile_confirmed.connect(_on_character_profile_confirmed)
 		scene_host.add_child(creator_scene)

@@ -14,7 +14,7 @@
     {
       "source": "C:/dev/Godot Game/Assets/Monsters/wild monsters/Wild Pack - Size Small/Wild_Pack_Small_1.png",
       "target": "res://assets/vendor/cute_sckr/monsters/Wild_Pack_Small_1.png",
-      "usage": "normal battle enemy placeholder"
+      "usage": "normal battle enemy runtime candidate"
     },
     {
       "source": "C:/dev/Godot Game/Assets/ansimuz assets/Cyberpunk streets/cyberpunk-street-files/Assets/Version 2/Previews/city.png",

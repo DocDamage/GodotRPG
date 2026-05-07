@@ -31,6 +31,7 @@
     "plague_town_street": "plague_wing_distant",
     "apothecary_house": "plague_wing_distant",
     "chapel": "plague_wing_distant",
+    "underchapel_drain": "underchapel_drain",
     "hidden_hospital_corridor": "underchapel_drain",
     "bell_tower_boss_room": "plague_wing_distant"
   }

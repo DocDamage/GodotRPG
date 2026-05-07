@@ -23,7 +23,7 @@
       "source_sprite_id": "Medieval Dungeon/2/2_112",
       "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Fantasy Dungeon & Prison Pixel Art Tileset Pack/2/2_112.png",
       "output_path": "res://assets/tilesets/first_slice/bell_tower/sliced/bell_rope.png",
-      "review_status": "placeholder"
+      "review_status": "candidate"
     },
     {
       "id": "anchor_door",

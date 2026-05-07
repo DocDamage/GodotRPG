@@ -253,7 +253,7 @@ func _refresh_target_buttons() -> void:
 func apply_battler_animation_hooks() -> void:
 	var party := _ensure_party_sprite()
 	if not battle.party.is_empty():
-		party.set_meta("animation_set", String(_active_party_member().get("animation_set", "sev_placeholder")))
+		party.set_meta("animation_set", String(_active_party_member().get("animation_set", "sev_generated")))
 		_set_battler_animation_state(party, "party", "idle")
 	var enemy := _ensure_enemy_sprite()
 	for index in range(battle.enemies.size()):
@@ -1003,9 +1003,9 @@ func _render_party_status() -> void:
 
 func _sync_active_party_sprite(member: Dictionary) -> void:
 	var sprite := _ensure_party_sprite()
-	var animation_set := String(member.get("animation_set", "sev_placeholder"))
+	var animation_set := String(member.get("animation_set", "sev_generated"))
 	if animation_set.is_empty():
-		animation_set = "sev_placeholder"
+		animation_set = "sev_generated"
 	sprite.set_meta("animation_set", animation_set)
 	if String(sprite.get_meta("animation_state", "")) == "":
 		_set_battler_animation_state(sprite, "party", "idle")
@@ -1125,11 +1125,11 @@ func _ensure_party_sprite() -> Sprite2D:
 		else:
 			add_child(party_sprite)
 	if party_sprite.texture == null:
-		party_sprite.texture = _create_party_placeholder_texture()
+		party_sprite.texture = _create_party_fallback_texture()
 	party_sprite.set_meta("presentation_role", "party_lead")
 	return party_sprite
 
-func _create_party_placeholder_texture() -> Texture2D:
+func _create_party_fallback_texture() -> Texture2D:
 	var image := Image.create(32, 48, false, Image.FORMAT_RGBA8)
 	image.fill(Color(0, 0, 0, 0))
 	for y in range(4, 44):

@@ -1,0 +1,135 @@
+{
+  "profiles": {
+    "empty_rotunda": {
+      "vista_id": "vista_gallery",
+      "weather_profile": "sterile_dust",
+      "lighting_profile": "cold_museum_idle",
+      "time_of_day": "outside_time",
+      "parallax_layers": [
+        {"id": "distant_museum_wall", "rect": {"x": -48, "y": -24, "w": 560, "h": 74}, "color": [0.55, 0.64, 0.68, 0.88], "texture_path": "res://assets/vistas/first_slice/industrial/bg.png", "scroll_speed": 0.05},
+        {"id": "blue_terminal_band", "rect": {"x": -32, "y": 28, "w": 520, "h": 48}, "color": [0.50, 0.62, 0.66, 0.46], "texture_path": "res://assets/vistas/first_slice/industrial/far_buildings.png", "scroll_speed": 0.12}
+      ],
+      "weather_patches": [
+        {"id": "dust_01", "rect": {"x": 42, "y": 34, "w": 72, "h": 6}, "color": [0.64, 0.76, 0.82, 0.10]},
+        {"id": "dust_02", "rect": {"x": 214, "y": 78, "w": 88, "h": 8}, "color": [0.64, 0.76, 0.82, 0.08]},
+        {"id": "dust_03", "rect": {"x": 330, "y": 46, "w": 60, "h": 5}, "color": [0.64, 0.76, 0.82, 0.07]}
+      ],
+      "lighting": {"color": [0.08, 0.13, 0.15, 0.18], "rect": {"x": -16, "y": -16, "w": 480, "h": 304}}
+    },
+    "broken_exhibit_door": {
+      "vista_id": "vista_gallery",
+      "weather_profile": "plague_leak",
+      "lighting_profile": "museum_breach_alarm",
+      "time_of_day": "outside_time",
+      "parallax_layers": [
+        {"id": "sealed_gallery_wall", "rect": {"x": -48, "y": -28, "w": 560, "h": 78}, "color": [0.56, 0.63, 0.67, 0.88], "texture_path": "res://assets/vistas/first_slice/industrial/bg.png", "scroll_speed": 0.04},
+        {"id": "red_breach_haze", "rect": {"x": -16, "y": 22, "w": 492, "h": 48}, "color": [0.38, 0.14, 0.12, 0.34], "scroll_speed": 0.10}
+      ],
+      "weather_patches": [
+        {"id": "leak_01", "rect": {"x": 90, "y": 72, "w": 102, "h": 18}, "color": [0.48, 0.58, 0.44, 0.18]},
+        {"id": "leak_02", "rect": {"x": 178, "y": 102, "w": 136, "h": 22}, "color": [0.48, 0.58, 0.44, 0.14]},
+        {"id": "leak_03", "rect": {"x": 284, "y": 58, "w": 86, "h": 14}, "color": [0.62, 0.34, 0.32, 0.13]}
+      ],
+      "lighting": {"color": [0.28, 0.07, 0.06, 0.17], "rect": {"x": -16, "y": -16, "w": 480, "h": 304}}
+    },
+    "plague_town_street": {
+      "vista_id": "plague_wing_distant",
+      "weather_profile": "plague_fog",
+      "lighting_profile": "sick_gray_day",
+      "time_of_day": "quarantine_day",
+      "parallax_layers": [
+        {"id": "far_bell_tower", "rect": {"x": -42, "y": -20, "w": 548, "h": 64}, "color": [0.62, 0.58, 0.55, 0.72], "texture_path": "res://assets/vistas/first_slice/mountain_dusk/sky.png", "scroll_speed": 0.05},
+        {"id": "distant_roofs", "rect": {"x": -20, "y": 32, "w": 500, "h": 42}, "color": [0.50, 0.48, 0.44, 0.54], "texture_path": "res://assets/vistas/first_slice/mountain_dusk/far_mountains.png", "scroll_speed": 0.14},
+        {"id": "low_grave_fog", "rect": {"x": -8, "y": 92, "w": 468, "h": 24}, "color": [0.53, 0.59, 0.50, 0.18], "scroll_speed": 0.24}
+      ],
+      "weather_patches": [
+        {"id": "fog_01", "rect": {"x": 38, "y": 72, "w": 96, "h": 18}, "color": [0.62, 0.67, 0.58, 0.18]},
+        {"id": "fog_02", "rect": {"x": 154, "y": 112, "w": 128, "h": 24}, "color": [0.62, 0.67, 0.58, 0.14]},
+        {"id": "fog_03", "rect": {"x": 302, "y": 54, "w": 104, "h": 20}, "color": [0.62, 0.67, 0.58, 0.19]}
+      ],
+      "lighting": {"color": [0.18, 0.20, 0.17, 0.22], "rect": {"x": -16, "y": -16, "w": 480, "h": 304}}
+    },
+    "apothecary_house": {
+      "vista_id": "plague_wing_distant",
+      "weather_profile": "herb_smoke",
+      "lighting_profile": "warm_sickroom",
+      "time_of_day": "quarantine_day",
+      "parallax_layers": [
+        {"id": "shuttered_window", "rect": {"x": -20, "y": -16, "w": 488, "h": 54}, "color": [0.62, 0.55, 0.46, 0.36], "texture_path": "res://assets/vistas/first_slice/mountain_dusk/far_mountains.png", "scroll_speed": 0.02},
+        {"id": "shelf_shadow", "rect": {"x": 0, "y": 42, "w": 448, "h": 34}, "color": [0.30, 0.20, 0.12, 0.34], "scroll_speed": 0.05}
+      ],
+      "weather_patches": [
+        {"id": "steam_01", "rect": {"x": 70, "y": 60, "w": 54, "h": 14}, "color": [0.74, 0.67, 0.52, 0.14]},
+        {"id": "steam_02", "rect": {"x": 184, "y": 42, "w": 64, "h": 16}, "color": [0.74, 0.67, 0.52, 0.12]},
+        {"id": "dust_herb", "rect": {"x": 292, "y": 92, "w": 72, "h": 10}, "color": [0.54, 0.58, 0.42, 0.10]}
+      ],
+      "lighting": {"color": [0.30, 0.16, 0.06, 0.18], "rect": {"x": -16, "y": -16, "w": 480, "h": 304}}
+    },
+    "chapel": {
+      "vista_id": "plague_wing_distant",
+      "weather_profile": "candle_dust",
+      "lighting_profile": "cold_candle_chapel",
+      "time_of_day": "quarantine_day",
+      "parallax_layers": [
+        {"id": "chapel_nave_shadow", "rect": {"x": -28, "y": -24, "w": 520, "h": 70}, "color": [0.62, 0.62, 0.72, 0.48], "texture_path": "res://assets/vistas/first_slice/gothic/back.png", "scroll_speed": 0.02},
+        {"id": "stained_dim_band", "rect": {"x": 8, "y": 30, "w": 420, "h": 38}, "color": [0.58, 0.55, 0.68, 0.34], "texture_path": "res://assets/vistas/first_slice/gothic/middle.png", "scroll_speed": 0.04}
+      ],
+      "weather_patches": [
+        {"id": "dust_candle_01", "rect": {"x": 52, "y": 52, "w": 42, "h": 7}, "color": [0.82, 0.73, 0.58, 0.10]},
+        {"id": "dust_candle_02", "rect": {"x": 208, "y": 72, "w": 58, "h": 8}, "color": [0.82, 0.73, 0.58, 0.09]},
+        {"id": "dust_candle_03", "rect": {"x": 330, "y": 42, "w": 46, "h": 7}, "color": [0.82, 0.73, 0.58, 0.08]}
+      ],
+      "lighting": {"color": [0.12, 0.12, 0.20, 0.20], "rect": {"x": -16, "y": -16, "w": 480, "h": 304}}
+    },
+    "underchapel_drain": {
+      "vista_id": "underchapel_drain",
+      "weather_profile": "sewer_mist",
+      "lighting_profile": "green_black_drain",
+      "time_of_day": "below_time",
+      "parallax_layers": [
+        {"id": "far_pipe_wall", "rect": {"x": -42, "y": -20, "w": 548, "h": 68}, "color": [0.58, 0.72, 0.66, 0.82], "texture_path": "res://assets/vistas/first_slice/sewer/back.png", "scroll_speed": 0.04},
+        {"id": "museum_pipe_band", "rect": {"x": -14, "y": 34, "w": 492, "h": 42}, "color": [0.56, 0.75, 0.68, 0.50], "texture_path": "res://assets/vistas/first_slice/sewer/middle.png", "scroll_speed": 0.10},
+        {"id": "drain_water_haze", "rect": {"x": -8, "y": 102, "w": 468, "h": 22}, "color": [0.20, 0.38, 0.30, 0.16], "scroll_speed": 0.22}
+      ],
+      "weather_patches": [
+        {"id": "mist_01", "rect": {"x": 46, "y": 84, "w": 112, "h": 18}, "color": [0.50, 0.72, 0.62, 0.14]},
+        {"id": "mist_02", "rect": {"x": 170, "y": 122, "w": 128, "h": 22}, "color": [0.50, 0.72, 0.62, 0.12]},
+        {"id": "mist_03", "rect": {"x": 294, "y": 68, "w": 80, "h": 16}, "color": [0.50, 0.72, 0.62, 0.11]}
+      ],
+      "lighting": {"color": [0.02, 0.18, 0.12, 0.24], "rect": {"x": -16, "y": -16, "w": 480, "h": 304}}
+    },
+    "hidden_hospital_corridor": {
+      "vista_id": "underchapel_drain",
+      "weather_profile": "sterile_flicker",
+      "lighting_profile": "flickering_hospital_white",
+      "time_of_day": "below_time",
+      "parallax_layers": [
+        {"id": "white_corridor_depth", "rect": {"x": -24, "y": -18, "w": 512, "h": 62}, "color": [0.58, 0.62, 0.66, 0.72], "texture_path": "res://assets/vistas/first_slice/gothic/back.png", "scroll_speed": 0.03},
+        {"id": "surgical_light_band", "rect": {"x": 4, "y": 36, "w": 440, "h": 38}, "color": [0.62, 0.68, 0.70, 0.34], "texture_path": "res://assets/vistas/first_slice/gothic/middle.png", "scroll_speed": 0.08}
+      ],
+      "weather_patches": [
+        {"id": "flicker_01", "rect": {"x": 64, "y": 40, "w": 94, "h": 12}, "color": [0.82, 0.92, 0.88, 0.13]},
+        {"id": "flicker_02", "rect": {"x": 214, "y": 52, "w": 112, "h": 14}, "color": [0.82, 0.92, 0.88, 0.10]},
+        {"id": "flicker_03", "rect": {"x": 300, "y": 106, "w": 68, "h": 10}, "color": [0.82, 0.92, 0.88, 0.08]}
+      ],
+      "lighting": {"color": [0.44, 0.50, 0.48, 0.12], "rect": {"x": -16, "y": -16, "w": 480, "h": 304}}
+    },
+    "bell_tower_boss_room": {
+      "vista_id": "plague_wing_distant",
+      "weather_profile": "judgment_haze",
+      "lighting_profile": "red_bell_storm",
+      "time_of_day": "false_dusk",
+      "parallax_layers": [
+        {"id": "tower_void", "rect": {"x": -42, "y": -24, "w": 548, "h": 70}, "color": [0.58, 0.48, 0.54, 0.54], "texture_path": "res://assets/vistas/first_slice/gothic/back.png", "scroll_speed": 0.03},
+        {"id": "red_bell_vibration", "rect": {"x": -8, "y": 34, "w": 468, "h": 34}, "color": [0.60, 0.28, 0.28, 0.34], "texture_path": "res://assets/vistas/first_slice/gothic/near.png", "scroll_speed": 0.12},
+        {"id": "ash_floor_haze", "rect": {"x": -2, "y": 108, "w": 456, "h": 20}, "color": [0.64, 0.50, 0.45, 0.13], "scroll_speed": 0.20}
+      ],
+      "weather_patches": [
+        {"id": "haze_01", "rect": {"x": 42, "y": 72, "w": 114, "h": 18}, "color": [0.70, 0.40, 0.34, 0.14], "drift_speed": 9.0},
+        {"id": "haze_02", "rect": {"x": 176, "y": 112, "w": 128, "h": 24}, "color": [0.70, 0.40, 0.34, 0.11], "drift_speed": 6.0},
+        {"id": "haze_03", "rect": {"x": 310, "y": 58, "w": 88, "h": 16}, "color": [0.70, 0.40, 0.34, 0.13], "drift_speed": 7.5}
+      ],
+      "lighting": {"color": [0.30, 0.04, 0.04, 0.23], "rect": {"x": -16, "y": -16, "w": 480, "h": 304}, "pulse_strength": 0.08, "pulse_speed": 2.4}
+    }
+  }
+}

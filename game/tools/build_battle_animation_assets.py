@@ -131,7 +131,7 @@ def render_preview(frames: dict[str, list[Image.Image]]) -> Image.Image:
 def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     animation_sets = {
-        "sev_placeholder": write_set("sev_placeholder", create_sev_seed(), (72, 80), 1),
+        "sev_generated": write_set("sev_generated", create_sev_seed(), (72, 80), 1),
         "clean_man_generated": write_set("clean_man_generated", Image.open(SOURCE_DIR / "clean_man_enemy.png"), (96, 120), -1),
         "bell_saint_generated": write_set("bell_saint_generated", Image.open(SOURCE_DIR / "bell_saint_boss.png"), (192, 180), -1),
         "plague_wretch": write_set("plague_wretch", monster_seed("027"), (112, 120), -1),

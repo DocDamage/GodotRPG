@@ -7,7 +7,7 @@
     "xp": 0,
     "stats": {"max_hp": 92, "max_mp": 38, "strength": 7, "magic": 15, "defense": 5, "speed": 8},
     "skills": ["clean_wound", "rot_needle"],
-    "animation_set": "sev_placeholder"
+    "animation_set": "sev_generated"
   },
   "guardian": {"name": "Rowan", "class_id": "vanguard", "role": "tank_support"},
   "arcanist": {"name": "Selene", "class_id": "mystic", "role": "offensive_magic"},
