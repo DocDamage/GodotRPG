@@ -2,19 +2,19 @@
   "tables": {
     "plague_wing_underchapel": {
       "region_id": "plague_wing_underchapel",
-      "step_threshold": 10,
+      "step_threshold": 18,
       "entries": [
-        {"id": "fever_wretch_pair", "weight": 4, "enemies": ["fever_wretch", "fever_wretch"]},
+        {"id": "fever_wretch_pair", "weight": 5, "enemies": ["fever_wretch", "fever_wretch"]},
         {"id": "rot_choir_single", "weight": 2, "enemies": ["rot_choir"]},
         {"id": "bell_touched_with_wretch", "weight": 1, "enemies": ["bell_touched", "fever_wretch"]}
       ]
     },
     "plague_wing_hospital": {
       "region_id": "plague_wing_hospital",
-      "step_threshold": 8,
+      "step_threshold": 14,
       "entries": [
         {"id": "prayer_bound_corpse", "weight": 3, "enemies": ["prayer_bound_corpse"]},
-        {"id": "clean_man_patrol", "weight": 2, "enemies": ["clean_man", "clean_man"]},
+        {"id": "clean_man_patrol", "weight": 2, "enemies": ["clean_man"]},
         {"id": "rot_choir_with_corpse", "weight": 1, "enemies": ["rot_choir", "prayer_bound_corpse"]}
       ]
     }

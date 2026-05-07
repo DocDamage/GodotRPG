@@ -4,6 +4,7 @@ extends Node2D
 @export var map_id := "bell_tower_boss_room"
 
 const TileAssetCatalog = preload("res://scripts/field/tile_asset_catalog.gd")
+const MapPropRenderer = preload("res://scripts/field/map_prop_renderer.gd")
 
 const WALL_RECTS := [
 	Rect2(0, 0, 272, 16),
@@ -58,13 +59,7 @@ func _add_landmarks() -> void:
 	var landmarks := Node2D.new()
 	landmarks.name = "Landmarks"
 	add_child(landmarks)
-	landmarks.add_child(_create_sliced_prop("TowerStone", Vector2(54, 56), "res://assets/tilesets/first_slice/bell_tower/sliced/tower_stone.png", 0.26, -8))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("PlagueBell", Vector2(136, 40), "res://assets/generated/pixellab/first_slice/plague_bell.png", 0.42, -4), "anchor_relic_source", "The bell holds too much grief for its size. Its sound has become a verdict."))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("BellSaintStatue", Vector2(136, 58), "res://assets/tilesets/first_slice/bell_tower/sliced/bell_saint_statue.png", 0.36, -5), "boss_foreshadow", "Prayer ribbons pull toward the statue as if the room is breathing through it."))
-	landmarks.add_child(_create_sliced_prop("BellRope", Vector2(174, 54), "res://assets/generated/pixellab/first_slice/bell_rope.png", 0.34, -3))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("AnchorDoor", Vector2(196, 96), "res://assets/tilesets/first_slice/bell_tower/sliced/anchor_door.png", 0.18, -6), "museum_lock", "The lock is museum-made, but the blood on the threshold belongs to Hallowmere."))
-	landmarks.add_child(_create_sliced_prop("BloodMark", Vector2(136, 114), "res://assets/tilesets/first_slice/bell_tower/sliced/blood_mark.png", 0.46, -3))
-	landmarks.add_child(_create_sliced_prop("TowerLantern", Vector2(84, 108), "res://assets/tilesets/first_slice/bell_tower/sliced/tower_lantern.png", 0.70, -4))
+	MapPropRenderer.new().render_props(landmarks, map_id)
 
 
 func _add_collision() -> void:

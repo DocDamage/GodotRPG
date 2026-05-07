@@ -127,6 +127,8 @@ func _try_interact() -> bool:
 		return false
 	if target.node.has_method("interact"):
 		var result: Dictionary = target.node.interact()
+		result = _apply_story_prop_discovery(result)
+		result = _apply_side_quest_interaction(result)
 		var resolved := field.resolve_interaction_result(result)
 		_play_audio(resolved.audio_event)
 		status_label.text = resolved.status
@@ -570,6 +572,70 @@ func _game_state():
 		return game_state_override
 	return get_node_or_null("/root/GameState") if is_inside_tree() else null
 
+func _apply_side_quest_interaction(result: Dictionary) -> Dictionary:
+	var quest: Dictionary = result.get("quest", {})
+	if quest.is_empty():
+		return result
+	var updated := result.duplicate(true)
+	var game_state = _game_state()
+	var quest_id := String(quest.get("id", "side_quest"))
+	var completion_flag := String(quest.get("completion_flag", "quest_%s_complete" % quest_id))
+	var speaker := String(updated.get("display_name", ""))
+	if game_state != null and bool(game_state.flags.get(completion_flag, false)):
+		updated.status = _side_quest_status(speaker, String(quest.get("repeat_line", updated.get("status", ""))), {})
+		return updated
+	if game_state != null:
+		game_state.flags[completion_flag] = true
+		var reward_items: Dictionary = quest.get("reward_items", {})
+		if not reward_items.is_empty() and game_state.has_method("add_inventory_items"):
+			game_state.add_inventory_items(reward_items)
+		updated.status = _side_quest_status(
+			speaker,
+			String(quest.get("complete_line", updated.get("status", ""))),
+			reward_items
+		)
+	return updated
+
+func _apply_story_prop_discovery(result: Dictionary) -> Dictionary:
+	if String(result.get("kind", "")) != "story_prop":
+		return result
+	var flag_id := String(result.get("discovery_flag", ""))
+	if flag_id.is_empty():
+		return result
+	var game_state = _game_state()
+	if game_state == null:
+		return result
+	var updated := result.duplicate(true)
+	var already_discovered := bool(game_state.flags.get(flag_id, false))
+	game_state.flags[flag_id] = true
+	var discoveries: Array = game_state.flags.get("discovered_story_props", [])
+	if not discoveries.has(flag_id):
+		discoveries.append(flag_id)
+	game_state.flags["discovered_story_props"] = discoveries
+	if not already_discovered:
+		updated.status = "%s Evidence recovered." % String(updated.get("status", ""))
+	return updated
+
+func _side_quest_status(speaker: String, line: String, reward_items: Dictionary) -> String:
+	var status := line
+	if not speaker.is_empty() and not line.begins_with("%s:" % speaker):
+		status = "%s: %s" % [speaker, line]
+	var reward_text := _format_reward_items(reward_items)
+	if not reward_text.is_empty():
+		status = "%s Received %s." % [status, reward_text]
+	return status
+
+func _format_reward_items(reward_items: Dictionary) -> String:
+	if reward_items.is_empty():
+		return ""
+	var catalog := ContentCatalog.new()
+	var rewards: Array[String] = []
+	for item_id in reward_items.keys():
+		var item := catalog.item(String(item_id))
+		var display_name := String(item.get("display_name", String(item_id).replace("_", " ").capitalize()))
+		rewards.append("%s x%d" % [display_name, int(reward_items[item_id])])
+	return ", ".join(rewards)
+
 func _enemy_definition(enemy_id: String) -> Dictionary:
 	var file := FileAccess.open(ENEMIES_PATH, FileAccess.READ)
 	if file == null:
@@ -699,6 +765,8 @@ func _render_authored_story_prop_interactions(authored_root: Node, interactables
 			"name": String(prop.name).capitalize(),
 			"line": String(prop.get_meta("inspect_text", "")),
 			"position": {"x": local_position.x, "y": local_position.y},
+			"audio_event": String(prop.get_meta("inspect_audio", "ui_confirm")),
+			"discovery_flag": String(prop.get_meta("discovery_flag", "")),
 			"story_role": String(prop.get_meta("story_role", "")),
 			"source_node": String(prop.name),
 		}, "story_prop"))

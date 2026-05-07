@@ -4,6 +4,7 @@ extends Node2D
 @export var map_id := "hallowmere_street"
 
 const TileAssetCatalog = preload("res://scripts/field/tile_asset_catalog.gd")
+const MapPropRenderer = preload("res://scripts/field/map_prop_renderer.gd")
 
 const WALL_RECTS := [
 	Rect2(0, 16, 480, 16),
@@ -57,22 +58,7 @@ func _add_landmarks() -> void:
 	var landmarks := Node2D.new()
 	landmarks.name = "Landmarks"
 	add_child(landmarks)
-	landmarks.add_child(_create_sprite_landmark("House01", "plague_town_house_01", Vector2(72, 24), Color(0.86, 0.78, 0.70, 0.95), -10))
-	landmarks.add_child(_create_sprite_landmark("House02", "plague_town_house_02", Vector2(240, 32), Color(0.78, 0.72, 0.66, 0.92), -10))
-	landmarks.add_child(_create_sprite_landmark("GraveMarker", "plague_town_grave_01", Vector2(256, 128), Color(0.65, 0.70, 0.68, 0.95), -8))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("CoffinStack", Vector2(216, 96), "res://assets/tilesets/first_slice/hallowmere/sliced/coffin_stack.png", 0.52, -7), "plague_cost", "Fresh coffins wait beside old mud. Hallowmere is running out of distance between sickness and burial."))
-	landmarks.add_child(_create_sprite_landmark("RoadStone", "plague_town_rock_01", Vector2(144, 120), Color(0.62, 0.58, 0.52, 0.9), -8))
-	landmarks.add_child(_create_color_landmark("TownWell", Vector2(176, 128), Vector2(24, 24), Color(0.22, 0.24, 0.22, 0.95)))
-	var toll_stall := _create_color_landmark("TollStall", Vector2(320, 96), Vector2(34, 22), Color(0.40, 0.22, 0.16, 0.35))
-	_tag_story_prop(toll_stall, "shop_anchor", "Toll's stall looks temporary, but the same coin mark is carved into the counter in every era.")
-	toll_stall.add_child(_create_sliced_prop("TollStallSprite", Vector2.ZERO, "res://assets/tilesets/first_slice/hallowmere/sliced/toll_stall.png", 0.30, -6))
-	landmarks.add_child(toll_stall)
-	landmarks.add_child(_create_color_landmark("ApothecaryDoor", Vector2(352, 96), Vector2(22, 30), Color(0.18, 0.30, 0.22, 0.95)))
-	var chapel_road := _create_color_landmark("ChapelRoad", Vector2(416, 80), Vector2(38, 28), Color(0.27, 0.24, 0.29, 0.35))
-	_tag_story_prop(chapel_road, "route_marker", "The chapel sign has been repainted so many times the arrow points more like an accusation than a direction.")
-	chapel_road.add_child(_create_sliced_prop("ChapelSignSprite", Vector2.ZERO, "res://assets/tilesets/first_slice/hallowmere/sliced/chapel_sign.png", 0.62, -6))
-	landmarks.add_child(chapel_road)
-	landmarks.add_child(_create_sliced_prop("RefusePile", Vector2(304, 136), "res://assets/tilesets/first_slice/hallowmere/sliced/refuse_pile.png", 0.34, -7))
+	MapPropRenderer.new().render_props(landmarks, map_id)
 	_add_atmosphere()
 
 

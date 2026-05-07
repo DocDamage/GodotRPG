@@ -4,6 +4,7 @@ extends Node2D
 @export var map_id := "underchapel_drain"
 
 const TileAssetCatalog = preload("res://scripts/field/tile_asset_catalog.gd")
+const MapPropRenderer = preload("res://scripts/field/map_prop_renderer.gd")
 
 const WALL_RECTS := [
 	Rect2(0, 32, 384, 16),
@@ -57,12 +58,7 @@ func _add_landmarks() -> void:
 	var landmarks := Node2D.new()
 	landmarks.name = "Landmarks"
 	add_child(landmarks)
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("MuseumPipe", Vector2(96, 72), "res://assets/tilesets/first_slice/underchapel/sliced/museum_pipe.png", 0.72, -6), "museum_infrastructure", "The pipe sweats plague water and hums with museum power. It should not belong to either world."))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("PumpMachine", Vector2(160, 96), "res://assets/tilesets/first_slice/underchapel/sliced/pump_machine.png", 0.30, -6), "cross_era_machine", "A clean machine forces dirty water through old stone. The Curator's layer is under the chapel."))
-	landmarks.add_child(_create_sliced_prop("DrainGrate", Vector2(224, 116), "res://assets/tilesets/first_slice/underchapel/sliced/drain_grate.png", 0.72, -5))
-	landmarks.add_child(_create_sliced_prop("ServiceLadder", Vector2(304, 96), "res://assets/tilesets/first_slice/underchapel/sliced/service_ladder.png", 0.82, -5))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("WarningPanel", Vector2(128, 120), "res://assets/tilesets/first_slice/underchapel/sliced/warning_panel.png", 0.52, -5), "curator_warning_label", "The warning panel uses museum symbols, but the grime around it is older than the town above."))
-	landmarks.add_child(_create_sliced_prop("WasteBags", Vector2(272, 128), "res://assets/tilesets/first_slice/underchapel/sliced/waste_bags.png", 0.42, -6))
+	MapPropRenderer.new().render_props(landmarks, map_id)
 
 
 func _add_collision() -> void:

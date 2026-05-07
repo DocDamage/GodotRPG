@@ -22,9 +22,12 @@ func interact() -> Dictionary:
 	return {
 		"type": "map_line",
 		"status": status,
-		"audio_event": "ui_confirm",
+		"audio_event": String(entry.get("audio_event", "ui_confirm")),
+		"display_name": display_name,
 		"entry": entry,
 		"kind": entry_kind,
+		"quest": entry.get("quest", {}),
+		"discovery_flag": String(entry.get("discovery_flag", "")),
 	}
 
 func _render_marker() -> void:

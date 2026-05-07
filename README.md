@@ -23,9 +23,16 @@ The slice starts with Sev's character creator, moves through the breached museum
 - Data-driven story flow, map catalog, objectives, dialogue, items, enemies, and audio events.
 - Character creator with Sev profile, portrait, relic voice, dossier, validation, randomize, reset, and save persistence.
 - Authored field maps with curated tile art, story prop inspections, transitions, entry dialogue, objectives, and random encounters.
+- Data-driven first-slice prop placement manifest at `game/data/maps/first_slice_prop_placements.json`, layered by navigation, story evidence, and atmosphere.
+- Selected navigation and story props now define manifest-level collision rectangles, with tests guarding spawns and transition centers.
+- Story evidence props define manifest-level inspection audio and `discovered_prop_*` flags, so first-time prop inspections show evidence feedback, use exhibit or museum cues, and feed later codex/dialogue logic.
+- First-slice evidence progress is summarized on the Truth Recovered reward panel as `Evidence Found: found / total`, with an `Evidence Remaining` hint for the earliest maps still missing inspected story props.
+- Evidence discovery flags and the discovered evidence list are save/load covered, including rebuild support for older saves that only have individual `discovered_prop_*` flags.
+- First-slice NPC/side-quest interactions in Hallowmere and the hidden hospital, including one-time Clean Bandage and Fever Charm rewards.
 - FF9-style prototype battle presentation with cinematic camera, enemy AI profiles, status effects, skill menus, generated Bell Saint/Clean Man animation sets, and boss rewards.
 - Memory Card collection/equip data and Tetra-style card battle minigame foundations.
-- Save/load payload coverage for route checkpoints before and after Bell Saint completion.
+- Save/load payload coverage for route checkpoints before and after Bell Saint completion, plus autosave feedback on the chapter reward panel.
+- First-slice navigation and encounter pacing checks for safe spawns, clear transition points, lighter hospital patrols, and a tuned Bell Saint boss.
 - OGG-first curated runtime audio manifest with dedicated first-slice map entry and ambience cues.
 
 ## Requirements
@@ -64,5 +71,6 @@ The converter writes selected OGGs under `game/assets/audio`.
 ## Remaining Slice Polish
 
 - Replace generated one-shot map cues with final mastered ambience loops once source audio is selected.
-- Manual visual QA for authored tile maps in the Godot editor, especially collision bounds and prop placement.
+- Manual visual QA for authored tile maps in the Godot editor, especially prop placement and visual readability.
+- Expand the prop manifest with final collision rectangles after editor playthrough confirms walk lanes.
 - Add final production UI art pass for the reward scene, save UI, and battle command panels.

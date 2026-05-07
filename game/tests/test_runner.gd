@@ -46,6 +46,8 @@ func _run_tests() -> void:
 	_test_atb_wait_mode_pause()
 	_test_encounter_selection()
 	_test_first_slice_plague_encounters_defined()
+	_test_first_slice_encounter_pacing_is_boss_safe()
+	_test_bell_saint_boss_numbers_fit_first_slice_party()
 	_test_prototype_field_builds_group_encounter_payload()
 	_test_prototype_field_requests_random_encounter_from_current_map()
 	_test_prototype_field_step_threshold_triggers_random_encounter()
@@ -54,15 +56,36 @@ func _run_tests() -> void:
 	_test_prototype_field_loads_saved_player_position_for_current_map()
 	_test_save_payload_roundtrip()
 	_test_save_payload_preserves_bell_saint_slice_checkpoints()
+	_test_save_payload_preserves_first_slice_evidence_progress()
+	_test_game_state_rebuilds_discovered_story_prop_list_from_legacy_flags()
 	_test_field_movement_and_interactions()
 	_test_slice_flow_route_matches_playable_bell_saint_path()
 	_test_slice_flow_route_is_playable_and_rewarded()
 	_test_first_slice_map_catalog_defines_town_and_dungeon()
+	_test_first_slice_route_spawns_and_transitions_are_navigable()
+	_test_first_slice_maps_add_side_quest_npcs()
 	_test_prototype_field_resolves_first_slice_map_data()
 	_test_prototype_field_generates_first_slice_map_markers()
+	_test_map_interactable_returns_side_quest_payload()
+	_test_prototype_field_completes_clean_cloth_side_quest()
+	_test_prototype_field_does_not_duplicate_side_quest_rewards()
+	_test_prototype_field_completes_wrong_chart_side_quest()
 	_test_prototype_field_exposes_transition_zones()
 	_test_first_slice_maps_define_visible_graybox_layouts()
 	_test_prototype_field_renders_graybox_layout()
+	_test_first_slice_prop_placement_manifest_defines_layers()
+	_test_map_prop_renderer_resolves_and_instantiates_props()
+	_test_map_prop_renderer_creates_prop_collision()
+	_test_map_prop_renderer_forwards_discovery_flag_metadata()
+	_test_first_slice_prop_manifest_assets_exist_and_story_props_are_inspectable()
+	_test_first_slice_story_props_define_inspection_audio()
+	_test_first_slice_story_props_define_discovery_flags()
+	_test_evidence_progress_service_counts_first_slice_story_props()
+	_test_evidence_progress_service_counts_discovered_story_props()
+	_test_evidence_progress_service_returns_map_breakdown()
+	_test_evidence_progress_service_formats_missing_map_hint()
+	_test_first_slice_prop_manifest_marks_key_navigation_props_blocking()
+	_test_first_slice_blocking_props_do_not_cover_spawns_or_transitions()
 	_test_first_slice_tile_asset_catalog_defines_runtime_tiles()
 	_test_prototype_field_renders_real_tile_art_layer()
 	_test_hallowmere_authored_map_scene_renders_curated_props()
@@ -94,6 +117,10 @@ func _run_tests() -> void:
 	_test_prototype_field_mounts_authored_bell_tower_map()
 	_test_prototype_field_exposes_mounted_map_audio_profile()
 	_test_prototype_field_creates_story_prop_interactions()
+	_test_prototype_field_story_prop_uses_manifest_inspection_audio()
+	_test_prototype_field_story_prop_inspection_sets_discovery_flag()
+	_test_prototype_field_first_story_prop_discovery_adds_evidence_feedback()
+	_test_prototype_field_repeat_story_prop_inspection_does_not_repeat_evidence_feedback()
 	_test_prototype_field_player_can_inspect_authored_story_prop()
 	_test_prototype_field_plays_authored_map_entry_audio()
 	_test_prototype_field_changes_maps_when_player_enters_transition()
@@ -168,7 +195,9 @@ func _run_tests() -> void:
 	_test_app_root_applies_battle_party_state()
 	_test_app_root_bell_saint_completion_recruits_mira_and_records_reward_scene()
 	_test_app_root_bell_saint_completion_records_boss_defeat()
+	_test_app_root_bell_saint_completion_records_autosave_feedback()
 	_test_app_root_renders_bell_saint_reward_scene()
+	_test_app_root_reward_scene_summarizes_evidence_progress()
 	_test_app_root_reward_scene_renders_acknowledgement_prompt()
 	_test_app_root_consumes_reward_dialogue_after_acknowledgement()
 	_test_app_root_refreshes_reward_scene_after_acknowledgement()
@@ -235,6 +264,63 @@ func _run_tests() -> void:
 func _assert(condition: bool, message: String) -> void:
 	if not condition:
 		failures.append(message)
+
+func _dictionary_with_id(entries: Array, entry_id: String) -> Dictionary:
+	for entry in entries:
+		if entry is Dictionary and String(entry.get("id", "")) == entry_id:
+			return entry
+	return {}
+
+func _prop_manifest_asset_exists(prop: Dictionary, tile_catalog) -> bool:
+	if prop.has("asset_path"):
+		return FileAccess.file_exists(String(prop.asset_path))
+	if prop.has("asset_id"):
+		var asset = tile_catalog.asset_by_id(String(prop.asset_id))
+		return not asset.is_empty() and FileAccess.file_exists(String(asset.get("runtime_path", "")))
+	return String(prop.get("kind", "")) == "color"
+
+func _prop_collision_rect(prop: Dictionary) -> Rect2:
+	var position := _vector_from_map_point(prop.get("position", {}))
+	var rect_data: Dictionary = prop.get("collision_rect", {})
+	return Rect2(
+		position + Vector2(float(rect_data.get("x", 0.0)), float(rect_data.get("y", 0.0))),
+		Vector2(float(rect_data.get("w", 0.0)), float(rect_data.get("h", 0.0)))
+	)
+
+func _vector_from_map_point(point: Dictionary) -> Vector2:
+	return Vector2(float(point.get("x", 0.0)), float(point.get("y", 0.0)))
+
+func _rect_from_map_rect(rect: Dictionary) -> Rect2:
+	return Rect2(
+		float(rect.get("x", 0.0)),
+		float(rect.get("y", 0.0)),
+		float(rect.get("w", 0.0)),
+		float(rect.get("h", 0.0))
+	)
+
+func _tile_rect_to_pixels(tile_rect: Dictionary, tile_size: int) -> Rect2:
+	return Rect2(
+		float(tile_rect.get("x", 0)) * tile_size,
+		float(tile_rect.get("y", 0)) * tile_size,
+		float(tile_rect.get("w", 0)) * tile_size,
+		float(tile_rect.get("h", 0)) * tile_size
+	)
+
+func _point_is_on_floor(map: Dictionary, point: Vector2) -> bool:
+	var layout: Dictionary = map.get("layout", {})
+	var tile_size := int(layout.get("tile_size", 16))
+	for floor_rect in layout.get("floor_rects", []):
+		if _tile_rect_to_pixels(floor_rect, tile_size).has_point(point):
+			return true
+	return false
+
+func _point_is_inside_wall(map: Dictionary, point: Vector2) -> bool:
+	var layout: Dictionary = map.get("layout", {})
+	var tile_size := int(layout.get("tile_size", 16))
+	for wall_rect in layout.get("wall_rects", []):
+		if _tile_rect_to_pixels(wall_rect, tile_size).has_point(point):
+			return true
+	return false
 
 func _test_character_creator_profile_output() -> void:
 	_assert(ResourceLoader.exists("res://scripts/character_creator/character_creator_controller.gd"), "character creator controller exists")
@@ -714,6 +800,29 @@ func _test_first_slice_plague_encounters_defined() -> void:
 	_assert(enemies.has("clean_man"), "enemy database includes Clean Man")
 	_assert(enemies.has("bell_saint"), "enemy database includes Bell Saint boss")
 
+func _test_first_slice_encounter_pacing_is_boss_safe() -> void:
+	var encounter_file := FileAccess.open("res://data/encounters/plague_wing.json", FileAccess.READ)
+	var encounters = JSON.parse_string(encounter_file.get_as_text())
+	var underchapel = encounters.tables.plague_wing_underchapel
+	var hospital = encounters.tables.plague_wing_hospital
+	_assert(int(underchapel.step_threshold) >= 18, "Underchapel waits long enough before random encounters")
+	_assert(int(hospital.step_threshold) >= 14, "Hospital waits long enough before random encounters")
+	_assert(underchapel.entries.size() <= 3, "Underchapel encounter table stays compact for the first dungeon")
+	_assert(hospital.entries.size() <= 3, "Hospital encounter table stays compact before Bell Saint")
+	_assert(float(underchapel.entries[0].weight) >= 5.0, "Underchapel favors the simpler Fever Wretch pair")
+	_assert(hospital.entries.any(func(entry): return entry.id == "clean_man_patrol" and int(entry.enemies.size()) == 1), "Hospital uses a single Clean Man patrol before the boss")
+
+func _test_bell_saint_boss_numbers_fit_first_slice_party() -> void:
+	var enemy_file := FileAccess.open("res://data/combat/enemies.json", FileAccess.READ)
+	var enemies = JSON.parse_string(enemy_file.get_as_text())
+	var boss = enemies.bell_saint
+	_assert(int(boss.max_hp) <= 360, "Bell Saint HP is tuned for the first Sev/Mira boss fight")
+	_assert(int(boss.strength) <= 14, "Bell Saint strength leaves room for recovery after dungeon encounters")
+	_assert(int(boss.defense) <= 7, "Bell Saint defense keeps basic attacks useful")
+	_assert(int(boss.xp) >= 180, "Bell Saint still pays meaningful chapter-completion XP")
+	_assert(boss.relic == "bell_clapper", "Bell Saint still grants Bell Clapper")
+	_assert(boss.memory_card == "bell_saint", "Bell Saint still grants Bell Saint memory card")
+
 func _test_prototype_field_builds_group_encounter_payload() -> void:
 	var FieldScene = load("res://scenes/field/prototype_field.tscn")
 	var field_scene = FieldScene.instantiate()
@@ -757,7 +866,7 @@ func _test_prototype_field_step_threshold_triggers_random_encounter() -> void:
 	field_scene.load_phase_map()
 	_assert(field_scene.has_method("record_encounter_steps"), "prototype field exposes step-based encounter checks")
 	if field_scene.has_method("record_encounter_steps"):
-		_assert(not field_scene.record_encounter_steps(9, 0.0), "encounter does not trigger before table threshold")
+		_assert(not field_scene.record_encounter_steps(17, 0.0), "encounter does not trigger before table threshold")
 		_assert(emitted.is_empty(), "pre-threshold movement emits no battle payload")
 		_assert(field_scene.record_encounter_steps(1, 0.0), "encounter triggers when accumulated steps reach threshold")
 		_assert(emitted.size() == 1, "threshold encounter emits one battle payload")
@@ -778,7 +887,7 @@ func _test_prototype_field_player_travel_records_encounter_steps() -> void:
 	var player = field_scene.get_node("%Player")
 	_assert(field_scene.has_method("record_player_travel_for_encounters"), "prototype field records encounter steps from player travel")
 	if field_scene.has_method("record_player_travel_for_encounters"):
-		player.position += Vector2(16 * 9, 0)
+		player.position += Vector2(16 * 17, 0)
 		_assert(not field_scene.record_player_travel_for_encounters(0.0), "travel under threshold does not trigger an encounter")
 		_assert(emitted.is_empty(), "under-threshold player travel emits no battle")
 		player.position += Vector2(16, 0)
@@ -893,6 +1002,45 @@ func _test_save_payload_preserves_bell_saint_slice_checkpoints() -> void:
 		restored.free()
 		state.free()
 
+func _test_save_payload_preserves_first_slice_evidence_progress() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var SaveService = load("res://scripts/save/save_service.gd")
+	var EvidenceProgressService = load("res://scripts/core/evidence_progress_service.gd")
+	var state = GameStateScript.new()
+	state.flags = {
+		"discovered_prop_underchapel_museum_pipe": true,
+		"discovered_prop_hospital_medical_chart": true,
+		"discovered_story_props": [
+			"discovered_prop_underchapel_museum_pipe",
+			"discovered_prop_hospital_medical_chart",
+		],
+	}
+	var payload = SaveService.new().build_payload(state.to_save_state())
+	var restored = GameStateScript.new()
+	restored.apply_save_payload(SaveService.new().migrate_payload(payload))
+	var summary: Dictionary = EvidenceProgressService.new().first_slice_summary(restored.flags)
+	_assert(restored.flags.get("discovered_story_props", []).has("discovered_prop_underchapel_museum_pipe"), "save roundtrip preserves discovered story prop list")
+	_assert(int(summary.found) == 2, "save roundtrip preserves first-slice evidence progress count")
+	restored.free()
+	state.free()
+
+func _test_game_state_rebuilds_discovered_story_prop_list_from_legacy_flags() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var restored = GameStateScript.new()
+	restored.apply_save_payload({
+		"profile": {},
+		"map_id": "underchapel_drain",
+		"position": Vector2(96, 72),
+		"flags": {
+			"discovered_prop_underchapel_museum_pipe": true,
+			"discovered_prop_hospital_medical_chart": true,
+		},
+	})
+	var discovered: Array = restored.flags.get("discovered_story_props", [])
+	_assert(discovered.has("discovered_prop_underchapel_museum_pipe"), "legacy evidence flag rebuilds discovered story prop list")
+	_assert(discovered.has("discovered_prop_hospital_medical_chart"), "legacy hospital evidence flag rebuilds discovered story prop list")
+	restored.free()
+
 func _test_field_movement_and_interactions() -> void:
 	_assert(ResourceLoader.exists("res://scripts/field/field_controller.gd"), "field controller exists")
 	var FieldController = load("res://scripts/field/field_controller.gd")
@@ -979,6 +1127,48 @@ func _test_first_slice_map_catalog_defines_town_and_dungeon() -> void:
 	var hospital = catalog.map_for_phase("hidden_hospital_corridor")
 	_assert(hospital.interactables.any(func(i): return i.id == "medical_chart"), "hospital corridor has medical chart interaction")
 
+func _test_first_slice_route_spawns_and_transitions_are_navigable() -> void:
+	var MapCatalog = load("res://scripts/field/map_catalog.gd")
+	var catalog = MapCatalog.new()
+	for phase_id in [
+		"empty_rotunda",
+		"broken_exhibit_door",
+		"plague_town_street",
+		"apothecary_house",
+		"chapel",
+		"underchapel_drain",
+		"hidden_hospital_corridor",
+		"bell_tower_boss_room",
+	]:
+		var map = catalog.map_for_phase(phase_id)
+		var spawn := _vector_from_map_point(map.get("spawn", {}))
+		_assert(_point_is_on_floor(map, spawn), "%s spawn is on walkable floor" % phase_id)
+		_assert(not _point_is_inside_wall(map, spawn), "%s spawn is clear of wall collision" % phase_id)
+		for transition in map.get("transitions", []):
+			var rect := _rect_from_map_rect(transition.get("rect", {}))
+			var center := rect.position + rect.size / 2.0
+			_assert(_point_is_on_floor(map, center), "%s transition %s center is on walkable floor" % [phase_id, transition.id])
+			_assert(not _point_is_inside_wall(map, center), "%s transition %s center is clear of wall collision" % [phase_id, transition.id])
+			var target_map = catalog.map_for_phase(String(transition.target_phase))
+			var target_spawn := _vector_from_map_point(transition.get("spawn", {}))
+			_assert(_point_is_on_floor(target_map, target_spawn), "%s transition %s target spawn is on target floor" % [phase_id, transition.id])
+			_assert(not _point_is_inside_wall(target_map, target_spawn), "%s transition %s target spawn is clear on target map" % [phase_id, transition.id])
+
+func _test_first_slice_maps_add_side_quest_npcs() -> void:
+	var MapCatalog = load("res://scripts/field/map_catalog.gd")
+	var catalog = MapCatalog.new()
+	var town = catalog.map_for_phase("plague_town_street")
+	_assert(town.npcs.any(func(npc): return npc.id == "fever_child"), "Hallowmere includes fever child ambient NPC")
+	_assert(town.npcs.any(func(npc): return npc.id == "corpse_cart_driver"), "Hallowmere includes corpse cart driver ambient NPC")
+	var sick_woman = _dictionary_with_id(town.npcs, "sick_woman")
+	_assert(sick_woman.has("quest"), "Sick Woman carries clean cloth side quest payload")
+	_assert(String(sick_woman.get("quest", {}).get("id", "")) == "clean_cloth", "Sick Woman side quest id is clean cloth")
+	var hospital = catalog.map_for_phase("hidden_hospital_corridor")
+	_assert(hospital.npcs.any(func(npc): return npc.id == "nurse_echo"), "hospital corridor includes Nurse Echo NPC")
+	var nurse_echo = _dictionary_with_id(hospital.npcs, "nurse_echo")
+	_assert(nurse_echo.has("quest"), "Nurse Echo carries wrong chart side quest payload")
+	_assert(String(nurse_echo.get("quest", {}).get("id", "")) == "wrong_chart", "Nurse Echo side quest id is wrong chart")
+
 func _test_prototype_field_resolves_first_slice_map_data() -> void:
 	var FieldScene = load("res://scenes/field/prototype_field.tscn")
 	var field_scene = FieldScene.instantiate()
@@ -1005,6 +1195,96 @@ func _test_prototype_field_generates_first_slice_map_markers() -> void:
 	_assert(result.type == "map_line", "generated NPC interaction returns map line result")
 	_assert(result.status == "Sick Woman: Do not come near.", "generated NPC interaction includes speaker and line")
 	field_scene.queue_free()
+
+func _test_map_interactable_returns_side_quest_payload() -> void:
+	var MapInteractable = load("res://scripts/field/map_interactable.gd")
+	var marker = MapInteractable.new()
+	marker.configure({
+		"id": "quest_npc",
+		"name": "Quest NPC",
+		"position": {"x": 16, "y": 16},
+		"line": "I have something for you.",
+		"quest": {
+			"id": "clean_cloth",
+			"completion_flag": "quest_clean_cloth_complete",
+			"reward_items": {"clean_bandage": 2},
+			"complete_line": "Take this boiled cloth.",
+			"repeat_line": "You already carry what I can spare."
+		}
+	}, "npc")
+	var result = marker.interact()
+	_assert(result.has("quest"), "map interactable forwards side quest payload")
+	_assert(String(result.get("quest", {}).get("id", "")) == "clean_cloth", "side quest payload preserves id")
+	_assert(String(result.get("display_name", "")) == "Quest NPC", "side quest payload includes display name")
+	marker.free()
+
+func _test_prototype_field_completes_clean_cloth_side_quest() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var field_scene = FieldScene.instantiate()
+	field_scene.game_state_override = game_state
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "plague_town_street")
+	field_scene.load_phase_map()
+	field_scene.active_dialogue_index = -1
+	field_scene.active_dialogue_lines.clear()
+	var sick_woman = field_scene.get_node("MapContent/Npcs/sick_woman")
+	field_scene.get_node("%Player").position = sick_woman.position + Vector2(-16, 0)
+	field_scene.get_node("%Player").facing = "right"
+	_assert(field_scene.try_context_action(), "field interaction completes clean cloth quest")
+	_assert(bool(game_state.flags.get("quest_clean_cloth_complete", false)), "clean cloth quest completion flag is stored")
+	_assert(int(game_state.inventory.get("clean_bandage", 0)) == 2, "clean cloth quest grants two clean bandages")
+	_assert(field_scene.get_node("%StatusLabel").text.contains("Received Clean Bandage x2."), "clean cloth quest status reports reward")
+	field_scene.game_state_override = null
+	field_scene.queue_free()
+	game_state.free()
+
+func _test_prototype_field_does_not_duplicate_side_quest_rewards() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var field_scene = FieldScene.instantiate()
+	field_scene.game_state_override = game_state
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "plague_town_street")
+	field_scene.load_phase_map()
+	field_scene.active_dialogue_index = -1
+	field_scene.active_dialogue_lines.clear()
+	var sick_woman = field_scene.get_node("MapContent/Npcs/sick_woman")
+	field_scene.get_node("%Player").position = sick_woman.position + Vector2(-16, 0)
+	field_scene.get_node("%Player").facing = "right"
+	field_scene.try_context_action()
+	field_scene.try_context_action()
+	_assert(int(game_state.inventory.get("clean_bandage", 0)) == 2, "repeat clean cloth interaction does not duplicate rewards")
+	_assert(field_scene.get_node("%StatusLabel").text.contains("already carry"), "repeat clean cloth interaction shows repeat line")
+	field_scene.game_state_override = null
+	field_scene.queue_free()
+	game_state.free()
+
+func _test_prototype_field_completes_wrong_chart_side_quest() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var field_scene = FieldScene.instantiate()
+	field_scene.game_state_override = game_state
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "hidden_hospital_corridor")
+	field_scene.load_phase_map()
+	field_scene.active_dialogue_index = -1
+	field_scene.active_dialogue_lines.clear()
+	var nurse_echo = field_scene.get_node_or_null("MapContent/Npcs/nurse_echo")
+	_assert(nurse_echo != null, "field renders Nurse Echo side quest NPC")
+	if nurse_echo != null:
+		field_scene.get_node("%Player").position = nurse_echo.position + Vector2(-16, 0)
+		field_scene.get_node("%Player").facing = "right"
+		_assert(field_scene.try_context_action(), "field interaction completes wrong chart quest")
+	_assert(bool(game_state.flags.get("quest_wrong_chart_complete", false)), "wrong chart quest completion flag is stored")
+	_assert(int(game_state.inventory.get("fever_charm", 0)) == 1, "wrong chart quest grants fever charm")
+	_assert(field_scene.get_node("%StatusLabel").text.contains("Received Fever Charm x1."), "wrong chart quest status reports reward")
+	field_scene.game_state_override = null
+	field_scene.queue_free()
+	game_state.free()
 
 func _test_prototype_field_exposes_transition_zones() -> void:
 	var FieldScene = load("res://scenes/field/prototype_field.tscn")
@@ -1050,6 +1330,183 @@ func _test_prototype_field_renders_graybox_layout() -> void:
 	_assert(field_scene.get_node("MapContent/Graybox/Walls").get_child_count() >= 4, "Hallowmere renders wall shapes")
 	_assert(field_scene.get_node("%Player").position == Vector2(48, 96), "prototype field moves player to map spawn")
 	field_scene.queue_free()
+
+func _test_first_slice_prop_placement_manifest_defines_layers() -> void:
+	_assert(ResourceLoader.exists("res://data/maps/first_slice_prop_placements.json"), "first slice prop placement manifest exists")
+	var file := FileAccess.open("res://data/maps/first_slice_prop_placements.json", FileAccess.READ)
+	var manifest = JSON.parse_string(file.get_as_text())
+	for map_id in [
+		"hallowmere_street",
+		"mira_apothecary",
+		"sainted_bell_chapel",
+		"underchapel_drain",
+		"hidden_hospital_corridor",
+		"bell_tower_boss_room",
+	]:
+		_assert(manifest.maps.has(map_id), "%s has prop placement data" % map_id)
+		var categories := []
+		for prop in manifest.maps[map_id].props:
+			categories.append(String(prop.get("category", "")))
+		_assert(categories.has("navigation"), "%s includes navigation props" % map_id)
+		_assert(categories.has("story"), "%s includes story evidence props" % map_id)
+		_assert(categories.has("atmosphere"), "%s includes atmosphere props" % map_id)
+
+func _test_map_prop_renderer_resolves_and_instantiates_props() -> void:
+	_assert(ResourceLoader.exists("res://scripts/field/map_prop_renderer.gd"), "map prop renderer script exists")
+	var MapPropRenderer = load("res://scripts/field/map_prop_renderer.gd")
+	var renderer = MapPropRenderer.new()
+	var props = renderer.props_for_map("hallowmere_street")
+	_assert(props.any(func(prop): return prop.id == "House01"), "renderer resolves Hallowmere prop data")
+	var house_prop := _dictionary_with_id(props, "House01")
+	var house = renderer.create_prop(house_prop)
+	_assert(house is Sprite2D, "renderer creates sprite prop for House01")
+	_assert(house.name == "House01", "renderer names prop from manifest id")
+	_assert(house.get_meta("tile_asset_id", "") == "plague_town_house_01", "renderer records tile asset metadata")
+	_assert(house.get_meta("prop_category", "") == "navigation", "renderer records prop category")
+	house.free()
+
+func _test_map_prop_renderer_creates_prop_collision() -> void:
+	var MapPropRenderer = load("res://scripts/field/map_prop_renderer.gd")
+	var renderer = MapPropRenderer.new()
+	var props = renderer.props_for_map("hallowmere_street")
+	var town_well_prop := _dictionary_with_id(props, "TownWell")
+	_assert(town_well_prop.has("collision_rect"), "TownWell manifest entry defines collision")
+	var town_well = renderer.create_prop(town_well_prop)
+	_assert(town_well.has_node("PropCollision"), "renderer creates collision body for blocking prop")
+	var collision = town_well.get_node("PropCollision")
+	_assert(collision is StaticBody2D, "prop collision node is a StaticBody2D")
+	_assert(collision.has_node("CollisionShape2D"), "prop collision body has a collision shape")
+	town_well.free()
+
+func _test_map_prop_renderer_forwards_discovery_flag_metadata() -> void:
+	var MapPropRenderer = load("res://scripts/field/map_prop_renderer.gd")
+	var renderer = MapPropRenderer.new()
+	var props = renderer.props_for_map("underchapel_drain")
+	var pipe_prop := _dictionary_with_id(props, "MuseumPipe")
+	var pipe = renderer.create_prop(pipe_prop)
+	_assert(pipe.get_meta("discovery_flag", "") == "discovered_prop_underchapel_museum_pipe", "renderer forwards discovery flag metadata")
+	pipe.free()
+
+func _test_first_slice_prop_manifest_assets_exist_and_story_props_are_inspectable() -> void:
+	var file := FileAccess.open("res://data/maps/first_slice_prop_placements.json", FileAccess.READ)
+	var manifest = JSON.parse_string(file.get_as_text())
+	var TileAssetCatalog = load("res://scripts/field/tile_asset_catalog.gd")
+	var tile_catalog = TileAssetCatalog.new()
+	for map_id in manifest.maps.keys():
+		for prop in manifest.maps[map_id].props:
+			_assert(_prop_manifest_asset_exists(prop, tile_catalog), "%s/%s references an existing prop asset" % [map_id, prop.id])
+			for child in prop.get("children", []):
+				_assert(_prop_manifest_asset_exists(child, tile_catalog), "%s/%s/%s references an existing child prop asset" % [map_id, prop.id, child.id])
+			if String(prop.get("category", "")) == "story":
+				_assert(not String(prop.get("story_role", "")).is_empty(), "%s/%s story prop records story role" % [map_id, prop.id])
+				_assert(not String(prop.get("inspect_text", "")).is_empty(), "%s/%s story prop records inspect text" % [map_id, prop.id])
+
+func _test_first_slice_story_props_define_inspection_audio() -> void:
+	var file := FileAccess.open("res://data/maps/first_slice_prop_placements.json", FileAccess.READ)
+	var manifest = JSON.parse_string(file.get_as_text())
+	var AudioEventCatalog = load("res://scripts/core/audio_event_catalog.gd")
+	var audio_catalog = AudioEventCatalog.new()
+	for map_id in manifest.maps.keys():
+		for prop in manifest.maps[map_id].props:
+			if String(prop.get("category", "")) != "story":
+				continue
+			var event_id := String(prop.get("inspect_audio", ""))
+			_assert(not event_id.is_empty(), "%s/%s story prop defines inspect audio" % [map_id, prop.id])
+			_assert(not audio_catalog.event(event_id).is_empty(), "%s/%s inspect audio event exists" % [map_id, prop.id])
+
+func _test_first_slice_story_props_define_discovery_flags() -> void:
+	var file := FileAccess.open("res://data/maps/first_slice_prop_placements.json", FileAccess.READ)
+	var manifest = JSON.parse_string(file.get_as_text())
+	for map_id in manifest.maps.keys():
+		for prop in manifest.maps[map_id].props:
+			if String(prop.get("category", "")) != "story":
+				continue
+			var flag_id := String(prop.get("discovery_flag", ""))
+			_assert(flag_id.begins_with("discovered_prop_"), "%s/%s story prop defines stable discovery flag" % [map_id, prop.id])
+
+func _test_evidence_progress_service_counts_first_slice_story_props() -> void:
+	_assert(ResourceLoader.exists("res://scripts/core/evidence_progress_service.gd"), "evidence progress service exists")
+	var EvidenceProgressService = load("res://scripts/core/evidence_progress_service.gd")
+	var summary: Dictionary = EvidenceProgressService.new().first_slice_summary({})
+	_assert(int(summary.total) == 16, "evidence progress counts all first-slice story props")
+	_assert(int(summary.found) == 0, "empty flags find no evidence")
+	_assert(String(summary.label) == "Evidence Found: 0 / 16", "evidence progress formats empty label")
+
+func _test_evidence_progress_service_counts_discovered_story_props() -> void:
+	var EvidenceProgressService = load("res://scripts/core/evidence_progress_service.gd")
+	var summary: Dictionary = EvidenceProgressService.new().first_slice_summary({
+		"discovered_prop_underchapel_museum_pipe": true,
+		"discovered_prop_hospital_medical_chart": true,
+		"discovered_prop_not_in_slice": true,
+	})
+	_assert(int(summary.total) == 16, "evidence progress keeps total stable when flags include unknowns")
+	_assert(int(summary.found) == 2, "evidence progress counts discovered first-slice evidence only")
+	_assert(String(summary.label) == "Evidence Found: 2 / 16", "evidence progress formats discovered label")
+
+func _test_evidence_progress_service_returns_map_breakdown() -> void:
+	var EvidenceProgressService = load("res://scripts/core/evidence_progress_service.gd")
+	var summary: Dictionary = EvidenceProgressService.new().first_slice_summary({
+		"discovered_prop_underchapel_museum_pipe": true,
+		"discovered_prop_hospital_medical_chart": true,
+	})
+	var maps: Dictionary = summary.get("maps", {})
+	_assert(int(maps.get("hallowmere_street", {}).get("total", 0)) == 3, "evidence progress counts Hallowmere story props")
+	_assert(int(maps.get("underchapel_drain", {}).get("found", 0)) == 1, "evidence progress counts discovered Underchapel evidence")
+	_assert(int(maps.get("hidden_hospital_corridor", {}).get("total", 0)) == 3, "evidence progress counts hospital story props")
+	_assert(String(maps.get("hidden_hospital_corridor", {}).get("label", "")) == "Hidden Hospital Corridor: 1 / 3", "evidence progress formats map breakdown label")
+
+func _test_evidence_progress_service_formats_missing_map_hint() -> void:
+	var EvidenceProgressService = load("res://scripts/core/evidence_progress_service.gd")
+	var summary: Dictionary = EvidenceProgressService.new().first_slice_summary({
+		"discovered_prop_underchapel_museum_pipe": true,
+		"discovered_prop_underchapel_pump_machine": true,
+		"discovered_prop_underchapel_warning_panel": true,
+		"discovered_prop_hospital_medical_chart": true,
+	})
+	_assert(String(summary.get("next_hint", "")) == "Evidence Remaining: Hallowmere Street, Mira Apothecary, Sainted Bell Chapel", "evidence progress lists earliest maps still missing evidence")
+
+func _test_first_slice_prop_manifest_marks_key_navigation_props_blocking() -> void:
+	var file := FileAccess.open("res://data/maps/first_slice_prop_placements.json", FileAccess.READ)
+	var manifest = JSON.parse_string(file.get_as_text())
+	var expected_blocking := {
+		"hallowmere_street": ["House01", "House02", "CoffinStack", "TownWell"],
+		"mira_apothecary": ["RestBed", "WorkTable"],
+		"sainted_bell_chapel": ["ChapelBench", "StoneRail"],
+		"underchapel_drain": ["DrainGrate", "ServiceLadder"],
+		"hidden_hospital_corridor": ["HospitalDoor", "PatientBed"],
+		"bell_tower_boss_room": ["BellRope", "AnchorDoor"],
+	}
+	for map_id in expected_blocking.keys():
+		var props: Array = manifest.maps[map_id].props
+		for prop_id in expected_blocking[map_id]:
+			var prop := _dictionary_with_id(props, prop_id)
+			_assert(prop.has("collision_rect"), "%s/%s has blocking collision rect" % [map_id, prop_id])
+
+func _test_first_slice_blocking_props_do_not_cover_spawns_or_transitions() -> void:
+	var file := FileAccess.open("res://data/maps/first_slice_prop_placements.json", FileAccess.READ)
+	var manifest = JSON.parse_string(file.get_as_text())
+	var MapCatalog = load("res://scripts/field/map_catalog.gd")
+	var catalog = MapCatalog.new()
+	for phase_id in [
+		"plague_town_street",
+		"apothecary_house",
+		"chapel",
+		"underchapel_drain",
+		"hidden_hospital_corridor",
+		"bell_tower_boss_room",
+	]:
+		var map = catalog.map_for_phase(phase_id)
+		var prop_data = manifest.maps.get(map.id, {"props": []})
+		for prop in prop_data.props:
+			if not prop.has("collision_rect"):
+				continue
+			var collision_rect := _prop_collision_rect(prop)
+			var spawn := _vector_from_map_point(map.get("spawn", {}))
+			_assert(not collision_rect.has_point(spawn), "%s/%s blocking prop does not cover spawn" % [map.id, prop.id])
+			for transition in map.get("transitions", []):
+				var transition_rect := _rect_from_map_rect(transition.get("rect", {}))
+				var center := transition_rect.position + transition_rect.size / 2.0
+				_assert(not collision_rect.has_point(center), "%s/%s blocking prop does not cover transition %s" % [map.id, prop.id, transition.id])
 
 func _test_first_slice_tile_asset_catalog_defines_runtime_tiles() -> void:
 	_assert(ResourceLoader.exists("res://data/tilesets/first_slice_tile_assets.json"), "first slice tile asset manifest exists")
@@ -1586,8 +2043,82 @@ func _test_prototype_field_creates_story_prop_interactions() -> void:
 		_assert(result.kind == "story_prop", "authored story prop interaction keeps prop kind")
 		_assert(String(result.status).begins_with("Inspect: "), "authored story prop interaction is presented as inspection text")
 		_assert(String(result.status).contains("newer than Hallowmere"), "authored story prop interaction returns inspect text")
-		_assert(result.audio_event == "ui_confirm", "authored story prop interaction uses confirm audio")
+		_assert(result.audio_event == "plague_cough", "authored story prop interaction uses manifest audio")
 	field_scene.queue_free()
+
+func _test_prototype_field_story_prop_uses_manifest_inspection_audio() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.max_unlocked_route_index = 5
+	field_scene.load_phase_map()
+	var museum_pipe = field_scene.get_node_or_null("MapContent/Interactables/InspectMuseumPipe")
+	_assert(museum_pipe != null, "prototype field creates inspect interaction for museum pipe")
+	if museum_pipe != null:
+		var result: Dictionary = museum_pipe.interact()
+		_assert(result.audio_event == "door_museum_open", "museum pipe inspection uses museum machinery cue")
+	field_scene.queue_free()
+
+func _test_prototype_field_story_prop_inspection_sets_discovery_flag() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var field_scene = FieldScene.instantiate()
+	field_scene.game_state_override = game_state
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.max_unlocked_route_index = 5
+	field_scene.load_phase_map()
+	var player = field_scene.get_node("%Player")
+	player.position = Vector2(80, 72)
+	player.facing = "right"
+	_assert(field_scene.try_context_action(), "field can inspect museum pipe story prop")
+	_assert(bool(game_state.flags.get("discovered_prop_underchapel_museum_pipe", false)), "story prop inspection stores discovery flag")
+	_assert(game_state.flags.get("discovered_story_props", []).has("discovered_prop_underchapel_museum_pipe"), "story prop discovery is listed for later systems")
+	field_scene.game_state_override = null
+	field_scene.queue_free()
+	game_state.free()
+
+func _test_prototype_field_first_story_prop_discovery_adds_evidence_feedback() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var field_scene = FieldScene.instantiate()
+	field_scene.game_state_override = game_state
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.max_unlocked_route_index = 5
+	field_scene.load_phase_map()
+	var player = field_scene.get_node("%Player")
+	player.position = Vector2(80, 72)
+	player.facing = "right"
+	_assert(field_scene.try_context_action(), "field can inspect museum pipe for evidence feedback")
+	_assert(field_scene.get_node("%StatusLabel").text.contains("Evidence recovered."), "first story prop discovery tells player evidence was recovered")
+	field_scene.game_state_override = null
+	field_scene.queue_free()
+	game_state.free()
+
+func _test_prototype_field_repeat_story_prop_inspection_does_not_repeat_evidence_feedback() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var field_scene = FieldScene.instantiate()
+	field_scene.game_state_override = game_state
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.max_unlocked_route_index = 5
+	field_scene.load_phase_map()
+	var player = field_scene.get_node("%Player")
+	player.position = Vector2(80, 72)
+	player.facing = "right"
+	_assert(field_scene.try_context_action(), "field can inspect museum pipe first time")
+	_assert(field_scene.try_context_action(), "field can inspect museum pipe second time")
+	_assert(not field_scene.get_node("%StatusLabel").text.contains("Evidence recovered."), "repeat story prop inspection does not replay evidence feedback")
+	_assert(game_state.flags.get("discovered_story_props", []).count("discovered_prop_underchapel_museum_pipe") == 1, "repeat story prop inspection keeps one discovery list entry")
+	field_scene.game_state_override = null
+	field_scene.queue_free()
+	game_state.free()
 
 func _test_prototype_field_player_can_inspect_authored_story_prop() -> void:
 	var FieldScene = load("res://scenes/field/prototype_field.tscn")
@@ -3163,6 +3694,34 @@ func _test_app_root_bell_saint_completion_records_boss_defeat() -> void:
 	app.queue_free()
 	game_state.free()
 
+func _test_app_root_bell_saint_completion_records_autosave_feedback() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120}}]
+	game_state.party = party
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("battle")
+	app._on_battle_completed({
+		"xp": 180,
+		"loot": {},
+		"relics": ["bell_clapper"],
+		"memory_cards": ["bell_saint"],
+		"next_flow": "truth_recovered",
+		"party_state": [{"id": "lead", "hp": 90}]
+	})
+	_assert(game_state.flags.get("last_save_status", "").contains("Autosaved"), "Bell Saint completion records autosave feedback")
+	var text_label = app.get_node_or_null("%SceneHost/RewardScenePanel/Content/RewardText")
+	_assert(text_label is Label, "Bell Saint reward scene renders after autosave")
+	if text_label is Label:
+		_assert(text_label.text.contains("Autosaved"), "Bell Saint reward scene tells player progress is saved")
+		_assert(text_label.text.contains("safe to stop"), "Bell Saint reward scene tells player it is safe to stop")
+	app.queue_free()
+	game_state.free()
+
 func _test_app_root_renders_bell_saint_reward_scene() -> void:
 	var AppRootScene = load("res://scenes/app/app_root.tscn")
 	var GameStateScript = load("res://scripts/core/game_state.gd")
@@ -3192,6 +3751,29 @@ func _test_app_root_renders_bell_saint_reward_scene() -> void:
 			_assert(text_label.text.contains("Anchor Recovered: Bell Clapper"), "reward scene summarizes recovered anchor relic")
 			_assert(text_label.text.contains("Memory Card: The Bell Saint"), "reward scene summarizes acquired memory card")
 			_assert(text_label.text.contains("Mira Venn joined"), "reward scene summarizes Mira joining the party")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_reward_scene_summarizes_evidence_progress() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	game_state.inventory["bell_clapper"] = 1
+	game_state.memory_cards["owned"] = ["bell_saint"]
+	game_state.flags["discovered_prop_underchapel_museum_pipe"] = true
+	game_state.flags["discovered_prop_hospital_medical_chart"] = true
+	game_state.flags["pending_reward_dialogue"] = {"section": "rewards", "scene": "memory_card_unlock"}
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("truth_recovered")
+	app._sync_scene()
+	var text_label = app.get_node_or_null("%SceneHost/RewardScenePanel/Content/RewardText")
+	_assert(text_label is Label, "reward scene renders text for evidence progress")
+	if text_label is Label:
+		_assert(text_label.text.contains("Evidence Found: 2 / 16"), "reward scene summarizes first-slice evidence progress")
+		_assert(text_label.text.contains("Evidence Remaining: Hallowmere Street, Mira Apothecary, Sainted Bell Chapel"), "reward scene summarizes earliest maps with missing evidence")
 	app.queue_free()
 	game_state.free()
 
@@ -4003,6 +4585,7 @@ func _test_first_slice_items_and_memory_card_data() -> void:
 	var items = JSON.parse_string(item_file.get_as_text())
 	_assert(items.clean_bandage.display_name == "Clean Bandage", "first slice includes Clean Bandage")
 	_assert(items.bitter_draught.kind == "consumable", "first slice includes Bitter Draught as consumable")
+	_assert(items.fever_charm.display_name == "Fever Charm", "first slice includes Fever Charm side quest reward")
 	_assert(items.bell_clapper.kind == "anchor_relic", "Bell Clapper is an anchor relic item")
 	_assert(ResourceLoader.exists("res://data/cards/memory_cards.json"), "memory cards data exists")
 	var card_file := FileAccess.open("res://data/cards/memory_cards.json", FileAccess.READ)

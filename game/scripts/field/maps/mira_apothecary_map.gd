@@ -4,6 +4,7 @@ extends Node2D
 @export var map_id := "mira_apothecary"
 
 const TileAssetCatalog = preload("res://scripts/field/tile_asset_catalog.gd")
+const MapPropRenderer = preload("res://scripts/field/map_prop_renderer.gd")
 
 const WALL_RECTS := [
 	Rect2(0, 16, 208, 16),
@@ -56,11 +57,7 @@ func _add_landmarks() -> void:
 	var landmarks := Node2D.new()
 	landmarks.name = "Landmarks"
 	add_child(landmarks)
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("MedicineShelf", Vector2(128, 64), "res://assets/tilesets/first_slice/apothecary/sliced/medicine_shelf.png", 0.08), "medical_supply", "Boiled cloth, bitter bottles, and labels written by someone who expected to run out of both time and room."))
-	landmarks.add_child(_create_sliced_prop("RestBed", Vector2(160, 96), "res://assets/tilesets/first_slice/apothecary/sliced/rest_bed.png", 0.24))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("WorkTable", Vector2(96, 80), "res://assets/tilesets/first_slice/apothecary/sliced/work_table.png", 0.18), "mira_workspace", "Mira's tools are clean. Her notes are not. Every page argues with the town's idea of mercy."))
-	landmarks.add_child(_create_color_landmark("ExitDoor", Vector2(32, 64), Vector2(20, 34), Color(0.14, 0.10, 0.08, 0.95), "museum_modern_inside_tiles"))
-	landmarks.add_child(_create_sliced_prop("BoilingBasin", Vector2(104, 112), "res://assets/tilesets/first_slice/apothecary/sliced/boiling_basin.png", 0.16))
+	MapPropRenderer.new().render_props(landmarks, map_id)
 
 
 func _add_collision() -> void:

@@ -13,7 +13,7 @@
     "heal_hp": 60,
     "description": "A harsh medicinal drink brewed from old herbs and older desperation. Tastes like punishment."
   },
-  "fever_char": {
+  "fever_charm": {
     "display_name": "Fever Charm",
     "kind": "accessory",
     "resist": {"disease": 0.05},

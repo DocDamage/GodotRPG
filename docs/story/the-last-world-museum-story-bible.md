@@ -109,5 +109,14 @@ Runtime status:
 - Sev's character creator is the first playable screen.
 - The Bell Saint route is defined in both story flow and map flow data.
 - Hallowmere, Mira's Apothecary, the chapel, Underchapel Drain, hidden hospital, and Bell Tower have authored field scenes with inspectable story props.
+- First-slice prop placement is data-driven through layered navigation, story evidence, and atmosphere entries, so map density can be tuned without editing each map script.
+- Blocking prop collision is defined in the same manifest for houses, wells, coffins, beds, chapel benches, sewer machinery, hospital props, and Bell Tower anchor objects while preserving route spawns and transitions.
+- Story evidence props now carry inspection audio cues from the same manifest, letting museum machinery, plague evidence, medicine props, and bell anchors sound distinct when examined.
+- Story evidence inspections now set stable `discovered_prop_*` flags, show one-time "Evidence recovered" feedback, and maintain a `discovered_story_props` list, giving later codex entries, optional dialogue, and completion checks a real evidence trail.
+- The Truth Recovered reward panel now summarizes first-slice evidence progress as `Evidence Found: found / total`, plus an `Evidence Remaining` hint for the earliest maps still missing inspected story props. This lets the chapter close reflect how much of Hallowmere's hidden record the player examined.
+- Evidence discovery is save/load covered. If an older save has individual `discovered_prop_*` flags but no `discovered_story_props` list, the game rebuilds the list when loading.
+- Hallowmere now includes additional ambient residents and a `clean_cloth` side quest from the Sick Woman that grants Clean Bandages.
+- The hidden hospital now includes Nurse Echo and a `wrong_chart` side quest that grants the Fever Charm.
 - Mira recruitment, Bell Saint completion flags, Bell Clapper, and The Bell Saint Memory Card are save/load covered.
 - The battle system resolves Bell Saint victory into the Truth Recovered reward scene.
+- The Bell Saint reward scene confirms autosave, and the first-slice encounter pacing now favors fewer dungeon fights before the boss.

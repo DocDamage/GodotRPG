@@ -4,6 +4,7 @@ extends Node2D
 @export var map_id := "sainted_bell_chapel"
 
 const TileAssetCatalog = preload("res://scripts/field/tile_asset_catalog.gd")
+const MapPropRenderer = preload("res://scripts/field/map_prop_renderer.gd")
 
 const WALL_RECTS := [
 	Rect2(0, 0, 288, 16),
@@ -58,12 +59,7 @@ func _add_landmarks() -> void:
 	var landmarks := Node2D.new()
 	landmarks.name = "Landmarks"
 	add_child(landmarks)
-	landmarks.add_child(_create_sliced_prop("ChapelArch", Vector2(128, 48), "res://assets/tilesets/first_slice/chapel/sliced/chapel_arch.png", 0.16, -8))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("SaintStatue", Vector2(128, 70), "res://assets/tilesets/first_slice/chapel/sliced/saint_statue.png", 0.36, -6), "belief_anchor", "The statue's face is worn smooth where frightened hands asked stone to answer."))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("CellarDoor", Vector2(224, 112), "res://assets/tilesets/first_slice/chapel/sliced/cellar_door.png", 0.20, -5), "hidden_route", "Cold air leaks through the cellar door. It smells less like earth than sterilized metal."))
-	landmarks.add_child(_create_sliced_prop("ChapelLantern", Vector2(88, 112), "res://assets/tilesets/first_slice/chapel/sliced/chapel_lantern.png", 0.70, -5))
-	landmarks.add_child(_create_sliced_prop("ChapelBench", Vector2(168, 112), "res://assets/tilesets/first_slice/chapel/sliced/chapel_bench.png", 0.48, -5))
-	landmarks.add_child(_create_sliced_prop("StoneRail", Vector2(128, 104), "res://assets/tilesets/first_slice/chapel/sliced/stone_rail.png", 0.34, -7))
+	MapPropRenderer.new().render_props(landmarks, map_id)
 
 
 func _add_collision() -> void:

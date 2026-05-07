@@ -90,7 +90,21 @@
         ]
       },
       "npcs": [
-        {"id": "sick_woman", "name": "Sick Woman", "position": {"x": 112, "y": 80}, "line": "Do not come near."},
+        {
+          "id": "sick_woman",
+          "name": "Sick Woman",
+          "position": {"x": 112, "y": 80},
+          "line": "Do not come near.",
+          "quest": {
+            "id": "clean_cloth",
+            "completion_flag": "quest_clean_cloth_complete",
+            "reward_items": {"clean_bandage": 2},
+            "complete_line": "Take this boiled cloth. Someone should leave Hallowmere with clean hands.",
+            "repeat_line": "You already carry what I can spare."
+          }
+        },
+        {"id": "fever_child", "name": "Child Behind Door", "position": {"x": 80, "y": 128}, "line": "Mother said liars knock softly."},
+        {"id": "corpse_cart_driver", "name": "Corpse Cart Driver", "position": {"x": 256, "y": 136}, "line": "People look under the sheet to see if it is someone they know."},
         {"id": "old_man_well", "name": "Old Man by Well", "position": {"x": 160, "y": 112}, "line": "The water was sweet before the priests blessed it."},
         {"id": "coffin_maker", "name": "Coffin Maker", "position": {"x": 216, "y": 96}, "line": "Small, medium, or merciful?"},
         {"id": "praying_villager", "name": "Praying Villager", "position": {"x": 272, "y": 72}, "line": "The bell will cleanse us."}
@@ -222,7 +236,20 @@
         ]
       },
       "npcs": [
-        {"id": "patient_echo", "name": "Patient Echo", "position": {"x": 112, "y": 80}, "line": "Do not let them ring the bell."}
+        {"id": "patient_echo", "name": "Patient Echo", "position": {"x": 112, "y": 80}, "line": "Do not let them ring the bell."},
+        {
+          "id": "nurse_echo",
+          "name": "Nurse Echo",
+          "position": {"x": 256, "y": 112},
+          "line": "Ward C is closed.",
+          "quest": {
+            "id": "wrong_chart",
+            "completion_flag": "quest_wrong_chart_complete",
+            "reward_items": {"fever_charm": 1},
+            "complete_line": "If the chart remembers the fever, carry this charm where the bell can hear it.",
+            "repeat_line": "Ward C remains closed. You already carry what the chart allowed."
+          }
+        }
       ],
       "interactables": [
         {"id": "medical_chart", "name": "Medical Chart", "position": {"x": 160, "y": 96}, "line": "Containment trial. Memory fever. Religious overlay contamination."},

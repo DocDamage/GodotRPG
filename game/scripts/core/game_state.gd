@@ -52,10 +52,30 @@ func apply_save_payload(payload: Dictionary) -> void:
 	accessibility = AccessibilitySettings.from_dict(payload.get("accessibility", {}))
 	map_id = payload.get("map_id", "overworld")
 	player_position = payload.get("position", Vector2.ZERO)
-	party = payload.get("party", []).duplicate(true)
+	party = _typed_party_from_payload(payload.get("party", []))
 	inventory = payload.get("inventory", {}).duplicate(true)
 	memory_cards = payload.get("memory_cards", {"owned": [], "equipped": []}).duplicate(true)
 	flags = payload.get("flags", {}).duplicate(true)
+	_rebuild_discovered_story_props_from_flags()
+
+func _typed_party_from_payload(value) -> Array[Dictionary]:
+	var restored_party: Array[Dictionary] = []
+	if not value is Array:
+		return restored_party
+	for member in value:
+		if member is Dictionary:
+			restored_party.append(member.duplicate(true))
+	return restored_party
+
+func _rebuild_discovered_story_props_from_flags() -> void:
+	var discovered: Array = flags.get("discovered_story_props", [])
+	for flag_id in flags.keys():
+		if not String(flag_id).begins_with("discovered_prop_"):
+			continue
+		if bool(flags.get(flag_id, false)) and not discovered.has(flag_id):
+			discovered.append(flag_id)
+	if not discovered.is_empty():
+		flags["discovered_story_props"] = discovered
 
 func save_manual_slot() -> Error:
 	return SaveService.new().save_slot("user://manual_slot.save", to_save_state())

@@ -6,6 +6,7 @@ const PrototypeBattleScene = preload("res://scenes/battle/prototype_battle.tscn"
 const StoryFlowService = preload("res://scripts/core/story_flow_service.gd")
 const VistaCatalog = preload("res://scripts/core/vista_catalog.gd")
 const ContentCatalog = preload("res://scripts/core/content_catalog.gd")
+const EvidenceProgressService = preload("res://scripts/core/evidence_progress_service.gd")
 
 @onready var title_label: Label = %TitleLabel
 @onready var flow_label: Label = %FlowLabel
@@ -109,6 +110,8 @@ func _apply_bell_saint_completion_state(game_state, payload: Dictionary) -> void
 		"section": "rewards",
 		"scene": "memory_card_unlock",
 	}
+	var save_error = game_state.save_manual_slot()
+	game_state.flags["last_save_status"] = "Autosaved. It is safe to stop here." if save_error == OK else "Autosave failed. Open the menu to save again."
 
 func _update_labels() -> void:
 	_resolve_late_bound_nodes()
@@ -200,6 +203,12 @@ func _reward_summary_lines(game_state, catalog: ContentCatalog) -> Array[String]
 		lines.append("Memory Card: %s" % String(card.get("display_name", "The Bell Saint")))
 	if game_state.party.any(func(member): return String(member.get("id", "")) == "mira_venn"):
 		lines.append("Mira Venn joined the party.")
+	var evidence := EvidenceProgressService.new().first_slice_summary(game_state.flags)
+	lines.append(String(evidence.label))
+	lines.append(String(evidence.next_hint))
+	var save_status := String(game_state.flags.get("last_save_status", ""))
+	if not save_status.is_empty():
+		lines.append(save_status)
 	if not lines.is_empty():
 		lines.append("")
 	return lines

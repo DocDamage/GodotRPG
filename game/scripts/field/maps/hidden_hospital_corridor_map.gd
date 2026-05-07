@@ -4,6 +4,7 @@ extends Node2D
 @export var map_id := "hidden_hospital_corridor"
 
 const TileAssetCatalog = preload("res://scripts/field/tile_asset_catalog.gd")
+const MapPropRenderer = preload("res://scripts/field/map_prop_renderer.gd")
 
 const WALL_RECTS := [
 	Rect2(0, 16, 416, 16),
@@ -57,12 +58,7 @@ func _add_landmarks() -> void:
 	var landmarks := Node2D.new()
 	landmarks.name = "Landmarks"
 	add_child(landmarks)
-	landmarks.add_child(_create_sliced_prop("HospitalDoor", Vector2(48, 72), "res://assets/tilesets/first_slice/hospital/sliced/hospital_door.png", 0.34, -7))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("PatientBed", Vector2(112, 88), "res://assets/tilesets/first_slice/hospital/sliced/patient_bed.png", 0.30, -6), "medical_evidence", "The bed frame is newer than Hallowmere by centuries. The restraints are not."))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("MedicalChart", Vector2(160, 96), "res://assets/tilesets/first_slice/hospital/sliced/medical_chart.png", 0.58, -5), "memory_fever_record", "Containment trial. Memory fever. Bell vector unstable. Someone recorded the sickness before the town named it sin."))
-	landmarks.add_child(_tag_story_prop(_create_sliced_prop("MedicineCabinet", Vector2(224, 80), "res://assets/tilesets/first_slice/hospital/sliced/medicine_cabinet.png", 0.24, -7), "medical_supply", "Sealed bottles line the cabinet. Most labels describe symptoms Mira has seen in prayer, not medicine."))
-	landmarks.add_child(_create_sliced_prop("OperatingLight", Vector2(288, 64), "res://assets/tilesets/first_slice/hospital/sliced/operating_light.png", 0.42, -4))
-	landmarks.add_child(_create_sliced_prop("IvStand", Vector2(136, 104), "res://assets/tilesets/first_slice/hospital/sliced/iv_stand.png", 0.42, -5))
+	MapPropRenderer.new().render_props(landmarks, map_id)
 
 
 func _add_collision() -> void:
