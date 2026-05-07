@@ -1,0 +1,53 @@
+{
+  "source_library": "Assets/Cut Sprites/CuteSCKR/Medieval Castle Fantasy - Pixel Art Tileset and Medieval Fantasy Dungeon & Prison Pixel Art Tileset Pack",
+  "promotions": [
+    {
+      "id": "chapel_arch",
+      "runtime_name": "chapel_arch.png",
+      "source_sprite_id": "Medieval Castle/2/2_1",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Castle Fantasy - Pixel Art Tileset/2/2_1.png",
+      "output_path": "res://assets/tilesets/first_slice/chapel/sliced/chapel_arch.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "saint_statue",
+      "runtime_name": "saint_statue.png",
+      "source_sprite_id": "Medieval Castle/4/4_10",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Castle Fantasy - Pixel Art Tileset/4/4_10.png",
+      "output_path": "res://assets/tilesets/first_slice/chapel/sliced/saint_statue.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "cellar_door",
+      "runtime_name": "cellar_door.png",
+      "source_sprite_id": "Medieval Castle/4/4_40",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Castle Fantasy - Pixel Art Tileset/4/4_40.png",
+      "output_path": "res://assets/tilesets/first_slice/chapel/sliced/cellar_door.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "chapel_lantern",
+      "runtime_name": "chapel_lantern.png",
+      "source_sprite_id": "Medieval Dungeon/2/2_167",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Fantasy Dungeon & Prison Pixel Art Tileset Pack/2/2_167.png",
+      "output_path": "res://assets/tilesets/first_slice/chapel/sliced/chapel_lantern.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "chapel_bench",
+      "runtime_name": "chapel_bench.png",
+      "source_sprite_id": "Medieval Dungeon/2/2_180",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Fantasy Dungeon & Prison Pixel Art Tileset Pack/2/2_180.png",
+      "output_path": "res://assets/tilesets/first_slice/chapel/sliced/chapel_bench.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "stone_rail",
+      "runtime_name": "stone_rail.png",
+      "source_sprite_id": "Medieval Castle/1/1_31",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Castle Fantasy - Pixel Art Tileset/1/1_31.png",
+      "output_path": "res://assets/tilesets/first_slice/chapel/sliced/stone_rail.png",
+      "review_status": "candidate"
+    }
+  ]
+}

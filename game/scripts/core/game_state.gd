@@ -6,6 +6,8 @@ const SaveService = preload("res://scripts/save/save_service.gd")
 const InventoryService = preload("res://scripts/progression/inventory_service.gd")
 const MemoryCardService = preload("res://scripts/progression/memory_card_service.gd")
 const ClassCatalog = preload("res://scripts/progression/class_catalog.gd")
+const ProgressionService = preload("res://scripts/progression/progression_service.gd")
+const ContentCatalog = preload("res://scripts/core/content_catalog.gd")
 
 var profile: PlayerProfile
 var accessibility: AccessibilitySettings = AccessibilitySettings.new()
@@ -76,6 +78,55 @@ func acquire_memory_card(card_id: String) -> bool:
 
 func equip_memory_card(card_id: String) -> bool:
 	return MemoryCardService.new().equip_card(memory_cards, card_id)
+
+func add_party_xp(xp_gained: int) -> void:
+	if xp_gained <= 0:
+		return
+	var progression := ProgressionService.new()
+	var updated_party: Array[Dictionary] = []
+	for member in party:
+		var class_id := String(member.get("class_id", "vanguard"))
+		updated_party.append(progression.apply_xp(member, xp_gained, class_id))
+	party = updated_party
+
+func apply_party_battle_state(party_state: Array) -> void:
+	if party_state.is_empty():
+		return
+	var state_by_id := {}
+	for state in party_state:
+		var member_id := String(state.get("id", ""))
+		if not member_id.is_empty():
+			state_by_id[member_id] = state
+	var updated_party: Array[Dictionary] = []
+	for member in party:
+		var copy := member.duplicate(true)
+		var member_id := String(copy.get("id", ""))
+		var state: Dictionary = state_by_id.get(member_id, {})
+		if not state.is_empty():
+			if state.has("hp"):
+				var stats: Dictionary = copy.get("stats", {})
+				var max_hp := int(stats.get("max_hp", copy.get("max_hp", state.hp)))
+				copy.hp = clampi(int(state.hp), 0, max_hp)
+			if state.has("mp"):
+				var stats: Dictionary = copy.get("stats", {})
+				var max_mp := int(stats.get("max_mp", copy.get("max_mp", state.mp)))
+				copy.mp = clampi(int(state.mp), 0, max_mp)
+			if state.has("statuses"):
+				copy.statuses = state.statuses.duplicate(true)
+		updated_party.append(copy)
+	party = updated_party
+
+func recruit_party_member(member_id: String) -> bool:
+	if member_id.is_empty():
+		return false
+	for member in party:
+		if String(member.get("id", "")) == member_id:
+			return false
+	var member := ContentCatalog.new().party_member(member_id)
+	if member.is_empty():
+		return false
+	party.append(member)
+	return true
 
 func memory_card_effects() -> Dictionary:
 	return MemoryCardService.new().equipped_effects(memory_cards)

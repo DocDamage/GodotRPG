@@ -22,12 +22,22 @@ func _ready() -> void:
 
 
 func build_map() -> void:
+	_apply_map_metadata()
 	if get_node_or_null("InteriorFloor") != null:
 		return
 	_add_floor()
 	_add_landmarks()
 	_add_collision()
 	_add_atmosphere()
+
+
+func _apply_map_metadata() -> void:
+	set_meta("audio_profile", {
+		"map_id": map_id,
+		"ambience": "ambience_apothecary",
+		"entry": "item_pickup",
+		"museum_override": "curator_warning",
+	})
 
 
 func _add_floor() -> void:
@@ -46,9 +56,9 @@ func _add_landmarks() -> void:
 	var landmarks := Node2D.new()
 	landmarks.name = "Landmarks"
 	add_child(landmarks)
-	landmarks.add_child(_create_sliced_prop("MedicineShelf", Vector2(128, 64), "res://assets/tilesets/first_slice/apothecary/sliced/medicine_shelf.png", 0.08))
+	landmarks.add_child(_tag_story_prop(_create_sliced_prop("MedicineShelf", Vector2(128, 64), "res://assets/tilesets/first_slice/apothecary/sliced/medicine_shelf.png", 0.08), "medical_supply", "Boiled cloth, bitter bottles, and labels written by someone who expected to run out of both time and room."))
 	landmarks.add_child(_create_sliced_prop("RestBed", Vector2(160, 96), "res://assets/tilesets/first_slice/apothecary/sliced/rest_bed.png", 0.24))
-	landmarks.add_child(_create_sliced_prop("WorkTable", Vector2(96, 80), "res://assets/tilesets/first_slice/apothecary/sliced/work_table.png", 0.18))
+	landmarks.add_child(_tag_story_prop(_create_sliced_prop("WorkTable", Vector2(96, 80), "res://assets/tilesets/first_slice/apothecary/sliced/work_table.png", 0.18), "mira_workspace", "Mira's tools are clean. Her notes are not. Every page argues with the town's idea of mercy."))
 	landmarks.add_child(_create_color_landmark("ExitDoor", Vector2(32, 64), Vector2(20, 34), Color(0.14, 0.10, 0.08, 0.95), "museum_modern_inside_tiles"))
 	landmarks.add_child(_create_sliced_prop("BoilingBasin", Vector2(104, 112), "res://assets/tilesets/first_slice/apothecary/sliced/boiling_basin.png", 0.16))
 
@@ -101,6 +111,12 @@ func _create_sliced_prop(node_name: String, position: Vector2, path: String, pro
 	sprite.z_index = -6
 	sprite.set_meta("slice_path", path)
 	return sprite
+
+
+func _tag_story_prop(node: Node, story_role: String, inspect_text: String) -> Node:
+	node.set_meta("story_role", story_role)
+	node.set_meta("inspect_text", inspect_text)
+	return node
 
 
 func _create_smoke_patch(node_name: String, position: Vector2, size: Vector2, alpha: float) -> ColorRect:

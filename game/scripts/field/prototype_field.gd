@@ -3,6 +3,7 @@ extends Node2D
 signal battle_launch_requested(payload: Dictionary)
 
 const FieldController = preload("res://scripts/field/field_controller.gd")
+const EncounterTable = preload("res://scripts/field/encounter_table.gd")
 const SevRecordService = preload("res://scripts/core/sev_record_service.gd")
 const ContentCatalog = preload("res://scripts/core/content_catalog.gd")
 const MapCatalog = preload("res://scripts/field/map_catalog.gd")
@@ -14,9 +15,15 @@ const DialogueBoxScene = preload("res://scenes/dialogue/dialogue_box.tscn")
 const AUTHORED_MAP_SCENES := {
 	"hallowmere_street": "res://scenes/field/maps/hallowmere_street_map.tscn",
 	"mira_apothecary": "res://scenes/field/maps/mira_apothecary_map.tscn",
+	"sainted_bell_chapel": "res://scenes/field/maps/sainted_bell_chapel_map.tscn",
+	"underchapel_drain": "res://scenes/field/maps/underchapel_drain_map.tscn",
+	"hidden_hospital_corridor": "res://scenes/field/maps/hidden_hospital_corridor_map.tscn",
+	"bell_tower_boss_room": "res://scenes/field/maps/bell_tower_boss_room_map.tscn",
 }
 const ENEMIES_PATH := "res://data/combat/enemies.json"
+const ENCOUNTERS_PATH := "res://data/encounters/plague_wing.json"
 const BATTLE_SCENE_PATH := "res://scenes/battle/prototype_battle.tscn"
+const ENCOUNTER_STEP_DISTANCE := 16.0
 
 @onready var player: CharacterBody2D = %Player
 @onready var status_label: Label = %StatusLabel
@@ -34,6 +41,11 @@ var triggered_story_events: Array[String] = []
 var active_dialogue_lines: Array = []
 var active_dialogue_index := -1
 var dialogue_box: Control = null
+var steps_since_encounter_check := 0
+var encounter_travel_pixels := 0.0
+var last_encounter_player_position := Vector2.ZERO
+var has_encounter_player_position := false
+var game_state_override = null
 
 const FIRST_SLICE_ROUTE := [
 	"empty_rotunda",
@@ -87,7 +99,9 @@ func _ready() -> void:
 	_render_phase_metadata()
 
 func _physics_process(_delta: float) -> void:
-	check_player_transition()
+	if check_player_transition():
+		return
+	record_player_travel_for_encounters()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
@@ -127,8 +141,10 @@ func load_phase_map() -> void:
 		phase_id = String(phase_metadata.get("display_name", "")).to_snake_case()
 	current_map = MapCatalog.new().map_for_phase(phase_id)
 	map_phase_id = phase_id
+	steps_since_encounter_check = 0
 	_unlock_route_through(phase_id)
 	_render_map_content()
+	_reset_encounter_travel_tracking()
 	_render_current_objective()
 	_render_phase_metadata()
 	_render_boss_readiness()
@@ -136,6 +152,15 @@ func load_phase_map() -> void:
 
 func active_transitions() -> Array:
 	return active_transition_zones.duplicate(true)
+
+func mounted_map_audio_profile() -> Dictionary:
+	var authored_root := get_node_or_null("MapContent/AuthoredMap")
+	if authored_root == null or authored_root.get_child_count() == 0:
+		return {}
+	var mounted_map := authored_root.get_child(0)
+	if not mounted_map.has_meta("audio_profile"):
+		return {}
+	return mounted_map.get_meta("audio_profile", {}).duplicate(true)
 
 func transition_at(position: Vector2) -> Dictionary:
 	return field.resolve_transition(position, active_transition_zones)
@@ -163,9 +188,11 @@ func change_to_phase(phase_id: String, spawn_position := Vector2.ZERO) -> bool:
 	if target_map.is_empty():
 		return false
 	map_phase_id = phase_id
+	steps_since_encounter_check = 0
 	_unlock_route_through(phase_id)
 	current_map = target_map
 	_render_map_content(spawn_position)
+	_reset_encounter_travel_tracking()
 	_render_current_objective()
 	_render_phase_metadata()
 	_resolve_late_bound_nodes()
@@ -210,6 +237,8 @@ func battle_launch_payload() -> Dictionary:
 	var enemy_id := String(current_map.get("boss", ""))
 	if enemy_id.is_empty():
 		return {}
+	if _is_boss_defeated(enemy_id):
+		return {}
 	var enemy := _enemy_definition(enemy_id)
 	if enemy.is_empty():
 		return {}
@@ -225,12 +254,91 @@ func battle_launch_payload() -> Dictionary:
 		},
 	}
 
+func encounter_battle_payload(table_id: String, encounter_id: String) -> Dictionary:
+	var encounter := _encounter_definition(table_id, encounter_id)
+	if encounter.is_empty():
+		return {}
+	var enemy_ids: Array = encounter.get("enemies", [])
+	var enemies: Array = []
+	for enemy_id in enemy_ids:
+		var enemy := _enemy_definition(String(enemy_id))
+		if not enemy.is_empty():
+			enemies.append(enemy)
+	if enemies.is_empty():
+		return {}
+	return {
+		"scene_path": BATTLE_SCENE_PATH,
+		"source_phase": map_phase_id,
+		"source_position": player.position if player != null else Vector2.ZERO,
+		"table_id": table_id,
+		"encounter_id": encounter_id,
+		"enemy_ids": enemy_ids.duplicate(true),
+		"enemies": enemies,
+	}
+
 func request_battle_launch() -> bool:
 	var payload := battle_launch_payload()
 	if payload.is_empty():
 		return false
 	battle_launch_requested.emit(payload)
 	return true
+
+func request_random_encounter(roll: float = -1.0) -> bool:
+	var table_id := String(current_map.get("encounter_table", ""))
+	if table_id.is_empty():
+		return false
+	var table_data := _encounter_table_definition(table_id)
+	if table_data.is_empty():
+		return false
+	var table := EncounterTable.new(
+		table_id,
+		table_data.get("entries", []),
+		int(table_data.get("step_threshold", 16))
+	)
+	var encounter_id := table.pick(randf() if roll < 0.0 else roll)
+	var payload := encounter_battle_payload(table_id, encounter_id)
+	if payload.is_empty():
+		return false
+	battle_launch_requested.emit(payload)
+	return true
+
+func record_encounter_steps(step_count: int = 1, roll: float = -1.0) -> bool:
+	var table_id := String(current_map.get("encounter_table", ""))
+	if table_id.is_empty():
+		return false
+	var table_data := _encounter_table_definition(table_id)
+	if table_data.is_empty():
+		return false
+	var table := EncounterTable.new(
+		table_id,
+		table_data.get("entries", []),
+		int(table_data.get("step_threshold", 16))
+	)
+	steps_since_encounter_check += max(0, step_count)
+	if not table.should_check(steps_since_encounter_check):
+		return false
+	steps_since_encounter_check = 0
+	return request_random_encounter(roll)
+
+func record_player_travel_for_encounters(roll: float = -1.0) -> bool:
+	_resolve_late_bound_nodes()
+	if player == null:
+		return false
+	if not has_encounter_player_position:
+		last_encounter_player_position = player.position
+		has_encounter_player_position = true
+		return false
+	var previous_position := last_encounter_player_position
+	last_encounter_player_position = player.position
+	var distance := previous_position.distance_to(player.position)
+	if distance <= 0.0:
+		return false
+	encounter_travel_pixels += distance
+	var step_count := int(floor(encounter_travel_pixels / ENCOUNTER_STEP_DISTANCE))
+	if step_count <= 0:
+		return false
+	encounter_travel_pixels -= float(step_count) * ENCOUNTER_STEP_DISTANCE
+	return record_encounter_steps(step_count, roll)
 
 func _is_boss_room_ready() -> bool:
 	return not battle_launch_payload().is_empty()
@@ -317,10 +425,20 @@ func _render_boss_readiness() -> void:
 	_resolve_late_bound_nodes()
 	if status_label == null:
 		return
+	var boss_id := String(current_map.get("boss", ""))
+	if not boss_id.is_empty() and _is_boss_defeated(boss_id):
+		status_label.text = "Anchor recovered. The bell is silent."
+		return
 	var payload := battle_launch_payload()
 	if payload.is_empty():
 		return
 	status_label.text = "Battle ready: %s." % String(payload.enemy.get("name", payload.enemy_id))
+
+func _is_boss_defeated(enemy_id: String) -> bool:
+	var game_state = _game_state()
+	if game_state == null:
+		return false
+	return bool(game_state.flags.get("boss_%s_defeated" % enemy_id, false))
 
 func _run_entry_story_trigger(phase_id: String) -> void:
 	_resolve_late_bound_nodes()
@@ -328,6 +446,9 @@ func _run_entry_story_trigger(phase_id: String) -> void:
 		return
 	var trigger := FieldStoryTriggerCatalog.new().trigger_for_phase(phase_id)
 	if trigger.is_empty():
+		return
+	var boss_id := String(current_map.get("boss", ""))
+	if not boss_id.is_empty() and _is_boss_defeated(boss_id):
 		return
 	var trigger_id := String(trigger.get("id", ""))
 	if bool(trigger.get("once", true)) and triggered_story_events.has(trigger_id):
@@ -343,10 +464,22 @@ func _run_entry_story_trigger(phase_id: String) -> void:
 		return
 	active_dialogue_lines = lines.duplicate(true)
 	active_dialogue_index = 0
+	_apply_entry_story_trigger_effects(trigger)
 	_set_player_dialogue_lock(true)
 	_show_current_dialogue_line()
 	if not trigger_id.is_empty():
 		triggered_story_events.append(trigger_id)
+
+func _apply_entry_story_trigger_effects(trigger: Dictionary) -> void:
+	var recruit_id := String(trigger.get("recruit_party_member", ""))
+	if recruit_id.is_empty():
+		return
+	var game_state = _game_state()
+	if game_state == null:
+		return
+	if game_state.has_method("recruit_party_member"):
+		game_state.recruit_party_member(recruit_id)
+	game_state.flags["%s_recruited" % recruit_id] = true
 
 func _show_current_dialogue_line() -> void:
 	_resolve_late_bound_nodes()
@@ -393,11 +526,15 @@ func _set_player_dialogue_lock(locked: bool) -> void:
 		player.set("dialogue_locked", locked)
 
 func _dialogue_profile() -> Dictionary:
-	if is_inside_tree():
-		var game_state = get_node_or_null("/root/GameState")
-		if game_state != null and game_state.profile != null and game_state.profile.has_method("to_dict"):
-			return game_state.profile.to_dict()
+	var game_state = _game_state()
+	if game_state != null and game_state.profile != null and game_state.profile.has_method("to_dict"):
+		return game_state.profile.to_dict()
 	return {}
+
+func _game_state():
+	if game_state_override != null:
+		return game_state_override
+	return get_node_or_null("/root/GameState") if is_inside_tree() else null
 
 func _enemy_definition(enemy_id: String) -> Dictionary:
 	var file := FileAccess.open(ENEMIES_PATH, FileAccess.READ)
@@ -413,6 +550,22 @@ func _enemy_definition(enemy_id: String) -> Dictionary:
 	hydrated.id = enemy_id
 	hydrated.hp = int(enemy.get("max_hp", enemy.get("hp", 1)))
 	return hydrated
+
+func _encounter_definition(table_id: String, encounter_id: String) -> Dictionary:
+	var table := _encounter_table_definition(table_id)
+	for entry in table.get("entries", []):
+		if String(entry.get("id", "")) == encounter_id:
+			return entry
+	return {}
+
+func _encounter_table_definition(table_id: String) -> Dictionary:
+	var file := FileAccess.open(ENCOUNTERS_PATH, FileAccess.READ)
+	if file == null:
+		return {}
+	var parsed = JSON.parse_string(file.get_as_text())
+	if not parsed is Dictionary:
+		return {}
+	return parsed.get("tables", {}).get(table_id, {})
 
 func _phase_display_name(phase_id: String) -> String:
 	var map := MapCatalog.new().map_for_phase(phase_id)
@@ -625,8 +778,26 @@ func _move_player_to_spawn(spawn_override: Variant = null) -> void:
 	if player != null:
 		if spawn_override is Vector2:
 			player.position = spawn_override
+		elif _should_restore_saved_player_position():
+			player.position = _game_state().player_position
 		else:
 			player.position = _vector_from_dict(current_map.get("spawn", {}))
+
+func _should_restore_saved_player_position() -> bool:
+	var game_state = _game_state()
+	if game_state == null:
+		return false
+	return String(game_state.map_id) == String(current_map.get("id", ""))
+
+func _reset_encounter_travel_tracking() -> void:
+	_resolve_late_bound_nodes()
+	encounter_travel_pixels = 0.0
+	if player == null:
+		has_encounter_player_position = false
+		last_encounter_player_position = Vector2.ZERO
+		return
+	last_encounter_player_position = player.position
+	has_encounter_player_position = true
 
 func _vector_from_dict(value) -> Vector2:
 	if value is Dictionary:

@@ -1,0 +1,53 @@
+{
+  "source_library": "Assets/Cut Sprites/CuteSCKR/Abandoned Hospital Tileset",
+  "promotions": [
+    {
+      "id": "hospital_door",
+      "runtime_name": "hospital_door.png",
+      "source_sprite_id": "1/1_2",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Abandoned Hospital Tileset/1/1_2.png",
+      "output_path": "res://assets/tilesets/first_slice/hospital/sliced/hospital_door.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "patient_bed",
+      "runtime_name": "patient_bed.png",
+      "source_sprite_id": "1/1_10",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Abandoned Hospital Tileset/1/1_10.png",
+      "output_path": "res://assets/tilesets/first_slice/hospital/sliced/patient_bed.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "medicine_cabinet",
+      "runtime_name": "medicine_cabinet.png",
+      "source_sprite_id": "1/1_32",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Abandoned Hospital Tileset/1/1_32.png",
+      "output_path": "res://assets/tilesets/first_slice/hospital/sliced/medicine_cabinet.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "medical_chart",
+      "runtime_name": "medical_chart.png",
+      "source_sprite_id": "1/1_41",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Abandoned Hospital Tileset/1/1_41.png",
+      "output_path": "res://assets/tilesets/first_slice/hospital/sliced/medical_chart.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "operating_light",
+      "runtime_name": "operating_light.png",
+      "source_sprite_id": "1/1_45",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Abandoned Hospital Tileset/1/1_45.png",
+      "output_path": "res://assets/tilesets/first_slice/hospital/sliced/operating_light.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "iv_stand",
+      "runtime_name": "iv_stand.png",
+      "source_sprite_id": "1/1_5",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Abandoned Hospital Tileset/1/1_5.png",
+      "output_path": "res://assets/tilesets/first_slice/hospital/sliced/iv_stand.png",
+      "review_status": "candidate"
+    }
+  ]
+}

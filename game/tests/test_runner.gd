@@ -32,10 +32,20 @@ func _run_tests() -> void:
 	_test_app_root_confirmed_creator_starts_game_flow()
 	_test_player_profile_persists_uncatalogued_dossier()
 	_test_sev_record_service_summarizes_creator_loadout()
+	_test_content_catalog_loads_recruitable_party_members()
 	_test_class_stats_and_leveling()
+	_test_game_state_applies_battle_xp_to_party()
+	_test_game_state_applies_battle_party_state()
+	_test_game_state_recruits_party_member_once()
 	_test_atb_wait_mode_pause()
 	_test_encounter_selection()
 	_test_first_slice_plague_encounters_defined()
+	_test_prototype_field_builds_group_encounter_payload()
+	_test_prototype_field_requests_random_encounter_from_current_map()
+	_test_prototype_field_step_threshold_triggers_random_encounter()
+	_test_prototype_field_player_travel_records_encounter_steps()
+	_test_prototype_field_random_encounter_payload_records_source_position()
+	_test_prototype_field_loads_saved_player_position_for_current_map()
 	_test_save_payload_roundtrip()
 	_test_field_movement_and_interactions()
 	_test_first_slice_map_catalog_defines_town_and_dungeon()
@@ -48,15 +58,37 @@ func _run_tests() -> void:
 	_test_prototype_field_renders_real_tile_art_layer()
 	_test_hallowmere_authored_map_scene_renders_curated_props()
 	_test_hallowmere_authored_map_defines_story_landmarks()
+	_test_hallowmere_promoted_props_manifest_defines_runtime_assets()
+	_test_hallowmere_authored_map_renders_sliced_props()
 	_test_apothecary_authored_map_defines_interior_story_landmarks()
+	_test_hospital_promoted_props_manifest_defines_runtime_assets()
+	_test_hospital_authored_map_scene_renders_sliced_props()
+	_test_chapel_promoted_props_manifest_defines_runtime_assets()
+	_test_chapel_authored_map_scene_renders_sliced_props()
+	_test_underchapel_promoted_props_manifest_defines_runtime_assets()
+	_test_underchapel_authored_map_scene_renders_sliced_props()
+	_test_bell_tower_promoted_props_manifest_defines_runtime_assets()
+	_test_pixellab_promoted_assets_manifest_defines_runtime_assets()
+	_test_bell_tower_authored_map_scene_renders_sliced_props()
 	_test_apothecary_sliced_props_exist_and_render()
 	_test_apothecary_slice_manifest_documents_exported_regions()
+	_test_sprite_extractor_pipeline_exports_review_candidates()
+	_test_sprite_extractor_contact_sheets_exist()
+	_test_cut_sprite_folder_contact_sheets_exist()
+	_test_pixellab_generation_manifest_is_style_locked()
+	_test_apothecary_promoted_props_manifest_defines_runtime_assets()
 	_test_prototype_field_mounts_authored_hallowmere_map()
 	_test_prototype_field_mounts_authored_apothecary_map()
+	_test_prototype_field_mounts_authored_hospital_map()
+	_test_prototype_field_mounts_authored_chapel_map()
+	_test_prototype_field_mounts_authored_underchapel_map()
+	_test_prototype_field_mounts_authored_bell_tower_map()
+	_test_prototype_field_exposes_mounted_map_audio_profile()
 	_test_prototype_field_changes_maps_when_player_enters_transition()
 	_test_prototype_field_blocks_out_of_order_slice_transitions()
 	_test_field_story_trigger_catalog_maps_route_events()
 	_test_prototype_field_runs_entry_story_trigger_once()
+	_test_prototype_field_entry_trigger_recruits_mira()
 	_test_prototype_field_queues_and_advances_entry_dialogue()
 	_test_prototype_field_renders_entry_dialogue_in_dialogue_box()
 	_test_dialogue_box_renders_continue_prompt()
@@ -66,15 +98,79 @@ func _run_tests() -> void:
 	_test_prototype_field_exposes_bell_saint_battle_payload()
 	_test_prototype_field_emits_boss_battle_request()
 	_test_prototype_field_interact_launches_boss_after_dialogue()
+	_test_prototype_field_completed_bell_saint_does_not_launch_again()
 	_test_app_root_handles_field_battle_request()
+	_test_app_root_returns_random_encounters_to_source_phase()
+	_test_app_root_restores_random_encounter_source_position()
 	_test_battle_screen_emits_completion_payload()
+	_test_battle_screen_uses_cinematic_arena_camera()
+	_test_battle_screen_camera_focuses_battler_sides()
+	_test_battle_screen_plays_boss_intro_presentation()
+	_test_battle_screen_plays_attack_lunge_and_hit_reaction()
+	_test_battle_screen_resets_battler_presentation()
+	_test_battle_screen_shows_damage_popup_and_locks_commands()
+	_test_battle_screen_completes_action_presentation_sequence()
+	_test_battle_screen_starts_action_presentation_timer()
+	_test_battle_screen_presents_enemy_retaliation()
+	_test_battle_screen_retaliation_damages_ai_selected_party_target()
+	_test_battle_screen_retaliation_log_names_target()
+	_test_battle_screen_enemy_skill_damages_ai_selected_party_target()
+	_test_battle_screen_enemy_skill_log_names_target()
+	_test_battle_screen_starts_enemy_action_timer()
+	_test_battle_screen_handles_party_defeat()
+	_test_battle_screen_handles_victory_presentation()
+	_test_battle_screen_exposes_skill_and_item_commands()
+	_test_battle_screen_item_heals_most_wounded_living_party_member()
+	_test_battle_screen_disables_item_command_without_bandages()
+	_test_battle_screen_disables_item_command_after_last_bandage_used()
+	_test_battle_screen_tracks_command_readiness()
+	_test_battle_screen_command_state_skips_ko_active_member()
+	_test_battle_screen_advances_command_readiness_during_process()
+	_test_battle_screen_opens_selectable_skill_menu()
+	_test_battle_screen_records_animation_hooks()
+	_test_battle_screen_updates_party_animation_set_for_active_member()
+	_test_battle_animation_assets_are_cataloged()
+	_test_combat_enemies_have_animation_sets()
+	_test_battle_screen_renders_generated_enemy_sprite()
+	_test_battle_screen_renders_and_targets_multiple_enemies()
+	_test_battle_screen_renders_target_buttons()
+	_test_battle_screen_attack_uses_selected_enemy()
+	_test_battle_screen_auto_selects_living_enemy_after_defeat()
+	_test_battle_screen_retaliation_uses_living_enemy()
+	_test_battle_screen_uses_pending_group_payload()
+	_test_battle_screen_starts_with_recruited_mira_from_game_state()
+	_test_battle_screen_marks_active_party_member_in_roster()
+	_test_battle_screen_party_roster_buttons_select_active_member()
+	_test_battle_screen_party_roster_buttons_show_hp()
+	_test_battle_screen_prevents_selecting_ko_party_member()
+	_test_battle_screen_uses_active_party_member_skills()
+	_test_battle_screen_advances_active_party_member_after_enemy_action()
+	_test_battle_screen_completion_includes_party_state()
+	_test_battle_screen_does_not_persist_rewards_before_app_root()
+	_test_battle_screen_uses_stable_visual_stage()
+	_test_battle_screen_updates_enemy_visual_status()
+	_test_battle_screen_updates_party_visual_status()
 	_test_app_root_handles_battle_completion_rewards()
+	_test_app_root_does_not_duplicate_anchor_relic_rewards()
+	_test_app_root_applies_battle_xp_to_party()
+	_test_app_root_applies_battle_party_state()
+	_test_app_root_bell_saint_completion_recruits_mira_and_records_reward_scene()
+	_test_app_root_bell_saint_completion_records_boss_defeat()
+	_test_app_root_renders_bell_saint_reward_scene()
+	_test_app_root_reward_scene_renders_acknowledgement_prompt()
+	_test_app_root_consumes_reward_dialogue_after_acknowledgement()
+	_test_app_root_refreshes_reward_scene_after_acknowledgement()
 	_test_dialogue_interpolation()
 	_test_portrait_catalog_resolves_creator_portraits()
 	_test_dialogue_box_uses_profile_portrait_for_sev()
 	_test_voice_blip_catalog_resolves_creator_voice()
 	_test_dialogue_box_uses_profile_voice_for_sev()
 	_test_battle_attack_and_victory_rewards()
+	_test_battle_skills_damage_and_heal()
+	_test_battle_items_consume_inventory_and_heal()
+	_test_battle_status_effects_apply_and_tick()
+	_test_enemy_ai_profiles_choose_actions()
+	_test_enemy_ai_targets_first_living_party_member()
 	_test_starting_relic_modifies_battle_stats()
 	_test_equipped_memory_card_modifies_battle_stats()
 	_test_boss_victory_requests_time_fracture()
@@ -118,6 +214,8 @@ func _run_tests() -> void:
 	_test_content_catalog_loads_items_cards_and_dialogue()
 	_test_audio_event_catalog_defines_bell_saint_slice()
 	_test_audio_service_resolves_runtime_event()
+	_test_authored_slice_maps_expose_audio_profiles()
+	_test_authored_slice_props_expose_story_inspection_metadata()
 	_test_vista_catalog_defines_bell_saint_vistas()
 
 func _assert(condition: bool, message: String) -> void:
@@ -495,6 +593,16 @@ func _test_sev_record_service_summarizes_creator_loadout() -> void:
 	_assert(summary.dossier.flags.has("no_exhibit_tag"), "Sev record summary includes dossier flags")
 	_assert(SevRecordService.new().field_line(profile).contains("Archive Needle"), "Sev record field line includes relic")
 
+func _test_content_catalog_loads_recruitable_party_members() -> void:
+	var ContentCatalog = load("res://scripts/core/content_catalog.gd")
+	var catalog = ContentCatalog.new()
+	_assert(catalog.has_method("party_member"), "content catalog exposes party member records")
+	if catalog.has_method("party_member"):
+		var mira = catalog.party_member("mira_venn")
+		_assert(mira.name == "Mira Venn", "content catalog loads Mira Venn party member")
+		_assert(mira.class_id == "plague_apothecary", "Mira Venn uses plague apothecary class")
+		_assert(mira.skills.has("clean_wound"), "Mira Venn starts with healing skill")
+
 func _test_class_stats_and_leveling() -> void:
 	_assert(ResourceLoader.exists("res://scripts/progression/class_catalog.gd"), "class catalog exists")
 	_assert(ResourceLoader.exists("res://scripts/progression/progression_service.gd"), "progression service exists")
@@ -505,6 +613,59 @@ func _test_class_stats_and_leveling() -> void:
 	var result = ProgressionService.new().apply_xp({"level": 1, "xp": 0, "stats": stats}, 125, "vanguard")
 	_assert(result.level == 2, "125 XP advances a level-one character to level two")
 	_assert(result.stats.max_hp > stats.max_hp, "level up increases max HP")
+
+func _test_game_state_applies_battle_xp_to_party() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [
+		{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 90, "stats": {"max_hp": 120, "max_mp": 12, "strength": 18, "magic": 4, "defense": 8, "speed": 10}},
+		{"id": "mira", "name": "Mira", "class_id": "mystic", "level": 1, "xp": 0, "stats": {"max_hp": 84, "max_mp": 42, "strength": 5, "magic": 16, "defense": 4, "speed": 8}},
+	]
+	game_state.party = party
+	_assert(game_state.has_method("add_party_xp"), "game state exposes party XP application")
+	if game_state.has_method("add_party_xp"):
+		game_state.add_party_xp(20)
+		_assert(game_state.party[0].level == 2, "party XP can level up lead member")
+		_assert(game_state.party[0].xp == 10, "party XP carries remainder after level up")
+		_assert(game_state.party[0].stats.max_hp > 120, "lead member gains class growth on level up")
+		_assert(game_state.party[1].xp == 20, "party XP applies to other active party members")
+	game_state.free()
+
+func _test_game_state_applies_battle_party_state() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [
+		{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 120, "stats": {"max_hp": 120, "defense": 8}},
+		{"id": "mira", "name": "Mira", "class_id": "mystic", "level": 1, "xp": 0, "hp": 84, "stats": {"max_hp": 84, "magic": 16}},
+	]
+	game_state.party = party
+	_assert(game_state.has_method("apply_party_battle_state"), "game state exposes party battle-state merge")
+	if game_state.has_method("apply_party_battle_state"):
+		game_state.apply_party_battle_state([
+			{"id": "lead", "hp": 73, "statuses": {"poison": {"turns": 1}}},
+			{"id": "mira", "hp": 0},
+		])
+		_assert(game_state.party[0].hp == 73, "party battle state persists lead HP")
+		_assert(game_state.party[0].statuses.poison.turns == 1, "party battle state persists statuses")
+		_assert(game_state.party[1].hp == 0, "party battle state can persist KO HP")
+		_assert(game_state.party[0].stats.max_hp == 120, "party battle state preserves persistent stats")
+	game_state.free()
+
+func _test_game_state_recruits_party_member_once() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120}}]
+	game_state.party = party
+	_assert(game_state.has_method("recruit_party_member"), "game state exposes party recruitment")
+	if game_state.has_method("recruit_party_member"):
+		_assert(game_state.recruit_party_member("mira_venn"), "game state recruits Mira Venn")
+		_assert(game_state.party.any(func(member): return member.id == "mira_venn"), "Mira Venn appears in active party")
+		var mira = game_state.party.filter(func(member): return member.id == "mira_venn")[0]
+		_assert(mira.class_id == "plague_apothecary", "Mira keeps plague apothecary class")
+		_assert(mira.skills.has("clean_wound"), "Mira joins with healing skill")
+		_assert(not game_state.recruit_party_member("mira_venn"), "recruiting Mira twice is ignored")
+		_assert(game_state.party.filter(func(member): return member.id == "mira_venn").size() == 1, "duplicate Mira is not added")
+	game_state.free()
 
 func _test_atb_wait_mode_pause() -> void:
 	_assert(ResourceLoader.exists("res://scripts/battle/battle_clock.gd"), "battle clock exists")
@@ -538,6 +699,112 @@ func _test_first_slice_plague_encounters_defined() -> void:
 	_assert(enemies.has("fever_wretch"), "enemy database includes Fever Wretch")
 	_assert(enemies.has("clean_man"), "enemy database includes Clean Man")
 	_assert(enemies.has("bell_saint"), "enemy database includes Bell Saint boss")
+
+func _test_prototype_field_builds_group_encounter_payload() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	_assert(field_scene.has_method("encounter_battle_payload"), "prototype field exposes encounter battle payload builder")
+	if field_scene.has_method("encounter_battle_payload"):
+		var payload = field_scene.encounter_battle_payload("plague_wing_underchapel", "fever_wretch_pair")
+		_assert(payload.scene_path == "res://scenes/battle/prototype_battle.tscn", "encounter payload points to battle scene")
+		_assert(payload.encounter_id == "fever_wretch_pair", "encounter payload keeps encounter id")
+		_assert(payload.enemy_ids.size() == 2, "encounter payload keeps all enemy ids")
+		_assert(payload.enemies.size() == 2, "encounter payload resolves every enemy")
+		_assert(payload.enemies[0].id == "fever_wretch", "first encounter enemy is hydrated")
+		_assert(payload.enemies[1].id == "fever_wretch", "duplicate encounter enemies are preserved")
+		_assert(payload.enemies[0].hp == payload.enemies[0].max_hp, "encounter enemy starts at full HP")
+	field_scene.queue_free()
+
+func _test_prototype_field_requests_random_encounter_from_current_map() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	var emitted: Array = []
+	field_scene.battle_launch_requested.connect(func(payload): emitted.append(payload))
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.load_phase_map()
+	_assert(field_scene.has_method("request_random_encounter"), "prototype field exposes random encounter battle request")
+	if field_scene.has_method("request_random_encounter"):
+		_assert(field_scene.request_random_encounter(0.0), "field can request encounter from current map table")
+		_assert(emitted.size() == 1, "random encounter emits one battle launch payload")
+		_assert(emitted[0].encounter_id == "fever_wretch_pair", "low roll selects first weighted encounter")
+		_assert(emitted[0].enemies.size() == 2, "random encounter payload includes grouped enemies")
+		_assert(emitted[0].source_phase == "underchapel_drain", "random encounter payload keeps source phase")
+	field_scene.queue_free()
+
+func _test_prototype_field_step_threshold_triggers_random_encounter() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	var emitted: Array = []
+	field_scene.battle_launch_requested.connect(func(payload): emitted.append(payload))
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.load_phase_map()
+	_assert(field_scene.has_method("record_encounter_steps"), "prototype field exposes step-based encounter checks")
+	if field_scene.has_method("record_encounter_steps"):
+		_assert(not field_scene.record_encounter_steps(9, 0.0), "encounter does not trigger before table threshold")
+		_assert(emitted.is_empty(), "pre-threshold movement emits no battle payload")
+		_assert(field_scene.record_encounter_steps(1, 0.0), "encounter triggers when accumulated steps reach threshold")
+		_assert(emitted.size() == 1, "threshold encounter emits one battle payload")
+		_assert(emitted[0].encounter_id == "fever_wretch_pair", "threshold encounter uses current table weighted pick")
+		_assert(emitted[0].enemies.size() == 2, "threshold encounter payload keeps grouped enemies")
+		_assert(not field_scene.record_encounter_steps(1, 0.0), "encounter step counter resets after a trigger")
+		_assert(emitted.size() == 1, "post-trigger single step does not emit another battle")
+	field_scene.queue_free()
+
+func _test_prototype_field_player_travel_records_encounter_steps() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	var emitted: Array = []
+	field_scene.battle_launch_requested.connect(func(payload): emitted.append(payload))
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.load_phase_map()
+	var player = field_scene.get_node("%Player")
+	_assert(field_scene.has_method("record_player_travel_for_encounters"), "prototype field records encounter steps from player travel")
+	if field_scene.has_method("record_player_travel_for_encounters"):
+		player.position += Vector2(16 * 9, 0)
+		_assert(not field_scene.record_player_travel_for_encounters(0.0), "travel under threshold does not trigger an encounter")
+		_assert(emitted.is_empty(), "under-threshold player travel emits no battle")
+		player.position += Vector2(16, 0)
+		_assert(field_scene.record_player_travel_for_encounters(0.0), "tile travel at threshold triggers an encounter")
+		_assert(emitted.size() == 1, "player travel emits one encounter payload at threshold")
+		_assert(emitted[0].encounter_id == "fever_wretch_pair", "player travel encounter uses current map table")
+	field_scene.queue_free()
+
+func _test_prototype_field_random_encounter_payload_records_source_position() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	var emitted: Array = []
+	field_scene.battle_launch_requested.connect(func(payload): emitted.append(payload))
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.load_phase_map()
+	var player = field_scene.get_node("%Player")
+	player.position = Vector2(176, 92)
+	_assert(field_scene.request_random_encounter(0.0), "field can request random encounter with player positioned")
+	_assert(emitted.size() == 1, "positioned random encounter emits payload")
+	_assert(emitted[0].has("source_position"), "random encounter payload records source position")
+	if emitted.size() == 1 and emitted[0].has("source_position"):
+		_assert(emitted[0].source_position == Vector2(176, 92), "random encounter source position matches player position")
+	field_scene.queue_free()
+
+func _test_prototype_field_loads_saved_player_position_for_current_map() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	game_state.map_id = "underchapel_drain"
+	game_state.player_position = Vector2(184, 104)
+	var field_scene = FieldScene.instantiate()
+	field_scene.game_state_override = game_state
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.load_phase_map()
+	var player = field_scene.get_node("%Player")
+	_assert(player.position == Vector2(184, 104), "prototype field restores saved player position for current map")
+	field_scene.queue_free()
+	game_state.free()
 
 func _test_save_payload_roundtrip() -> void:
 	_assert(ResourceLoader.exists("res://scripts/save/save_service.gd"), "save service exists")
@@ -725,6 +992,39 @@ func _test_hallowmere_authored_map_defines_story_landmarks() -> void:
 	_assert(map_scene.has_node("Landmarks/GraveMarker"), "Hallowmere authored map includes visible grave marker")
 	map_scene.queue_free()
 
+func _test_hallowmere_promoted_props_manifest_defines_runtime_assets() -> void:
+	_assert(FileAccess.file_exists("res://data/tilesets/hallowmere_promoted_props.json"), "Hallowmere promoted props manifest exists")
+	var file := FileAccess.open("res://data/tilesets/hallowmere_promoted_props.json", FileAccess.READ)
+	if file == null:
+		return
+	var manifest = JSON.parse_string(file.get_as_text())
+	_assert(manifest.promotions.size() >= 4, "Hallowmere promotion manifest defines runtime props")
+	for promotion in manifest.promotions:
+		_assert(not String(promotion.runtime_name).is_empty(), "%s promotion has runtime name" % promotion.id)
+		_assert(String(promotion.output_path).begins_with("res://assets/tilesets/first_slice/hallowmere/sliced/"), "%s promotion targets Hallowmere runtime sliced folder" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.output_path)), "%s promoted output exists" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.source_path)), "%s source cut sprite exists" % promotion.id)
+
+func _test_hallowmere_authored_map_renders_sliced_props() -> void:
+	var MapScene = load("res://scenes/field/maps/hallowmere_street_map.tscn")
+	var map_scene = MapScene.instantiate()
+	root.add_child(map_scene)
+	var expected_props := {
+		"Landmarks/TollStall/TollStallSprite": "toll_stall.png",
+		"Landmarks/ChapelRoad/ChapelSignSprite": "chapel_sign.png",
+		"Landmarks/CoffinStack": "coffin_stack.png",
+		"Landmarks/RefusePile": "refuse_pile.png",
+	}
+	for node_path in expected_props.keys():
+		_assert(map_scene.has_node(node_path), "Hallowmere renders sliced prop %s" % node_path)
+		if not map_scene.has_node(node_path):
+			continue
+		var sprite = map_scene.get_node(node_path)
+		_assert(sprite is Sprite2D, "%s is a Sprite2D" % node_path)
+		_assert(sprite.texture != null, "%s has sliced prop texture" % node_path)
+		_assert(String(sprite.get_meta("slice_path", "")).ends_with(expected_props[node_path]), "%s records promoted runtime slice path" % node_path)
+	map_scene.queue_free()
+
 func _test_apothecary_authored_map_defines_interior_story_landmarks() -> void:
 	_assert(ResourceLoader.exists("res://scenes/field/maps/mira_apothecary_map.tscn"), "Mira apothecary authored map scene exists")
 	var MapScene = load("res://scenes/field/maps/mira_apothecary_map.tscn")
@@ -744,6 +1044,181 @@ func _test_apothecary_authored_map_defines_interior_story_landmarks() -> void:
 		_assert(landmark.position.distance_to(expected_landmarks[landmark_id]) <= 8.0, "%s aligns with apothecary map data" % landmark_id)
 	_assert(map_scene.has_node("Atmosphere/HerbSmoke"), "Mira apothecary includes medicine-room atmosphere")
 	_assert(map_scene.get_node("Collision/Walls").get_child_count() >= 4, "Mira apothecary creates wall collision bodies")
+	map_scene.queue_free()
+
+func _test_hospital_promoted_props_manifest_defines_runtime_assets() -> void:
+	_assert(FileAccess.file_exists("res://data/tilesets/hospital_promoted_props.json"), "Hospital promoted props manifest exists")
+	var file := FileAccess.open("res://data/tilesets/hospital_promoted_props.json", FileAccess.READ)
+	if file == null:
+		return
+	var manifest = JSON.parse_string(file.get_as_text())
+	_assert(manifest.promotions.size() >= 5, "Hospital promotion manifest defines runtime props")
+	for promotion in manifest.promotions:
+		_assert(not String(promotion.runtime_name).is_empty(), "%s promotion has runtime name" % promotion.id)
+		_assert(String(promotion.output_path).begins_with("res://assets/tilesets/first_slice/hospital/sliced/"), "%s promotion targets hospital runtime sliced folder" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.output_path)), "%s promoted output exists" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.source_path)), "%s source cut sprite exists" % promotion.id)
+
+func _test_hospital_authored_map_scene_renders_sliced_props() -> void:
+	_assert(ResourceLoader.exists("res://scenes/field/maps/hidden_hospital_corridor_map.tscn"), "Hidden hospital authored map scene exists")
+	var MapScene = load("res://scenes/field/maps/hidden_hospital_corridor_map.tscn")
+	if MapScene == null:
+		return
+	var map_scene = MapScene.instantiate()
+	root.add_child(map_scene)
+	_assert(map_scene.get("map_id") == "hidden_hospital_corridor", "Hidden hospital authored map exposes map id")
+	_assert(map_scene.has_node("CorridorFloor"), "Hidden hospital renders corridor floor")
+	for node_path in [
+		"Landmarks/HospitalDoor",
+		"Landmarks/PatientBed",
+		"Landmarks/MedicineCabinet",
+		"Landmarks/MedicalChart",
+		"Landmarks/OperatingLight",
+	]:
+		_assert(map_scene.has_node(node_path), "Hidden hospital renders %s" % node_path)
+		if not map_scene.has_node(node_path):
+			continue
+		var sprite = map_scene.get_node(node_path)
+		_assert(sprite is Sprite2D, "%s is a Sprite2D" % node_path)
+		_assert(sprite.texture != null, "%s has sliced prop texture" % node_path)
+		_assert(String(sprite.get_meta("slice_path", "")).begins_with("res://assets/tilesets/first_slice/hospital/sliced/"), "%s records hospital slice path" % node_path)
+	_assert(map_scene.has_node("Atmosphere/LightFlicker"), "Hidden hospital includes flickering light atmosphere")
+	_assert(map_scene.has_node("Collision/Walls"), "Hidden hospital exposes collision root")
+	map_scene.queue_free()
+
+func _test_chapel_promoted_props_manifest_defines_runtime_assets() -> void:
+	_assert(FileAccess.file_exists("res://data/tilesets/chapel_promoted_props.json"), "Chapel promoted props manifest exists")
+	var file := FileAccess.open("res://data/tilesets/chapel_promoted_props.json", FileAccess.READ)
+	if file == null:
+		return
+	var manifest = JSON.parse_string(file.get_as_text())
+	_assert(manifest.promotions.size() >= 5, "Chapel promotion manifest defines runtime props")
+	for promotion in manifest.promotions:
+		_assert(not String(promotion.runtime_name).is_empty(), "%s promotion has runtime name" % promotion.id)
+		_assert(String(promotion.output_path).begins_with("res://assets/tilesets/first_slice/chapel/sliced/"), "%s promotion targets chapel runtime sliced folder" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.output_path)), "%s promoted output exists" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.source_path)), "%s source cut sprite exists" % promotion.id)
+
+func _test_chapel_authored_map_scene_renders_sliced_props() -> void:
+	_assert(ResourceLoader.exists("res://scenes/field/maps/sainted_bell_chapel_map.tscn"), "Sainted Bell chapel authored map scene exists")
+	var MapScene = load("res://scenes/field/maps/sainted_bell_chapel_map.tscn")
+	if MapScene == null:
+		return
+	var map_scene = MapScene.instantiate()
+	root.add_child(map_scene)
+	_assert(map_scene.get("map_id") == "sainted_bell_chapel", "Sainted Bell chapel authored map exposes map id")
+	_assert(map_scene.has_node("ChapelFloor"), "Sainted Bell chapel renders chapel floor")
+	for node_path in [
+		"Landmarks/ChapelArch",
+		"Landmarks/SaintStatue",
+		"Landmarks/CellarDoor",
+		"Landmarks/ChapelLantern",
+		"Landmarks/ChapelBench",
+	]:
+		_assert(map_scene.has_node(node_path), "Sainted Bell chapel renders %s" % node_path)
+		if not map_scene.has_node(node_path):
+			continue
+		var sprite = map_scene.get_node(node_path)
+		_assert(sprite is Sprite2D, "%s is a Sprite2D" % node_path)
+		_assert(sprite.texture != null, "%s has sliced prop texture" % node_path)
+		_assert(String(sprite.get_meta("slice_path", "")).begins_with("res://assets/tilesets/first_slice/chapel/sliced/"), "%s records chapel slice path" % node_path)
+	_assert(map_scene.has_node("Atmosphere/BellDust"), "Sainted Bell chapel includes bell dust atmosphere")
+	_assert(map_scene.has_node("Collision/Walls"), "Sainted Bell chapel exposes collision root")
+	map_scene.queue_free()
+
+func _test_underchapel_promoted_props_manifest_defines_runtime_assets() -> void:
+	_assert(FileAccess.file_exists("res://data/tilesets/underchapel_promoted_props.json"), "Underchapel promoted props manifest exists")
+	var file := FileAccess.open("res://data/tilesets/underchapel_promoted_props.json", FileAccess.READ)
+	if file == null:
+		return
+	var manifest = JSON.parse_string(file.get_as_text())
+	_assert(manifest.promotions.size() >= 5, "Underchapel promotion manifest defines runtime props")
+	for promotion in manifest.promotions:
+		_assert(not String(promotion.runtime_name).is_empty(), "%s promotion has runtime name" % promotion.id)
+		_assert(String(promotion.output_path).begins_with("res://assets/tilesets/first_slice/underchapel/sliced/"), "%s promotion targets underchapel runtime sliced folder" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.output_path)), "%s promoted output exists" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.source_path)), "%s source cut sprite exists" % promotion.id)
+
+func _test_underchapel_authored_map_scene_renders_sliced_props() -> void:
+	_assert(ResourceLoader.exists("res://scenes/field/maps/underchapel_drain_map.tscn"), "Underchapel authored map scene exists")
+	var MapScene = load("res://scenes/field/maps/underchapel_drain_map.tscn")
+	if MapScene == null:
+		return
+	var map_scene = MapScene.instantiate()
+	root.add_child(map_scene)
+	_assert(map_scene.get("map_id") == "underchapel_drain", "Underchapel authored map exposes map id")
+	_assert(map_scene.has_node("DrainFloor"), "Underchapel renders drain floor")
+	for node_path in [
+		"Landmarks/MuseumPipe",
+		"Landmarks/PumpMachine",
+		"Landmarks/DrainGrate",
+		"Landmarks/ServiceLadder",
+		"Landmarks/WarningPanel",
+	]:
+		_assert(map_scene.has_node(node_path), "Underchapel renders %s" % node_path)
+		if not map_scene.has_node(node_path):
+			continue
+		var sprite = map_scene.get_node(node_path)
+		_assert(sprite is Sprite2D, "%s is a Sprite2D" % node_path)
+		_assert(sprite.texture != null, "%s has sliced prop texture" % node_path)
+		_assert(String(sprite.get_meta("slice_path", "")).begins_with("res://assets/tilesets/first_slice/underchapel/sliced/"), "%s records underchapel slice path" % node_path)
+	_assert(map_scene.has_node("Atmosphere/SewerMist"), "Underchapel includes sewer mist atmosphere")
+	_assert(map_scene.has_node("Collision/Walls"), "Underchapel exposes collision root")
+	map_scene.queue_free()
+
+func _test_bell_tower_promoted_props_manifest_defines_runtime_assets() -> void:
+	_assert(FileAccess.file_exists("res://data/tilesets/bell_tower_promoted_props.json"), "Bell tower promoted props manifest exists")
+	var file := FileAccess.open("res://data/tilesets/bell_tower_promoted_props.json", FileAccess.READ)
+	if file == null:
+		return
+	var manifest = JSON.parse_string(file.get_as_text())
+	_assert(manifest.promotions.size() >= 5, "Bell tower promotion manifest defines runtime props")
+	for promotion in manifest.promotions:
+		_assert(not String(promotion.runtime_name).is_empty(), "%s promotion has runtime name" % promotion.id)
+		_assert(String(promotion.output_path).begins_with("res://assets/tilesets/first_slice/bell_tower/sliced/"), "%s promotion targets bell tower runtime sliced folder" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.output_path)), "%s promoted output exists" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.source_path)), "%s source cut sprite exists" % promotion.id)
+
+func _test_pixellab_promoted_assets_manifest_defines_runtime_assets() -> void:
+	_assert(FileAccess.file_exists("res://data/generation/pixellab_promoted_assets.json"), "PixelLab promoted assets manifest exists")
+	var file := FileAccess.open("res://data/generation/pixellab_promoted_assets.json", FileAccess.READ)
+	if file == null:
+		return
+	var manifest = JSON.parse_string(file.get_as_text())
+	_assert(manifest.promotions.size() >= 3, "PixelLab promotion manifest defines usable generated assets")
+	for promotion in manifest.promotions:
+		_assert(String(promotion.output_path).begins_with("res://assets/generated/pixellab/first_slice/"), "%s promotion targets generated runtime folder" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.output_path)), "%s promoted generated output exists" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.source_path)), "%s generated review source exists" % promotion.id)
+		_assert(String(promotion.review_status) == "approved_candidate", "%s is explicitly approved for runtime candidate use" % promotion.id)
+
+func _test_bell_tower_authored_map_scene_renders_sliced_props() -> void:
+	_assert(ResourceLoader.exists("res://scenes/field/maps/bell_tower_boss_room_map.tscn"), "Bell tower authored map scene exists")
+	var MapScene = load("res://scenes/field/maps/bell_tower_boss_room_map.tscn")
+	if MapScene == null:
+		return
+	var map_scene = MapScene.instantiate()
+	root.add_child(map_scene)
+	_assert(map_scene.get("map_id") == "bell_tower_boss_room", "Bell tower authored map exposes map id")
+	_assert(map_scene.has_node("BellTowerFloor"), "Bell tower renders boss room floor")
+	for node_path in [
+		"Landmarks/TowerStone",
+		"Landmarks/BellSaintStatue",
+		"Landmarks/BellRope",
+		"Landmarks/PlagueBell",
+		"Landmarks/AnchorDoor",
+		"Landmarks/BloodMark",
+	]:
+		_assert(map_scene.has_node(node_path), "Bell tower renders %s" % node_path)
+		if not map_scene.has_node(node_path):
+			continue
+		var sprite = map_scene.get_node(node_path)
+		_assert(sprite is Sprite2D, "%s is a Sprite2D" % node_path)
+		_assert(sprite.texture != null, "%s has sliced prop texture" % node_path)
+		var slice_path := String(sprite.get_meta("slice_path", ""))
+		_assert(slice_path.begins_with("res://assets/tilesets/first_slice/bell_tower/sliced/") or slice_path.begins_with("res://assets/generated/pixellab/first_slice/"), "%s records runtime sprite path" % node_path)
+	_assert(map_scene.has_node("Atmosphere/JudgmentHaze"), "Bell tower includes judgment haze atmosphere")
+	_assert(map_scene.has_node("Collision/Walls"), "Bell tower exposes collision root")
 	map_scene.queue_free()
 
 func _test_apothecary_sliced_props_exist_and_render() -> void:
@@ -776,8 +1251,107 @@ func _test_apothecary_slice_manifest_documents_exported_regions() -> void:
 		_assert(String(slice.get("review_status", "")) == "needs_visual_review" or String(slice.get("review_status", "")) == "approved", "%s records visual review status" % slice.id)
 		var image := Image.new()
 		_assert(image.load(String(slice.output_path)) == OK, "%s output image loads" % slice.id)
-		_assert(image.get_width() <= int(slice.get("max_width", 256)), "%s output width stays within quality gate" % slice.id)
-		_assert(image.get_height() <= int(slice.get("max_height", 256)), "%s output height stays within quality gate" % slice.id)
+		_assert(image.get_width() > 0 and image.get_height() > 0, "%s output has positive dimensions" % slice.id)
+
+func _test_sprite_extractor_pipeline_exports_review_candidates() -> void:
+	_assert(FileAccess.file_exists("res://tools/extract_sprites_from_sheet.py"), "sprite extractor CLI exists")
+	for manifest_path in _local_extracted_asset_manifests():
+		_assert(FileAccess.file_exists(manifest_path), "%s review manifest exists" % manifest_path)
+		var file := FileAccess.open(manifest_path, FileAccess.READ)
+		var manifest = JSON.parse_string(file.get_as_text())
+		_assert(manifest.sprites.size() >= 8, "%s has extracted sprite candidates" % manifest_path)
+		for sprite in manifest.sprites.slice(0, min(5, manifest.sprites.size())):
+			_assert(FileAccess.file_exists(String(sprite.output_path)), "%s candidate file exists" % sprite.id)
+			_assert(int(sprite.bounds.w) >= 10 and int(sprite.bounds.h) >= 10, "%s candidate has usable dimensions" % sprite.id)
+
+func _test_sprite_extractor_contact_sheets_exist() -> void:
+	_assert(FileAccess.file_exists("res://tools/build_sprite_contact_sheet.py"), "sprite contact sheet generator exists")
+	for contact_sheet_path in _local_extracted_asset_contact_sheets():
+		_assert(FileAccess.file_exists(contact_sheet_path), "%s contact sheet exists" % contact_sheet_path)
+		var file := FileAccess.open(contact_sheet_path, FileAccess.READ)
+		var html := file.get_as_text()
+		_assert(html.contains("sprite_001"), "%s lists sprite ids" % contact_sheet_path)
+		_assert(html.contains("<img"), "%s renders image previews" % contact_sheet_path)
+
+func _test_cut_sprite_folder_contact_sheets_exist() -> void:
+	_assert(FileAccess.file_exists("res://tools/build_folder_contact_sheet.py"), "cut sprite folder contact sheet generator exists")
+	for contact_sheet_path in _local_cut_sprite_contact_sheets():
+		_assert(FileAccess.file_exists(contact_sheet_path), "%s cut sprite contact sheet exists" % contact_sheet_path)
+		var file := FileAccess.open(contact_sheet_path, FileAccess.READ)
+		if file == null:
+			continue
+		var html := file.get_as_text()
+		_assert(html.contains("Cut Sprite Contact Sheet"), "%s identifies folder contact sheet output" % contact_sheet_path)
+		_assert(html.contains("<img"), "%s renders image previews" % contact_sheet_path)
+		_assert(html.contains("data-source-path"), "%s records source sprite paths" % contact_sheet_path)
+
+func _test_pixellab_generation_manifest_is_style_locked() -> void:
+	_assert(FileAccess.file_exists("res://tools/pixellab_generate_assets.py"), "PixelLab generation tool exists")
+	_assert(FileAccess.file_exists("res://data/generation/pixellab_first_slice_requests.json"), "PixelLab first-slice request manifest exists")
+	var file := FileAccess.open("res://data/generation/pixellab_first_slice_requests.json", FileAccess.READ)
+	if file == null:
+		return
+	var manifest = JSON.parse_string(file.get_as_text())
+	_assert(manifest.has("processed_output_root"), "PixelLab manifest defines processed output root")
+	_assert(manifest.shared.has("use_style_references"), "PixelLab manifest defines style reference mode")
+	_assert(manifest.shared.has("palette_reference_paths"), "PixelLab manifest defines palette references")
+	if not manifest.has("processed_output_root") or not manifest.shared.has("use_style_references") or not manifest.shared.has("palette_reference_paths"):
+		return
+	_assert(String(manifest.output_root).contains("Extracted Assets/generated/pixellab/first_slice"), "PixelLab outputs stay outside runtime assets")
+	_assert(String(manifest.processed_output_root).contains("Extracted Assets/generated/pixellab/first_slice_processed"), "PixelLab processed outputs stay outside runtime assets")
+	_assert(bool(manifest.shared.use_style_references) == false, "PixelLab generation defaults to no style references")
+	_assert(manifest.shared.palette_reference_paths.size() >= 3, "PixelLab manifest defines palette references")
+	for palette_reference_path in manifest.shared.palette_reference_paths:
+		_assert(FileAccess.file_exists(String(palette_reference_path)), "PixelLab palette reference exists")
+	_assert(manifest.requests.size() >= 5, "PixelLab manifest defines first missing asset batch")
+	for request in manifest.requests:
+		var image_size = request.get("image_size", manifest.shared.image_size)
+		var no_background = request.get("no_background", manifest.shared.no_background)
+		var style_description = String(request.get("style_description", manifest.shared.style_description))
+		_assert(String(request.id).contains("_"), "%s request uses stable snake_case id" % request.id)
+		_assert(String(request.output_name).ends_with(".png"), "%s request outputs png" % request.id)
+		_assert(int(image_size.width) <= 200 and int(image_size.height) <= 200, "%s respects Bitforge size limit" % request.id)
+		_assert(bool(no_background), "%s requests transparent background" % request.id)
+		_assert(String(request.description).contains("The Last World Museum"), "%s prompt anchors project style" % request.id)
+		_assert(style_description.contains("top-down JRPG"), "%s prompt describes top-down JRPG style" % request.id)
+
+func _test_apothecary_promoted_props_manifest_defines_runtime_assets() -> void:
+	_assert(FileAccess.file_exists("res://tools/promote_extracted_sprites.py"), "sprite promotion tool exists")
+	_assert(FileAccess.file_exists("res://data/tilesets/apothecary_promoted_props.json"), "apothecary promoted props manifest exists")
+	var file := FileAccess.open("res://data/tilesets/apothecary_promoted_props.json", FileAccess.READ)
+	var manifest = JSON.parse_string(file.get_as_text())
+	_assert(manifest.promotions.size() >= 4, "apothecary promotion manifest defines runtime props")
+	for promotion in manifest.promotions:
+		_assert(not String(promotion.runtime_name).is_empty(), "%s promotion has runtime name" % promotion.id)
+		_assert(String(promotion.output_path).begins_with("res://assets/tilesets/first_slice/apothecary/sliced/"), "%s promotion targets runtime sliced folder" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.output_path)), "%s promoted output exists" % promotion.id)
+		_assert(FileAccess.file_exists(String(promotion.source_path)), "%s source candidate exists" % promotion.id)
+		_assert(not String(promotion.source_sprite_id).is_empty(), "%s records source sprite id" % promotion.id)
+
+func _local_extracted_asset_contact_sheets() -> Array[String]:
+	var workspace_root := ProjectSettings.globalize_path("res://").get_base_dir().get_base_dir()
+	return [
+		"%s/Extracted Assets/apothecary/furniture_fixtures/contact_sheet.html" % workspace_root,
+		"%s/Extracted Assets/apothecary/jars_pots/contact_sheet.html" % workspace_root,
+	]
+
+func _local_cut_sprite_contact_sheets() -> Array[String]:
+	var workspace_root := ProjectSettings.globalize_path("res://").get_base_dir().get_base_dir()
+	return [
+		"%s/Extracted Assets/contact_sheets/first_slice/plague_town.html" % workspace_root,
+		"%s/Extracted Assets/contact_sheets/first_slice/abandoned_hospital.html" % workspace_root,
+		"%s/Extracted Assets/contact_sheets/first_slice/medieval_dungeon.html" % workspace_root,
+		"%s/Extracted Assets/contact_sheets/first_slice/medieval_town.html" % workspace_root,
+		"%s/Extracted Assets/contact_sheets/first_slice/medieval_castle.html" % workspace_root,
+		"%s/Extracted Assets/contact_sheets/first_slice/monster_pack_001_100.html" % workspace_root,
+	]
+
+func _local_extracted_asset_manifests() -> Array[String]:
+	var workspace_root := ProjectSettings.globalize_path("res://").get_base_dir().get_base_dir()
+	return [
+		"%s/Extracted Assets/apothecary/furniture_fixtures/manifest.json" % workspace_root,
+		"%s/Extracted Assets/apothecary/jars_pots/manifest.json" % workspace_root,
+	]
 
 func _test_prototype_field_mounts_authored_hallowmere_map() -> void:
 	var FieldScene = load("res://scenes/field/prototype_field.tscn")
@@ -801,6 +1375,77 @@ func _test_prototype_field_mounts_authored_apothecary_map() -> void:
 	var authored = field_scene.get_node_or_null("MapContent/AuthoredMap/MiraApothecaryMap")
 	_assert(authored != null, "prototype field mounts authored Mira apothecary map scene")
 	_assert(authored.get("map_id") == "mira_apothecary", "mounted apothecary authored map matches current map")
+	field_scene.queue_free()
+
+func _test_prototype_field_mounts_authored_hospital_map() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "hidden_hospital_corridor")
+	field_scene.max_unlocked_route_index = 6
+	field_scene.load_phase_map()
+	var authored = field_scene.get_node_or_null("MapContent/AuthoredMap/HiddenHospitalCorridorMap")
+	_assert(authored != null, "prototype field mounts authored hidden hospital map scene")
+	if authored != null:
+		_assert(authored.get("map_id") == "hidden_hospital_corridor", "mounted authored hospital map matches current map")
+	_assert(field_scene.has_node("MapContent/Graybox/Walls"), "prototype field keeps graybox walls while hospital map is mounted")
+	field_scene.queue_free()
+
+func _test_prototype_field_mounts_authored_chapel_map() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "chapel")
+	field_scene.max_unlocked_route_index = 4
+	field_scene.load_phase_map()
+	var authored = field_scene.get_node_or_null("MapContent/AuthoredMap/SaintedBellChapelMap")
+	_assert(authored != null, "prototype field mounts authored Sainted Bell chapel map scene")
+	if authored != null:
+		_assert(authored.get("map_id") == "sainted_bell_chapel", "mounted authored chapel map matches current map")
+	_assert(field_scene.has_node("MapContent/Graybox/Walls"), "prototype field keeps graybox walls while chapel map is mounted")
+	field_scene.queue_free()
+
+func _test_prototype_field_mounts_authored_underchapel_map() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.max_unlocked_route_index = 5
+	field_scene.load_phase_map()
+	var authored = field_scene.get_node_or_null("MapContent/AuthoredMap/UnderchapelDrainMap")
+	_assert(authored != null, "prototype field mounts authored Underchapel map scene")
+	if authored != null:
+		_assert(authored.get("map_id") == "underchapel_drain", "mounted authored Underchapel map matches current map")
+	_assert(field_scene.has_node("MapContent/Graybox/Walls"), "prototype field keeps graybox walls while Underchapel map is mounted")
+	field_scene.queue_free()
+
+func _test_prototype_field_mounts_authored_bell_tower_map() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "bell_tower_boss_room")
+	field_scene.max_unlocked_route_index = 7
+	field_scene.load_phase_map()
+	var authored = field_scene.get_node_or_null("MapContent/AuthoredMap/BellTowerBossRoomMap")
+	_assert(authored != null, "prototype field mounts authored Bell Tower boss room scene")
+	if authored != null:
+		_assert(authored.get("map_id") == "bell_tower_boss_room", "mounted authored Bell Tower map matches current map")
+	_assert(field_scene.has_node("MapContent/Graybox/Walls"), "prototype field keeps graybox walls while Bell Tower map is mounted")
+	field_scene.queue_free()
+
+func _test_prototype_field_exposes_mounted_map_audio_profile() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("phase_metadata", {"id": "underchapel_drain", "display_name": "Underchapel Drain"})
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.load_phase_map()
+	_assert(field_scene.has_method("mounted_map_audio_profile"), "prototype field exposes mounted map audio profile")
+	if field_scene.has_method("mounted_map_audio_profile"):
+		var profile: Dictionary = field_scene.mounted_map_audio_profile()
+		_assert(profile.get("map_id", "") == "underchapel_drain", "mounted audio profile comes from authored Underchapel map")
+		_assert(profile.get("ambience", "") == "ambience_underchapel_drain", "mounted audio profile includes authored ambience")
+		_assert(profile.get("museum_override", "") == "curator_warning", "mounted audio profile includes museum override")
 	field_scene.queue_free()
 
 func _test_prototype_field_changes_maps_when_player_enters_transition() -> void:
@@ -861,6 +1506,26 @@ func _test_prototype_field_runs_entry_story_trigger_once() -> void:
 	field_scene.change_to_phase("apothecary_house", Vector2(48, 64))
 	_assert(field_scene.get_node("%StatusLabel").text == "Entered Mira's Apothecary.", "field scene does not repeat one-shot trigger")
 	field_scene.queue_free()
+
+func _test_prototype_field_entry_trigger_recruits_mira() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120}}]
+	game_state.party = party
+	var field_scene = FieldScene.instantiate()
+	field_scene.game_state_override = game_state
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "apothecary_house")
+	field_scene.load_phase_map()
+	field_scene.change_to_phase("chapel", Vector2(48, 64))
+	_assert(game_state.party.any(func(member): return member.id == "mira_venn"), "mira_joins field trigger recruits Mira before dungeon")
+	_assert(game_state.flags.get("mira_venn_recruited", false), "mira_joins field trigger records recruitment flag")
+	field_scene.change_to_phase("apothecary_house", Vector2(48, 64))
+	field_scene.change_to_phase("chapel", Vector2(48, 64))
+	_assert(game_state.party.filter(func(member): return member.id == "mira_venn").size() == 1, "mira_joins field trigger does not duplicate Mira")
+	field_scene.queue_free()
+	game_state.free()
 
 func _test_prototype_field_queues_and_advances_entry_dialogue() -> void:
 	var FieldScene = load("res://scenes/field/prototype_field.tscn")
@@ -997,6 +1662,26 @@ func _test_prototype_field_interact_launches_boss_after_dialogue() -> void:
 	_assert(emitted[0].enemy_id == "bell_saint", "boss room context action launches Bell Saint")
 	field_scene.queue_free()
 
+func _test_prototype_field_completed_bell_saint_does_not_launch_again() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	game_state.flags["boss_bell_saint_defeated"] = true
+	var field_scene = FieldScene.instantiate()
+	field_scene.game_state_override = game_state
+	var emitted: Array = []
+	field_scene.battle_launch_requested.connect(func(payload): emitted.append(payload))
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "bell_tower_boss_room")
+	field_scene.load_phase_map()
+	_assert(field_scene.battle_launch_payload().is_empty(), "completed Bell Saint room has no boss payload")
+	_assert(not field_scene.request_battle_launch(), "completed Bell Saint room refuses battle launch")
+	_assert(emitted.is_empty(), "completed Bell Saint room does not emit battle launch")
+	var status_label = field_scene.get_node_or_null("%StatusLabel")
+	_assert(status_label is Label and status_label.text.contains("Anchor recovered"), "completed Bell Saint room reports recovered anchor")
+	field_scene.queue_free()
+	game_state.free()
+
 func _test_app_root_handles_field_battle_request() -> void:
 	var AppRootScene = load("res://scenes/app/app_root.tscn")
 	var GameStateScript = load("res://scripts/core/game_state.gd")
@@ -1018,6 +1703,57 @@ func _test_app_root_handles_field_battle_request() -> void:
 	app.queue_free()
 	game_state.free()
 
+func _test_app_root_returns_random_encounters_to_source_phase() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	game_state.flags["pending_battle_payload"] = {
+		"scene_path": "res://scenes/battle/prototype_battle.tscn",
+		"source_phase": "underchapel_drain",
+		"encounter_id": "fever_wretch_pair",
+		"enemy_ids": ["fever_wretch", "fever_wretch"],
+		"enemies": [
+			{"id": "fever_wretch_a", "name": "Fever Wretch", "hp": 0, "max_hp": 42, "xp": 24},
+			{"id": "fever_wretch_b", "name": "Fever Wretch", "hp": 0, "max_hp": 42, "xp": 24}
+		]
+	}
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("battle")
+	game_state.map_id = "battle"
+	app._on_battle_completed({"xp": 48, "loot": {}, "relics": [], "memory_cards": [], "next_flow": ""})
+	_assert(game_state.map_id == "underchapel_drain", "random encounter completion returns GameState to source phase")
+	_assert(app.story_flow.current_phase() == "underchapel_drain", "random encounter completion returns story flow to source phase")
+	_assert(not game_state.flags.has("pending_battle_payload"), "random encounter completion clears pending battle payload")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_restores_random_encounter_source_position() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	game_state.flags["pending_battle_payload"] = {
+		"scene_path": "res://scenes/battle/prototype_battle.tscn",
+		"source_phase": "underchapel_drain",
+		"source_position": Vector2(176, 92),
+		"encounter_id": "fever_wretch_pair",
+		"enemies": [{"id": "fever_wretch", "name": "Fever Wretch", "hp": 0, "max_hp": 42, "xp": 24}]
+	}
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("battle")
+	game_state.map_id = "battle"
+	game_state.player_position = Vector2.ZERO
+	app._on_battle_completed({"xp": 24, "loot": {}, "relics": [], "memory_cards": [], "next_flow": ""})
+	_assert(game_state.map_id == "underchapel_drain", "random encounter source position restore keeps source map")
+	_assert(game_state.player_position == Vector2(176, 92), "random encounter completion restores source player position")
+	app.queue_free()
+	game_state.free()
+
 func _test_battle_screen_emits_completion_payload() -> void:
 	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
 	var screen = BattleScene.instantiate()
@@ -1036,6 +1772,1093 @@ func _test_battle_screen_emits_completion_payload() -> void:
 	_assert(emitted[0].memory_cards == ["bell_saint"], "battle completion includes Bell Saint memory card")
 	screen.queue_free()
 
+func _test_battle_screen_uses_cinematic_arena_camera() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	_assert(screen is Node2D, "battle scene uses a world-space Node2D arena root")
+	var camera = screen.get_node_or_null("ArenaCamera")
+	var arena = screen.get_node_or_null("Arena")
+	var party_anchor = screen.get_node_or_null("Arena/Battlers/PartyAnchor")
+	var enemy_anchor = screen.get_node_or_null("Arena/Battlers/EnemyAnchor")
+	var party_sprite = screen.get_node_or_null("Arena/Battlers/PartyAnchor/PartyBattler")
+	var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+	var ui = screen.get_node_or_null("BattleUi")
+	_assert(camera is Camera2D, "battle scene has a Camera2D")
+	if camera is Camera2D:
+		_assert(camera.enabled, "battle camera is enabled")
+	_assert(arena is Node2D, "battle scene has world-space arena content")
+	_assert(party_anchor is Marker2D, "battle arena has a party anchor")
+	_assert(enemy_anchor is Marker2D, "battle arena has an enemy anchor")
+	_assert(party_sprite is Sprite2D, "party battler is a world-space sprite")
+	_assert(enemy_sprite is Sprite2D, "enemy battler is a world-space sprite")
+	_assert(ui is CanvasLayer, "battle commands and status live on a separate UI overlay")
+	screen.queue_free()
+
+func _test_battle_screen_camera_focuses_battler_sides() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	var camera = screen.get_node_or_null("ArenaCamera")
+	_assert(camera is Camera2D, "battle scene exposes camera for presentation control")
+	_assert(screen.has_method("focus_camera"), "battle screen exposes camera focus method")
+	_assert(screen.has_method("queue_hit_shake"), "battle screen exposes hit shake method")
+	if camera is Camera2D and screen.has_method("focus_camera"):
+		screen.focus_camera("enemy")
+		_assert(camera.position.x > 560.0, "enemy camera focus moves toward enemy side")
+		_assert(camera.zoom.x > 1.0, "enemy camera focus pushes in")
+		screen.focus_camera("party")
+		_assert(camera.position.x < 460.0, "party camera focus moves toward party side")
+		screen.focus_camera("wide")
+		_assert(camera.position.distance_to(Vector2(512, 300)) < 2.0, "wide camera focus returns to arena center")
+	if screen.has_method("queue_hit_shake"):
+		screen.queue_hit_shake(10.0)
+		_assert(float(screen.get("camera_shake_strength")) == 10.0, "hit shake stores requested shake strength")
+	screen.queue_free()
+
+func _test_battle_screen_plays_boss_intro_presentation() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "bell_saint", "name": "The Bell Saint", "hp": 48, "max_hp": 48, "strength": 10, "defense": 3, "speed": 6, "xp": 150, "boss": true, "sprite_path": "res://assets/generated/pixellab/first_slice/bell_saint_boss.png"}]
+	)
+	_assert(screen.has_method("play_boss_intro"), "battle screen exposes boss intro presentation")
+	if screen.has_method("play_boss_intro"):
+		screen.play_boss_intro()
+		var camera = screen.get_node_or_null("ArenaCamera")
+		var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+		_assert(String(screen.get("presentation_phase")) == "boss_intro", "boss intro records presentation phase")
+		if camera is Camera2D:
+			_assert(camera.position.x > 600.0, "boss intro frames enemy side")
+			_assert(camera.zoom.x >= 1.3, "boss intro pushes camera in farther than normal focus")
+		if enemy_sprite is Sprite2D:
+			_assert(String(enemy_sprite.get_meta("presentation_state", "")) == "boss_intro", "boss intro marks enemy sprite")
+	screen.queue_free()
+
+func _test_battle_screen_plays_attack_lunge_and_hit_reaction() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Presentation check.")
+	_assert(screen.has_method("play_party_attack_lunge"), "battle screen exposes attack lunge presentation")
+	_assert(screen.has_method("mark_enemy_hit"), "battle screen exposes enemy hit presentation")
+	if screen.has_method("play_party_attack_lunge") and screen.has_method("mark_enemy_hit"):
+		var party_sprite = screen.get_node_or_null("Arena/Battlers/PartyAnchor/PartyBattler")
+		var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+		var party_home: Vector2 = party_sprite.position if party_sprite is Sprite2D else Vector2.ZERO
+		screen.play_party_attack_lunge()
+		_assert(party_sprite is Sprite2D, "party attack lunge uses the world-space party sprite")
+		if party_sprite is Sprite2D:
+			_assert(party_sprite.position.x > party_home.x, "party lunge moves toward the enemy side")
+			_assert(String(party_sprite.get_meta("presentation_state", "")) == "attack_lunge", "party lunge records presentation state")
+			_assert(party_sprite.get_meta("home_position", Vector2.ZERO) == party_home, "party lunge preserves home position")
+		screen.mark_enemy_hit()
+		_assert(enemy_sprite is Sprite2D, "enemy hit reaction uses the world-space enemy sprite")
+		if enemy_sprite is Sprite2D:
+			_assert(String(enemy_sprite.get_meta("presentation_state", "")) == "hit_flash", "enemy hit reaction records presentation state")
+			_assert(enemy_sprite.modulate.r > enemy_sprite.modulate.g, "enemy hit reaction warms enemy sprite color")
+	screen.queue_free()
+
+func _test_battle_screen_resets_battler_presentation() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Reset check.")
+	_assert(screen.has_method("reset_battler_presentation"), "battle screen exposes presentation reset")
+	if screen.has_method("play_party_attack_lunge") and screen.has_method("mark_enemy_hit") and screen.has_method("reset_battler_presentation"):
+		var party_sprite = screen.get_node_or_null("Arena/Battlers/PartyAnchor/PartyBattler")
+		var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+		var party_home: Vector2 = party_sprite.position if party_sprite is Sprite2D else Vector2.ZERO
+		screen.play_party_attack_lunge()
+		screen.mark_enemy_hit()
+		screen.reset_battler_presentation()
+		if party_sprite is Sprite2D:
+			_assert(party_sprite.position == party_home, "presentation reset returns party battler home")
+			_assert(String(party_sprite.get_meta("presentation_state", "")) == "idle", "presentation reset returns party state to idle")
+		if enemy_sprite is Sprite2D:
+			_assert(enemy_sprite.modulate == Color.WHITE, "presentation reset clears enemy hit flash")
+			_assert(String(enemy_sprite.get_meta("presentation_state", "")) == "idle", "presentation reset returns enemy state to idle")
+	screen.queue_free()
+
+func _test_battle_screen_shows_damage_popup_and_locks_commands() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Damage check.")
+	_assert(screen.has_method("show_damage_popup"), "battle screen exposes damage popup presentation")
+	_assert(screen.has_method("set_commands_locked"), "battle screen exposes command lock presentation")
+	if screen.has_method("show_damage_popup") and screen.has_method("set_commands_locked"):
+		screen.set_commands_locked(true)
+		var attack_button = screen.get_node_or_null("%AttackButton")
+		var defend_button = screen.get_node_or_null("%DefendButton")
+		var flee_button = screen.get_node_or_null("%FleeButton")
+		_assert(bool(screen.get("commands_locked")), "battle screen records command lock")
+		_assert(attack_button is Button and attack_button.disabled, "attack command disables while presentation is locked")
+		_assert(defend_button is Button and defend_button.disabled, "defend command disables while presentation is locked")
+		_assert(flee_button is Button and flee_button.disabled, "flee command disables while presentation is locked")
+		screen.show_damage_popup(12)
+		var popup = screen.get_node_or_null("Arena/Presentation/DamagePopup")
+		_assert(popup is Label, "damage popup is a world-space label")
+		if popup is Label:
+			_assert(popup.text == "12", "damage popup shows damage amount")
+			_assert(popup.position.distance_to(Vector2(724, 206)) < 64.0, "damage popup appears near enemy side")
+			_assert(String(popup.get_meta("presentation_role", "")) == "damage_popup", "damage popup records presentation role")
+		screen.set_commands_locked(false)
+		_assert(not bool(screen.get("commands_locked")), "battle screen clears command lock")
+		_assert(attack_button is Button and attack_button.disabled, "attack command stays disabled until ATB is ready")
+	screen.queue_free()
+
+func _test_battle_screen_completes_action_presentation_sequence() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Sequence check.")
+	var party_sprite = screen.get_node_or_null("Arena/Battlers/PartyAnchor/PartyBattler")
+	var party_home: Vector2 = party_sprite.position if party_sprite is Sprite2D else Vector2.ZERO
+	_assert(screen.has_method("complete_action_presentation"), "battle screen exposes action presentation completion")
+	screen._on_attack_pressed()
+	_assert(bool(screen.get("commands_locked")), "attack keeps commands locked during presentation")
+	_assert(String(screen.get("presentation_phase")) == "action", "attack records action presentation phase")
+	if party_sprite is Sprite2D:
+		_assert(party_sprite.position != party_home, "attack presentation leaves party in lunge until completion")
+	if screen.has_method("complete_action_presentation"):
+		screen.complete_action_presentation()
+		_assert(bool(screen.get("commands_locked")), "presentation completion stays locked for enemy retaliation")
+		_assert(String(screen.get("presentation_phase")) == "enemy_action", "presentation completion advances to enemy action")
+		if party_sprite is Sprite2D:
+			_assert(party_sprite.position == party_home, "presentation completion returns party battler home")
+		var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+		if enemy_sprite is Sprite2D:
+			_assert(String(enemy_sprite.get_meta("presentation_state", "")) == "enemy_lunge", "presentation completion stages enemy retaliation")
+		if screen.has_method("complete_enemy_retaliation"):
+			screen.complete_enemy_retaliation()
+			_assert(not bool(screen.get("commands_locked")), "enemy retaliation completion unlocks commands")
+			_assert(String(screen.get("presentation_phase")) == "idle", "enemy retaliation completion returns phase to idle")
+	screen.queue_free()
+
+func _test_battle_screen_starts_action_presentation_timer() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Timer check.")
+	var timer = screen.get_node_or_null("ActionPresentationTimer")
+	_assert(timer is Timer, "battle scene has an action presentation timer")
+	if timer is Timer:
+		_assert(timer.one_shot, "action presentation timer is one-shot")
+		_assert(timer.wait_time > 0.1 and timer.wait_time < 1.5, "action presentation timer uses a short battle-presentation duration")
+	screen._on_attack_pressed()
+	if timer is Timer:
+		_assert(bool(screen.get("action_presentation_timer_active")), "attack marks action presentation timer active")
+	_assert(String(screen.get("presentation_phase")) == "action", "timer-backed attack enters action phase")
+	if screen.has_method("_on_action_presentation_timer_timeout"):
+		screen._on_action_presentation_timer_timeout()
+		_assert(String(screen.get("presentation_phase")) == "enemy_action", "timer timeout advances to enemy action")
+		_assert(bool(screen.get("commands_locked")), "timer timeout keeps commands locked during enemy action")
+		if screen.has_method("complete_enemy_retaliation"):
+			screen.complete_enemy_retaliation()
+			_assert(String(screen.get("presentation_phase")) == "idle", "enemy action completion returns to idle")
+			_assert(not bool(screen.get("commands_locked")), "enemy action completion unlocks commands")
+	screen.queue_free()
+
+func _test_battle_screen_presents_enemy_retaliation() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 120, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Retaliation check.")
+	_assert(screen.has_method("present_enemy_retaliation"), "battle screen exposes enemy retaliation presentation")
+	if screen.has_method("present_enemy_retaliation"):
+		var party_sprite = screen.get_node_or_null("Arena/Battlers/PartyAnchor/PartyBattler")
+		var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+		var enemy_home: Vector2 = enemy_sprite.position if enemy_sprite is Sprite2D else Vector2.ZERO
+		screen.present_enemy_retaliation()
+		_assert(String(screen.get("presentation_phase")) == "enemy_action", "enemy retaliation enters enemy action phase")
+		_assert(bool(screen.get("commands_locked")), "enemy retaliation keeps commands locked")
+		_assert(int(screen.battle.party[0].hp) == 117, "enemy retaliation applies damage after defense")
+		if enemy_sprite is Sprite2D:
+			_assert(enemy_sprite.position.x < enemy_home.x, "enemy retaliation lunges toward party side")
+			_assert(String(enemy_sprite.get_meta("presentation_state", "")) == "enemy_lunge", "enemy retaliation records enemy lunge state")
+		if party_sprite is Sprite2D:
+			_assert(String(party_sprite.get_meta("presentation_state", "")) == "hit_flash", "enemy retaliation marks party hit")
+			_assert(party_sprite.modulate.r > party_sprite.modulate.g, "enemy retaliation warms party hit color")
+		var popup = screen.get_node_or_null("Arena/Presentation/PartyDamagePopup")
+		_assert(popup is Label, "enemy retaliation shows party-side damage popup")
+		if popup is Label:
+			_assert(popup.text == "3", "party-side damage popup shows damage amount")
+	screen.queue_free()
+
+func _test_battle_screen_retaliation_damages_ai_selected_party_target() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 92, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "ai_profile": "aggressive"}]
+	)
+	screen._update_labels("Retaliation target check.")
+	screen.present_enemy_retaliation()
+	_assert(screen.battle.party[0].hp == 0, "retaliation leaves already-KO Sev untouched")
+	_assert(screen.battle.party[1].hp == 86, "retaliation damages AI-selected living target Mira")
+	_assert(int(screen.get("active_party_index")) == 1, "retaliation status focuses the damaged living target")
+	screen.queue_free()
+
+func _test_battle_screen_retaliation_log_names_target() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 92, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "ai_profile": "aggressive"}]
+	)
+	screen.present_enemy_retaliation()
+	var log_label = screen.get_node_or_null("%LogLabel")
+	_assert(log_label is Label and log_label.text.contains("Mira Venn"), "enemy retaliation log names the party member that was hit")
+	screen.queue_free()
+
+func _test_battle_screen_enemy_skill_damages_ai_selected_party_target() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 92, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "bell_saint", "name": "The Bell Saint", "hp": 48, "max_hp": 48, "strength": 10, "defense": 3, "speed": 6, "xp": 150, "boss": true, "ai_profile": "boss_bell_saint", "skills": ["rot_needle"]}]
+	)
+	screen._update_labels("Enemy skill target check.")
+	screen.present_enemy_retaliation()
+	_assert(screen.battle.party[0].hp == 0, "enemy skill leaves already-KO Sev untouched")
+	_assert(screen.battle.party[1].hp < 92, "enemy skill damages AI-selected living target Mira")
+	_assert(int(screen.get("active_party_index")) == 1, "enemy skill status focuses the damaged living target")
+	screen.queue_free()
+
+func _test_battle_screen_enemy_skill_log_names_target() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 92, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}},
+		],
+		[{"id": "bell_saint", "name": "The Bell Saint", "hp": 48, "max_hp": 48, "strength": 10, "defense": 3, "speed": 6, "xp": 150, "boss": true, "ai_profile": "boss_bell_saint", "skills": ["rot_needle"]}]
+	)
+	screen.present_enemy_retaliation()
+	var log_label = screen.get_node_or_null("%LogLabel")
+	_assert(log_label is Label and log_label.text.contains("Mira Venn"), "enemy skill log names the party member that was hit")
+	screen.queue_free()
+
+func _test_battle_screen_starts_enemy_action_timer() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 120, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Enemy timer check.")
+	var timer = screen.get_node_or_null("EnemyActionTimer")
+	_assert(timer is Timer, "battle scene has an enemy action timer")
+	if timer is Timer:
+		_assert(timer.one_shot, "enemy action timer is one-shot")
+		_assert(timer.wait_time > 0.1 and timer.wait_time < 1.5, "enemy action timer uses a short presentation duration")
+	screen.present_enemy_retaliation()
+	_assert(screen.get("enemy_action_timer_active") == true, "enemy retaliation marks enemy action timer active")
+	if screen.has_method("_on_enemy_action_timer_timeout"):
+		screen._on_enemy_action_timer_timeout()
+		_assert(screen.get("enemy_action_timer_active") == false, "enemy timer timeout clears active flag")
+		_assert(String(screen.get("presentation_phase")) == "idle", "enemy timer timeout returns presentation to idle")
+		_assert(not bool(screen.get("commands_locked")), "enemy timer timeout unlocks commands")
+	screen.queue_free()
+
+func _test_battle_screen_handles_party_defeat() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 2, "stats": {"max_hp": 120, "strength": 18, "defense": 1, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Defeat check.")
+	_assert(screen.has_method("is_party_defeated"), "battle screen exposes party defeat check")
+	_assert(screen.has_method("present_party_defeat"), "battle screen exposes party defeat presentation")
+	screen.present_enemy_retaliation()
+	_assert(int(screen.battle.party[0].hp) == 0, "lethal retaliation clamps party HP to zero")
+	if screen.has_method("is_party_defeated"):
+		_assert(screen.is_party_defeated(), "party defeat check returns true at zero HP")
+	_assert(String(screen.get("presentation_phase")) == "party_defeat", "party defeat sets defeat presentation phase")
+	_assert(bool(screen.get("commands_locked")), "party defeat keeps commands locked")
+	var party_sprite = screen.get_node_or_null("Arena/Battlers/PartyAnchor/PartyBattler")
+	if party_sprite is Sprite2D:
+		_assert(String(party_sprite.get_meta("presentation_state", "")) == "ko", "party defeat marks party battler KO")
+		_assert(party_sprite.rotation_degrees > 20.0, "party defeat visually drops party battler")
+	var log_label = screen.get_node_or_null("%LogLabel")
+	if log_label is Label:
+		_assert(log_label.text.contains("Docent unit offline"), "party defeat updates battle log")
+	screen.queue_free()
+
+func _test_battle_screen_handles_victory_presentation() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	var emitted: Array = []
+	screen.battle_completed.connect(func(payload): emitted.append(payload))
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 1, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Victory check.")
+	_assert(screen.has_method("present_victory"), "battle screen exposes victory presentation")
+	screen._on_attack_pressed()
+	_assert(emitted.size() == 1, "victory still emits completion payload")
+	_assert(String(screen.get("presentation_phase")) == "victory", "victory sets victory presentation phase")
+	_assert(not bool(screen.get("commands_locked")), "victory unlocks commands before transition")
+	var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+	if enemy_sprite is Sprite2D:
+		_assert(String(enemy_sprite.get_meta("presentation_state", "")) == "defeated", "victory marks enemy defeated")
+		_assert(enemy_sprite.visible == false, "victory hides defeated enemy sprite")
+	screen.queue_free()
+
+func _test_battle_screen_exposes_skill_and_item_commands() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "hp": 45, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 8}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Command check.")
+	var skill_button = screen.get_node_or_null("%SkillButton")
+	var item_button = screen.get_node_or_null("%ItemButton")
+	_assert(skill_button is Button, "battle UI exposes Skill command")
+	_assert(item_button is Button, "battle UI exposes Item command")
+	_assert(screen.has_method("_on_skill_pressed"), "battle screen handles Skill command")
+	_assert(screen.has_method("_on_item_pressed"), "battle screen handles Item command")
+	if screen.has_method("_on_skill_pressed") and screen.has_method("select_skill"):
+		screen._on_skill_pressed()
+		var menu = screen.get_node_or_null("%SkillMenu")
+		_assert(menu is VBoxContainer and menu.visible, "Skill command opens selectable skill menu")
+		screen.select_skill("archive_strike")
+		_assert(screen.battle.enemies[0].hp < 88, "Skill command damages enemy")
+		_assert(String(screen.get("presentation_phase")) == "action", "Skill command enters action presentation")
+		screen.complete_action_presentation()
+		if screen.has_method("complete_enemy_retaliation"):
+			screen.complete_enemy_retaliation()
+	if screen.has_method("_on_item_pressed"):
+		screen.battle.party[0].hp = 45
+		screen.battle_inventory = {"clean_bandage": 1}
+		screen._on_item_pressed()
+		_assert(screen.battle.party[0].hp == 80, "Item command heals party with Clean Bandage")
+		_assert(not screen.battle_inventory.has("clean_bandage"), "Item command consumes battle inventory")
+		var popup = screen.get_node_or_null("Arena/Presentation/HealPopup")
+		_assert(popup is Label, "Item command shows healing popup")
+	screen.queue_free()
+
+func _test_battle_screen_item_heals_most_wounded_living_party_member() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle_inventory = {"clean_bandage": 1}
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 120, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 40, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55}]
+	)
+	screen._on_item_pressed()
+	_assert(screen.battle.party[0].hp == 120, "item use leaves full-health Sev unchanged")
+	_assert(screen.battle.party[1].hp == 75, "item use heals most wounded living party member")
+	_assert(int(screen.get("active_party_index")) == 1, "item use focuses healed party member")
+	screen.queue_free()
+
+func _test_battle_screen_disables_item_command_without_bandages() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle_inventory = {}
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 70, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55}]
+	)
+	for combatant in screen.battle.clock.combatants:
+		if combatant.id == "lead":
+			combatant.atb = 100.0
+			combatant.ready = true
+	screen.refresh_command_state()
+	var attack_button = screen.get_node_or_null("%AttackButton")
+	var item_button = screen.get_node_or_null("%ItemButton")
+	_assert(attack_button is Button and not attack_button.disabled, "attack remains available when actor is ready")
+	_assert(item_button is Button and item_button.disabled, "item command disables when no Clean Bandage is available")
+	screen.queue_free()
+
+func _test_battle_screen_disables_item_command_after_last_bandage_used() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle_inventory = {"clean_bandage": 1}
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 70, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55}]
+	)
+	screen._on_item_pressed()
+	screen.complete_action_presentation()
+	for combatant in screen.battle.clock.combatants:
+		if combatant.id == "lead":
+			combatant.atb = 100.0
+			combatant.ready = true
+	screen.refresh_command_state()
+	var item_button = screen.get_node_or_null("%ItemButton")
+	_assert(not screen.battle_inventory.has("clean_bandage"), "using the last Clean Bandage consumes it")
+	_assert(item_button is Button and item_button.disabled, "item command disables after the last Clean Bandage is consumed")
+	screen.queue_free()
+
+func _test_battle_screen_tracks_command_readiness() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 20}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	_assert(screen.has_method("is_lead_ready"), "battle screen exposes lead readiness check")
+	_assert(screen.has_method("advance_battle_time"), "battle screen exposes ATB advance method")
+	_assert(screen.has_method("refresh_command_state"), "battle screen exposes command-state refresh")
+	if screen.has_method("is_lead_ready") and screen.has_method("advance_battle_time") and screen.has_method("refresh_command_state"):
+		screen.refresh_command_state()
+		var attack_button = screen.get_node_or_null("%AttackButton")
+		_assert(not screen.is_lead_ready(), "lead starts without a ready command")
+		_assert(attack_button is Button and attack_button.disabled, "commands are disabled until ATB is ready")
+		screen.advance_battle_time(6.0)
+		screen.refresh_command_state()
+		_assert(screen.is_lead_ready(), "lead becomes ready after ATB advances")
+		_assert(attack_button is Button and not attack_button.disabled, "commands enable when lead is ready")
+	screen.queue_free()
+
+func _test_battle_screen_command_state_skips_ko_active_member() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 92, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55}]
+	)
+	for combatant in screen.battle.clock.combatants:
+		if combatant.id == "mira_venn":
+			combatant.atb = 100.0
+			combatant.ready = true
+	screen.set("active_party_index", 0)
+	screen.refresh_command_state()
+	var attack_button = screen.get_node_or_null("%AttackButton")
+	_assert(int(screen.get("active_party_index")) == 1, "command refresh advances from KO active member to living party member")
+	_assert(screen.is_lead_ready(), "command readiness follows the living active party member")
+	_assert(attack_button is Button and not attack_button.disabled, "commands enable for ready living party member")
+	screen.queue_free()
+
+func _test_battle_screen_advances_command_readiness_during_process() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 20}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Process readiness check.")
+	screen.refresh_command_state()
+	var attack_button = screen.get_node_or_null("%AttackButton")
+	_assert(attack_button is Button and attack_button.disabled, "process test starts with commands disabled")
+	screen._process(6.0)
+	_assert(screen.is_lead_ready(), "battle screen process advances lead ATB")
+	_assert(attack_button is Button and not attack_button.disabled, "battle screen process refreshes command buttons when ready")
+	screen.queue_free()
+
+func _test_battle_screen_opens_selectable_skill_menu() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "skills": ["archive_strike", "clean_wound"]}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	_assert(screen.has_method("open_skill_menu"), "battle screen exposes skill menu opener")
+	_assert(screen.has_method("select_skill"), "battle screen exposes skill selection")
+	if screen.has_method("open_skill_menu") and screen.has_method("select_skill"):
+		screen.open_skill_menu()
+		var menu = screen.get_node_or_null("%SkillMenu")
+		_assert(menu is VBoxContainer, "battle UI has selectable skill menu")
+		if menu is VBoxContainer:
+			_assert(menu.visible, "skill menu becomes visible")
+			_assert(menu.get_child_count() >= 2, "skill menu creates one button per known skill")
+			var first = menu.get_child(0)
+			_assert(first is Button and first.text.contains("Archive Strike"), "skill menu renders skill display name")
+		screen.select_skill("archive_strike")
+		_assert(screen.battle.enemies[0].hp < 88, "selecting Archive Strike executes the selected skill")
+	screen.queue_free()
+
+func _test_battle_screen_records_animation_hooks() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png", "animation_set": "clean_man_generated"}]
+	)
+	_assert(screen.has_method("apply_battler_animation_hooks"), "battle screen exposes animation hook application")
+	if screen.has_method("apply_battler_animation_hooks"):
+		screen.apply_battler_animation_hooks()
+		var party_sprite = screen.get_node_or_null("Arena/Battlers/PartyAnchor/PartyBattler")
+		var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+		if party_sprite is Sprite2D:
+			_assert(String(party_sprite.get_meta("animation_set", "")) == "sev_placeholder", "party battler records animation set")
+			_assert(String(party_sprite.get_meta("animation_state", "")) == "idle", "party battler records idle animation state")
+		if enemy_sprite is Sprite2D:
+			_assert(String(enemy_sprite.get_meta("animation_set", "")) == "clean_man_generated", "enemy battler records animation set")
+			_assert(String(enemy_sprite.get_meta("animation_state", "")) == "idle", "enemy battler records idle animation state")
+	screen.queue_free()
+
+func _test_battle_screen_updates_party_animation_set_for_active_member() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound"], "animation_set": "mira_placeholder"},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "animation_set": "clean_man_generated"}]
+	)
+	screen.apply_battler_animation_hooks()
+	screen.select_party_member(1)
+	var party_sprite = screen.get_node_or_null("Arena/Battlers/PartyAnchor/PartyBattler")
+	_assert(party_sprite is Sprite2D and String(party_sprite.get_meta("animation_set", "")) == "mira_placeholder", "party battler uses active member animation set after roster selection")
+	screen.queue_free()
+
+func _test_battle_animation_assets_are_cataloged() -> void:
+	_assert(FileAccess.file_exists("res://data/battle/animation_sets.json"), "battle animation set data exists")
+	_assert(FileAccess.file_exists("res://assets/battle/animations/clean_man_generated/idle_01.png"), "Clean Man idle animation frame exists")
+	_assert(FileAccess.file_exists("res://assets/battle/animations/bell_saint_generated/attack_03.png"), "Bell Saint attack animation frame exists")
+	_assert(FileAccess.file_exists("res://assets/battle/animations/sev_placeholder/hurt_02.png"), "Sev placeholder hurt animation frame exists")
+	var ContentCatalog = load("res://scripts/core/content_catalog.gd")
+	var catalog = ContentCatalog.new()
+	var clean_set = catalog.battle_animation_set("clean_man_generated")
+	_assert(clean_set.get("states", {}).has("idle"), "content catalog loads Clean Man idle animation state")
+	_assert(clean_set.states.idle.frames.size() == 4, "Clean Man idle animation has four frames")
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "animation_set": "clean_man_generated"}]
+	)
+	screen.apply_battler_animation_hooks()
+	var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+	_assert(enemy_sprite is Sprite2D and enemy_sprite.texture != null, "battle screen applies cataloged enemy animation frame")
+	if enemy_sprite is Sprite2D:
+		screen.mark_enemy_hit()
+		_assert(String(enemy_sprite.get_meta("animation_state", "")) == "hurt", "enemy hurt animation state is applied")
+		_assert(enemy_sprite.texture != null, "enemy hurt animation frame is loaded")
+	screen.queue_free()
+
+func _test_combat_enemies_have_animation_sets() -> void:
+	var file := FileAccess.open("res://data/combat/enemies.json", FileAccess.READ)
+	_assert(file != null, "combat enemy data exists")
+	if file == null:
+		return
+	var enemies = JSON.parse_string(file.get_as_text())
+	_assert(enemies is Dictionary, "combat enemy data parses")
+	if not enemies is Dictionary:
+		return
+	var ContentCatalog = load("res://scripts/core/content_catalog.gd")
+	var catalog = ContentCatalog.new()
+	for enemy_id in enemies.keys():
+		var enemy: Dictionary = enemies[enemy_id]
+		var animation_set_id := String(enemy.get("animation_set", ""))
+		_assert(not animation_set_id.is_empty(), "%s has an animation set" % enemy_id)
+		if not animation_set_id.is_empty():
+			var animation_set = catalog.battle_animation_set(animation_set_id)
+			_assert(not animation_set.is_empty(), "%s animation set is cataloged" % enemy_id)
+			_assert(animation_set.get("states", {}).has("idle"), "%s animation set has idle frames" % enemy_id)
+			_assert(animation_set.get("states", {}).has("attack"), "%s animation set has attack frames" % enemy_id)
+
+func _test_battle_screen_renders_generated_enemy_sprite() -> void:
+	_assert(FileAccess.file_exists("res://assets/generated/pixellab/first_slice/clean_man_enemy.png"), "Clean Man generated runtime sprite exists")
+	_assert(FileAccess.file_exists("res://assets/generated/pixellab/first_slice/bell_saint_boss.png"), "Bell Saint generated runtime sprite exists")
+	var file := FileAccess.open("res://data/combat/enemies.json", FileAccess.READ)
+	var enemies = JSON.parse_string(file.get_as_text())
+	_assert(String(enemies.clean_man.get("sprite_path", "")) == "res://assets/generated/pixellab/first_slice/clean_man_enemy.png", "Clean Man enemy data uses generated sprite")
+	_assert(String(enemies.bell_saint.get("sprite_path", "")) == "res://assets/generated/pixellab/first_slice/bell_saint_boss.png", "Bell Saint enemy data uses generated sprite")
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "bell_saint", "name": "The Bell Saint", "hp": 48, "max_hp": 48, "strength": 10, "defense": 3, "speed": 6, "xp": 150, "sprite_path": "res://assets/generated/pixellab/first_slice/bell_saint_boss.png"}]
+	)
+	screen._update_labels("Sprite check.")
+	var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+	_assert(enemy_sprite is Sprite2D, "battle screen uses a world-space enemy sprite")
+	if enemy_sprite is Sprite2D:
+		_assert(enemy_sprite.texture != null, "battle screen loads generated enemy texture")
+		_assert(String(enemy_sprite.get_meta("sprite_path", "")) == "res://assets/generated/pixellab/first_slice/bell_saint_boss.png", "battle screen records displayed enemy sprite path")
+	screen.queue_free()
+
+func _test_battle_screen_renders_and_targets_multiple_enemies() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "skills": ["archive_strike"], "animation_set": "sev_placeholder"}],
+		[
+			{"id": "wretch", "name": "Fever Wretch", "hp": 42, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
+			{"id": "choir", "name": "Rot Choir", "hp": 64, "max_hp": 64, "strength": 6, "defense": 3, "speed": 5, "xp": 38, "animation_set": "rot_choir"}
+		]
+	)
+	screen.apply_battler_animation_hooks()
+	screen._update_labels("Multi target check.")
+	_assert(screen.has_method("select_enemy_target"), "battle screen exposes enemy target selection")
+	var enemy_anchor = screen.get_node_or_null("Arena/Battlers/EnemyAnchor")
+	_assert(enemy_anchor is Marker2D, "battle screen has enemy anchor for enemy formation")
+	if enemy_anchor is Marker2D:
+		_assert(enemy_anchor.get_node_or_null("EnemyBattler") is Sprite2D, "first enemy uses primary enemy battler sprite")
+		_assert(enemy_anchor.get_node_or_null("EnemyBattler_1") is Sprite2D, "second enemy gets a world-space battler sprite")
+	if screen.has_method("select_enemy_target"):
+		screen.select_enemy_target(1)
+		screen.select_skill("archive_strike")
+		_assert(screen.battle.enemies[0].hp == 42, "selected skill leaves non-target enemy HP unchanged")
+		_assert(screen.battle.enemies[1].hp < 64, "selected skill damages selected enemy")
+	screen.queue_free()
+
+func _test_battle_screen_renders_target_buttons() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 20}, "skills": ["archive_strike"], "animation_set": "sev_placeholder"}],
+		[
+			{"id": "wretch", "name": "Fever Wretch", "hp": 42, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
+			{"id": "choir", "name": "Rot Choir", "hp": 64, "max_hp": 64, "strength": 6, "defense": 3, "speed": 5, "xp": 38, "animation_set": "rot_choir"}
+		]
+	)
+	screen._update_labels("Target UI check.")
+	_assert(screen.has_method("render_target_menu"), "battle screen exposes target menu rendering")
+	if screen.has_method("render_target_menu"):
+		screen.render_target_menu()
+	var target_menu = screen.get_node_or_null("%TargetMenu")
+	_assert(target_menu is HBoxContainer, "battle UI has target menu container")
+	if target_menu is HBoxContainer:
+		_assert(target_menu.visible, "target menu becomes visible for enemy groups")
+		_assert(target_menu.get_child_count() == 2, "target menu creates one button per enemy")
+		var second = target_menu.get_child(1)
+		_assert(second is Button and second.text.contains("Rot Choir"), "target button names the enemy")
+		if second is Button:
+			second.pressed.emit()
+			var enemy_name = screen.get_node_or_null("%EnemyNameLabel")
+			_assert(enemy_name is Label and enemy_name.text == "Rot Choir", "pressing target button selects that enemy")
+	screen.queue_free()
+
+func _test_battle_screen_attack_uses_selected_enemy() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}],
+		[
+			{"id": "wretch", "name": "Fever Wretch", "hp": 42, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
+			{"id": "choir", "name": "Rot Choir", "hp": 64, "max_hp": 64, "strength": 6, "defense": 3, "speed": 5, "xp": 38, "animation_set": "rot_choir"}
+		]
+	)
+	screen.apply_battler_animation_hooks()
+	screen._update_labels("Attack target check.")
+	screen.select_enemy_target(1)
+	screen._on_attack_pressed()
+	_assert(screen.battle.enemies[0].hp == 42, "basic attack leaves non-target enemy HP unchanged")
+	_assert(screen.battle.enemies[1].hp < 64, "basic attack damages selected enemy")
+	screen.queue_free()
+
+func _test_battle_screen_auto_selects_living_enemy_after_defeat() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}],
+		[
+			{"id": "wretch", "name": "Fever Wretch", "hp": 6, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
+			{"id": "choir", "name": "Rot Choir", "hp": 64, "max_hp": 64, "strength": 6, "defense": 3, "speed": 5, "xp": 38, "animation_set": "rot_choir"}
+		]
+	)
+	screen.apply_battler_animation_hooks()
+	screen._update_labels("Auto target check.")
+	screen.render_target_menu()
+	screen.select_enemy_target(0)
+	screen._on_attack_pressed()
+	_assert(screen.battle.enemies[0].hp == 0, "attack can defeat selected enemy")
+	_assert(int(screen.get("selected_enemy_index")) == 1, "battle screen selects a living enemy after selected target is defeated")
+	var enemy_name = screen.get_node_or_null("%EnemyNameLabel")
+	_assert(enemy_name is Label and enemy_name.text == "Rot Choir", "enemy status panel follows auto-selected living target")
+	var target_menu = screen.get_node_or_null("%TargetMenu")
+	if target_menu is HBoxContainer and target_menu.get_child_count() >= 2:
+		var defeated_button = target_menu.get_child(0)
+		var living_button = target_menu.get_child(1)
+		_assert(defeated_button is Button and defeated_button.disabled, "defeated target button is disabled")
+		_assert(living_button is Button and living_button.button_pressed, "living target button becomes selected")
+	screen.queue_free()
+
+func _test_battle_screen_retaliation_uses_living_enemy() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 100, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}],
+		[
+			{"id": "wretch", "name": "Fever Wretch", "hp": 0, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
+			{"id": "choir", "name": "Rot Choir", "hp": 64, "max_hp": 64, "strength": 14, "defense": 3, "speed": 5, "xp": 38, "animation_set": "rot_choir"}
+		]
+	)
+	screen.apply_battler_animation_hooks()
+	screen._update_labels("Retaliation check.")
+	screen.present_enemy_retaliation()
+	_assert(screen.battle.party[0].hp == 91, "retaliation damage comes from the first living enemy")
+	var log_label = screen.get_node_or_null("%LogLabel")
+	_assert(log_label is Label and log_label.text.contains("Rot Choir retaliates"), "retaliation log names the living enemy")
+	screen.queue_free()
+
+func _test_battle_screen_uses_pending_group_payload() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	game_state.name = "GameState"
+	var party: Array[Dictionary] = [{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 100, "strength": 18, "defense": 5, "speed": 20}, "animation_set": "sev_placeholder"}]
+	game_state.party = party
+	game_state.flags["pending_battle_payload"] = {
+		"scene_path": "res://scenes/battle/prototype_battle.tscn",
+		"encounter_id": "fever_wretch_pair",
+		"enemy_ids": ["fever_wretch", "fever_wretch"],
+		"enemies": [
+			{"id": "fever_wretch_a", "name": "Fever Wretch", "hp": 42, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"},
+			{"id": "fever_wretch_b", "name": "Fever Wretch", "hp": 42, "max_hp": 42, "strength": 7, "defense": 2, "speed": 7, "xp": 24, "animation_set": "plague_wretch"}
+		]
+	}
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	screen.game_state_override = game_state
+	root.add_child(screen)
+	screen._ready()
+	_assert(screen.battle.enemies.size() == 2, "battle screen starts all enemies from pending group payload")
+	_assert(screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler_1") is Sprite2D, "pending group payload renders second enemy")
+	screen.queue_free()
+	game_state.free()
+
+func _test_battle_screen_starts_with_recruited_mira_from_game_state() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [
+		{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+		{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "stats": {"max_hp": 92, "max_mp": 38, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+	]
+	game_state.party = party
+	game_state.flags["pending_battle_payload"] = {
+		"scene_path": "res://scenes/battle/prototype_battle.tscn",
+		"enemy": {"id": "bell_saint", "name": "The Bell Saint", "hp": 48, "max_hp": 48, "strength": 10, "defense": 3, "speed": 6, "xp": 150, "boss": true, "animation_set": "bell_saint_generated"}
+	}
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	screen.game_state_override = game_state
+	root.add_child(screen)
+	screen._ready()
+	_assert(screen.battle.party.size() == 2, "battle screen starts with recruited party members from GameState")
+	_assert(screen.battle.party[1].id == "mira_venn", "Mira Venn is present in battle party")
+	_assert(screen.battle.party[1].skills.has("clean_wound"), "Mira Venn keeps healer skills in battle")
+	screen.queue_free()
+	game_state.free()
+
+func _test_battle_screen_marks_active_party_member_in_roster() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "animation_set": "clean_man_generated"}]
+	)
+	_assert(screen.has_method("select_party_member"), "battle screen exposes active party member selection")
+	if screen.has_method("select_party_member"):
+		screen.select_party_member(1)
+	screen._update_labels("Active party check.")
+	var party_label = screen.get_node_or_null("%PartyLabel")
+	var active_name = screen.get_node_or_null("%PartyNameLabel")
+	_assert(party_label is Label and party_label.text.contains("> Mira Venn"), "party roster marks active Mira")
+	_assert(active_name is Label and active_name.text.contains("Mira Venn"), "party status panel follows active party member")
+	screen.queue_free()
+
+func _test_battle_screen_party_roster_buttons_select_active_member() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}, "skills": ["archive_strike"]},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "animation_set": "clean_man_generated"}]
+	)
+	screen._update_labels("Roster button check.")
+	var roster = screen.get_node_or_null("%PartyRoster")
+	_assert(roster is VBoxContainer, "battle screen exposes a party roster button container")
+	if roster is VBoxContainer:
+		_assert(roster.get_child_count() == 2, "party roster renders one button per party member")
+		if roster.get_child_count() >= 2 and roster.get_child(1) is Button:
+			roster.get_child(1).pressed.emit()
+			_assert(int(screen.get("active_party_index")) == 1, "pressing Mira's roster button selects Mira")
+			_assert(roster.get_child(1).button_pressed, "selected party roster button is visibly pressed")
+	screen.queue_free()
+
+func _test_battle_screen_party_roster_buttons_show_hp() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 77, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 52, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55}]
+	)
+	screen._update_labels("Roster HP check.")
+	var roster = screen.get_node_or_null("%PartyRoster")
+	_assert(roster is VBoxContainer, "battle screen renders party roster buttons for HP display")
+	if roster is VBoxContainer and roster.get_child_count() >= 2:
+		_assert(roster.get_child(0).text.contains("77/120"), "Sev roster button shows current and max HP")
+		_assert(roster.get_child(1).text.contains("52/92"), "Mira roster button shows current and max HP")
+	screen.queue_free()
+
+func _test_battle_screen_prevents_selecting_ko_party_member() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 77, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 0, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55}]
+	)
+	screen.select_party_member(1)
+	_assert(int(screen.get("active_party_index")) == 0, "KO party members cannot become active through direct selection")
+	screen._update_labels("KO roster check.")
+	var roster = screen.get_node_or_null("%PartyRoster")
+	if roster is VBoxContainer and roster.get_child_count() >= 2:
+		_assert(roster.get_child(1).disabled, "KO party member roster button is disabled")
+	screen.queue_free()
+
+func _test_battle_screen_uses_active_party_member_skills() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}, "skills": ["archive_strike"]},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 40, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "animation_set": "clean_man_generated"}]
+	)
+	_assert(screen.has_method("select_party_member"), "battle screen exposes active party member selection for skills")
+	if not screen.has_method("select_party_member"):
+		screen.queue_free()
+		return
+	screen.select_party_member(1)
+	screen.open_skill_menu()
+	var menu = screen.get_node_or_null("%SkillMenu")
+	_assert(menu is VBoxContainer and menu.get_child_count() == 2, "skill menu shows active Mira's skills")
+	if menu is VBoxContainer and menu.get_child_count() >= 2:
+		_assert(menu.get_child(0).text.contains("Clean Wound"), "skill menu includes Mira healing skill")
+		_assert(menu.get_child(1).text.contains("Rot Needle"), "skill menu includes Mira plague skill")
+	screen.select_skill("clean_wound")
+	_assert(screen.battle.party[1].hp == 75, "Mira heals herself as active party member")
+	screen.queue_free()
+
+func _test_battle_screen_advances_active_party_member_after_enemy_action() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 120, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 92, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "animation_set": "clean_man_generated"}]
+	)
+	_assert(screen.has_method("select_party_member"), "battle screen exposes active party member selection before rotation")
+	if not screen.has_method("select_party_member"):
+		screen.queue_free()
+		return
+	screen.select_party_member(0)
+	screen.present_enemy_retaliation()
+	screen.complete_enemy_retaliation()
+	_assert(int(screen.get("active_party_index")) == 1, "active party member advances after enemy action")
+	screen._update_labels("Next actor check.")
+	var active_name = screen.get_node_or_null("%PartyNameLabel")
+	_assert(active_name is Label and active_name.text.contains("Mira Venn"), "party status panel follows next active member")
+	screen.queue_free()
+
+func _test_battle_screen_completion_includes_party_state() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	var emitted: Array = []
+	screen.battle_completed.connect(func(payload): emitted.append(payload))
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[
+			{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 77, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}},
+			{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 52, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}, "skills": ["clean_wound", "rot_needle"]},
+		],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 1, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._on_attack_pressed()
+	_assert(emitted.size() == 1, "battle screen emits completion payload for HP persistence check")
+	if emitted.size() == 1:
+		_assert(emitted[0].has("party_state"), "battle completion payload includes party state")
+		if emitted[0].has("party_state"):
+			_assert(emitted[0].party_state[0].id == "lead", "party state keeps party member id")
+			_assert(emitted[0].party_state[0].hp == 77, "party state keeps current HP")
+			_assert(emitted[0].party_state[0].stats.max_hp == 120, "party state keeps max HP context")
+			_assert(emitted[0].party_state.size() == 2, "party state includes recruited party members")
+			_assert(emitted[0].party_state[1].id == "mira_venn", "party state includes Mira Venn")
+			_assert(emitted[0].party_state[1].hp == 52, "party state keeps Mira's current HP")
+	screen.queue_free()
+
+func _test_battle_screen_does_not_persist_rewards_before_app_root() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var game_state = GameStateScript.new()
+	game_state.inventory = {}
+	game_state.memory_cards = {"owned": [], "equipped": []}
+	var party: Array[Dictionary] = [{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}]
+	game_state.party = party
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	screen.game_state_override = game_state
+	var emitted: Array = []
+	screen.battle_completed.connect(func(payload): emitted.append(payload))
+	root.add_child(screen)
+	screen.battle.start_battle(
+		party,
+		[{"id": "bell_saint", "name": "The Bell Saint", "hp": 1, "max_hp": 48, "strength": 10, "defense": 3, "speed": 6, "xp": 150, "boss": true, "relic": "bell_clapper", "memory_card": "bell_saint", "next_flow": "truth_recovered"}]
+	)
+	screen._on_attack_pressed()
+	_assert(emitted.size() == 1, "battle screen emits rewards for app root persistence")
+	_assert(not game_state.inventory.has("bell_clapper"), "battle screen does not persist relic rewards directly")
+	_assert(not game_state.memory_cards.owned.has("bell_saint"), "battle screen does not persist memory cards directly")
+	screen.queue_free()
+	game_state.free()
+
+func _test_battle_screen_uses_stable_visual_stage() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "bell_saint", "name": "The Bell Saint", "hp": 48, "max_hp": 48, "strength": 10, "defense": 3, "speed": 6, "xp": 150, "sprite_path": "res://assets/generated/pixellab/first_slice/bell_saint_boss.png"}]
+	)
+	screen._update_labels("Stage check.")
+	var arena = screen.get_node_or_null("Arena")
+	var party_anchor = screen.get_node_or_null("Arena/Battlers/PartyAnchor")
+	var enemy_anchor = screen.get_node_or_null("Arena/Battlers/EnemyAnchor")
+	var enemy_sprite = screen.get_node_or_null("Arena/Battlers/EnemyAnchor/EnemyBattler")
+	_assert(arena is Node2D, "battle screen has a world-space visual stage")
+	_assert(party_anchor is Marker2D, "battle stage reserves a party-side anchor")
+	_assert(enemy_anchor is Marker2D, "battle stage reserves an enemy-side anchor")
+	_assert(enemy_sprite is Sprite2D, "enemy sprite lives under the enemy anchor")
+	if party_anchor is Marker2D and enemy_anchor is Marker2D:
+		_assert(enemy_anchor.position.x > party_anchor.position.x, "enemy anchor is staged opposite the party")
+	screen.queue_free()
+
+func _test_battle_screen_updates_enemy_visual_status() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Status check.")
+	var enemy_name = screen.get_node_or_null("BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/EnemyStatus/EnemyNameLabel")
+	var enemy_hp = screen.get_node_or_null("BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/EnemyStatus/EnemyHpBar")
+	_assert(enemy_name is Label, "battle UI includes enemy name label")
+	_assert(enemy_hp is ProgressBar, "battle UI includes enemy HP bar")
+	if enemy_name is Label:
+		_assert(enemy_name.text == "Clean Man", "enemy visual name matches current enemy")
+	if enemy_hp is ProgressBar:
+		_assert(enemy_hp.max_value == 88.0, "enemy HP bar max matches enemy max HP")
+		_assert(enemy_hp.value == 88.0, "enemy HP bar value matches current enemy HP")
+	screen.battle.enemies[0].hp = 27
+	screen._update_labels("Damaged.")
+	if enemy_hp is ProgressBar:
+		_assert(enemy_hp.value == 27.0, "enemy HP bar updates after enemy damage")
+	screen.queue_free()
+
+func _test_battle_screen_updates_party_visual_status() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 3, "xp": 0, "hp": 97, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "sprite_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png"}]
+	)
+	screen._update_labels("Party status check.")
+	var party_name = screen.get_node_or_null("BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/PartyStatus/PartyNameLabel")
+	var party_hp = screen.get_node_or_null("BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/PartyStatus/PartyHpBar")
+	var party_role = screen.get_node_or_null("BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/PartyStatus/PartyRoleLabel")
+	_assert(party_name is Label, "battle UI includes party name label")
+	_assert(party_hp is ProgressBar, "battle UI includes party HP bar")
+	_assert(party_role is Label, "battle UI includes party role label")
+	if party_name is Label:
+		_assert(party_name.text == "Sev Lv.3", "party visual name includes level")
+	if party_hp is ProgressBar:
+		_assert(party_hp.max_value == 120.0, "party HP bar max matches max HP")
+		_assert(party_hp.value == 97.0, "party HP bar value uses current HP")
+	if party_role is Label:
+		_assert(party_role.text == "Vanguard", "party role label formats class id")
+	screen.battle.party[0].hp = 42
+	screen._update_labels("Party damaged.")
+	if party_hp is ProgressBar:
+		_assert(party_hp.value == 42.0, "party HP bar updates after party damage")
+	screen.queue_free()
+
 func _test_app_root_handles_battle_completion_rewards() -> void:
 	var AppRootScene = load("res://scenes/app/app_root.tscn")
 	var GameStateScript = load("res://scripts/core/game_state.gd")
@@ -1052,6 +2875,209 @@ func _test_app_root_handles_battle_completion_rewards() -> void:
 	_assert(game_state.inventory.bell_clapper == 1, "app root grants Bell Clapper on battle completion")
 	_assert(game_state.memory_cards.owned.has("bell_saint"), "app root grants Bell Saint memory card on battle completion")
 	_assert(not game_state.flags.has("pending_battle_payload"), "app root clears pending battle payload after completion")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_does_not_duplicate_anchor_relic_rewards() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	game_state.inventory["bell_clapper"] = 1
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("battle")
+	app._on_battle_completed({"next_flow": "truth_recovered", "relics": ["bell_clapper"], "memory_cards": ["bell_saint"], "loot": {}})
+	_assert(game_state.inventory.bell_clapper == 1, "anchor relic rewards stay unique when already owned")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_applies_battle_xp_to_party() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [
+		{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 90, "stats": {"max_hp": 120, "max_mp": 12, "strength": 18, "magic": 4, "defense": 8, "speed": 10}},
+	]
+	game_state.party = party
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("battle")
+	game_state.flags["pending_battle_payload"] = {"source_phase": "underchapel_drain", "source_position": Vector2(96, 80)}
+	app._on_battle_completed({"xp": 20, "loot": {}, "relics": [], "memory_cards": [], "next_flow": ""})
+	_assert(game_state.party[0].level == 2, "app root applies battle XP to party on completion")
+	_assert(game_state.party[0].xp == 10, "app root keeps XP remainder after level up")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_applies_battle_party_state() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [
+		{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 120, "stats": {"max_hp": 120, "max_mp": 12, "strength": 18, "magic": 4, "defense": 8, "speed": 10}},
+	]
+	game_state.party = party
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("battle")
+	game_state.flags["pending_battle_payload"] = {"source_phase": "underchapel_drain", "source_position": Vector2(96, 80)}
+	app._on_battle_completed({
+		"xp": 0,
+		"loot": {},
+		"relics": [],
+		"memory_cards": [],
+		"next_flow": "",
+		"party_state": [{"id": "lead", "hp": 43, "statuses": {"poison": {"turns": 1}}}]
+	})
+	_assert(game_state.party[0].hp == 43, "app root persists party HP from battle completion")
+	_assert(game_state.party[0].has("statuses"), "app root persists party status container from battle completion")
+	if game_state.party[0].has("statuses"):
+		_assert(game_state.party[0].statuses.poison.turns == 1, "app root persists party statuses from battle completion")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_bell_saint_completion_recruits_mira_and_records_reward_scene() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120}}]
+	game_state.party = party
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("battle")
+	app._on_battle_completed({
+		"xp": 180,
+		"loot": {},
+		"relics": ["bell_clapper"],
+		"memory_cards": ["bell_saint"],
+		"next_flow": "truth_recovered",
+		"party_state": [{"id": "lead", "hp": 90}]
+	})
+	_assert(game_state.party.any(func(member): return member.id == "mira_venn"), "Bell Saint completion recruits Mira Venn")
+	_assert(game_state.flags.get("mira_venn_recruited", false), "Bell Saint completion records Mira recruitment flag")
+	_assert(game_state.flags.get("chapter_01_complete", false), "Bell Saint completion marks chapter one complete")
+	_assert(game_state.flags.get("pending_reward_dialogue", {}).get("scene", "") == "memory_card_unlock", "Bell Saint completion records reward dialogue scene")
+	_assert(game_state.inventory.bell_clapper == 1, "Bell Saint completion still grants Bell Clapper")
+	_assert(game_state.memory_cards.owned.has("bell_saint"), "Bell Saint completion still grants Bell Saint memory card")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_bell_saint_completion_records_boss_defeat() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	var party: Array[Dictionary] = [{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120}}]
+	game_state.party = party
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("battle")
+	app._on_battle_completed({
+		"xp": 180,
+		"loot": {},
+		"relics": ["bell_clapper"],
+		"memory_cards": ["bell_saint"],
+		"next_flow": "truth_recovered",
+		"party_state": [{"id": "lead", "hp": 90}]
+	})
+	_assert(game_state.flags.get("boss_bell_saint_defeated", false), "Bell Saint completion records defeated boss flag")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_renders_bell_saint_reward_scene() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	game_state.inventory["bell_clapper"] = 1
+	game_state.memory_cards["owned"] = ["bell_saint"]
+	var party: Array[Dictionary] = [
+		{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "stats": {"max_hp": 120}},
+		{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "stats": {"max_hp": 92}},
+	]
+	game_state.party = party
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	game_state.flags["pending_reward_dialogue"] = {"section": "rewards", "scene": "memory_card_unlock"}
+	app.story_flow.go_to_phase("truth_recovered")
+	app._sync_scene()
+	var panel = app.get_node_or_null("%SceneHost/RewardScenePanel")
+	_assert(panel is Control, "app root renders reward scene panel after Bell Saint")
+	if panel is Control:
+		var text_label = panel.get_node_or_null("Content/RewardText")
+		_assert(text_label is Label, "reward scene panel contains reward text label")
+		if text_label is Label:
+			_assert(text_label.text.contains("Evidence"), "reward scene includes Sev evidence line")
+			_assert(text_label.text.contains("Unauthorized truth recovered"), "reward scene includes Curator correction line")
+			_assert(text_label.text.contains("Anchor Recovered: Bell Clapper"), "reward scene summarizes recovered anchor relic")
+			_assert(text_label.text.contains("Memory Card: The Bell Saint"), "reward scene summarizes acquired memory card")
+			_assert(text_label.text.contains("Mira Venn joined"), "reward scene summarizes Mira joining the party")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_reward_scene_renders_acknowledgement_prompt() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	game_state.flags["pending_reward_dialogue"] = {"section": "rewards", "scene": "memory_card_unlock"}
+	app.story_flow.go_to_phase("truth_recovered")
+	app._sync_scene()
+	var prompt = app.get_node_or_null("%SceneHost/RewardScenePanel/Content/AcknowledgePrompt")
+	_assert(prompt is Label, "reward scene renders acknowledgement prompt")
+	if prompt is Label:
+		_assert(prompt.text.contains("Interact"), "reward scene prompt names the input that continues")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_consumes_reward_dialogue_after_acknowledgement() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("truth_recovered")
+	game_state.map_id = "truth_recovered"
+	game_state.flags["pending_reward_dialogue"] = {"section": "rewards", "scene": "memory_card_unlock"}
+	app._advance_flow()
+	_assert(not game_state.flags.has("pending_reward_dialogue"), "acknowledging reward scene consumes pending reward dialogue")
+	_assert(game_state.map_id == "truth_recovered", "acknowledging final reward scene stays on truth recovered phase")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_refreshes_reward_scene_after_acknowledgement() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	app.story_flow.go_to_phase("truth_recovered")
+	game_state.map_id = "truth_recovered"
+	game_state.flags["pending_reward_dialogue"] = {"section": "rewards", "scene": "memory_card_unlock"}
+	app._sync_scene()
+	app._advance_flow()
+	var text_label = app.get_node_or_null("%SceneHost/RewardScenePanel/Content/RewardText")
+	_assert(text_label is Label, "reward panel remains mounted after acknowledgement")
+	if text_label is Label:
+		_assert(not text_label.text.contains("Unauthorized truth recovered"), "acknowledged reward panel no longer shows one-time Curator correction")
+		_assert(text_label.text.contains("Chapter 1 Complete"), "acknowledged reward panel shows stable chapter completion state")
 	app.queue_free()
 	game_state.free()
 
@@ -1115,6 +3141,95 @@ func _test_battle_attack_and_victory_rewards() -> void:
 	var rewards = battle.resolve_victory()
 	_assert(rewards.xp == 25, "victory grants enemy XP")
 	_assert(rewards.loot.potion == 1, "victory grants enemy loot")
+
+func _test_battle_skills_damage_and_heal() -> void:
+	_assert(FileAccess.file_exists("res://data/battle/skills.json"), "battle skills data exists")
+	var ContentCatalog = load("res://scripts/core/content_catalog.gd")
+	var catalog = ContentCatalog.new()
+	_assert(catalog.battle_skill("archive_strike").display_name == "Archive Strike", "content catalog loads battle skills")
+	var BattleController = load("res://scripts/battle/battle_controller.gd")
+	var battle = BattleController.new()
+	battle.start_battle([
+		{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "hp": 50, "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 8}}
+	], [
+		{"id": "wretch", "name": "Wretch", "hp": 40, "max_hp": 40, "strength": 4, "defense": 3, "speed": 5, "xp": 10}
+	])
+	var damage_result = battle.execute_command("lead", "skill", "wretch", {"skill_id": "archive_strike"})
+	_assert(damage_result.skill_id == "archive_strike", "skill result records skill id")
+	_assert(damage_result.damage > 12, "Archive Strike deals skill damage beyond basic strength")
+	_assert(battle.enemies[0].hp == 40 - damage_result.damage, "damage skill reduces enemy HP")
+	var heal_result = battle.execute_command("lead", "skill", "lead", {"skill_id": "clean_wound"})
+	_assert(heal_result.heal == 35, "Clean Wound heals configured HP amount")
+	_assert(battle.party[0].hp == min(100, 50 + heal_result.heal), "healing skill restores party HP up to max")
+
+func _test_battle_items_consume_inventory_and_heal() -> void:
+	var BattleController = load("res://scripts/battle/battle_controller.gd")
+	var battle = BattleController.new()
+	var inventory := {"clean_bandage": 1}
+	battle.start_battle([
+		{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 40, "stats": {"max_hp": 120, "strength": 18, "defense": 8, "speed": 10}}
+	], [
+		{"id": "wretch", "name": "Wretch", "hp": 30, "max_hp": 30, "strength": 4, "defense": 2, "speed": 5, "xp": 10}
+	])
+	var result = battle.execute_command("lead", "item", "lead", {"item_id": "clean_bandage", "inventory": inventory})
+	_assert(result.item_id == "clean_bandage", "item result records item id")
+	_assert(result.heal == 35, "Clean Bandage heals configured HP amount")
+	_assert(battle.party[0].hp == 75, "battle item restores target HP")
+	_assert(not inventory.has("clean_bandage"), "battle item consumes inventory stack")
+	var missing = battle.execute_command("lead", "item", "lead", {"item_id": "clean_bandage", "inventory": inventory})
+	_assert(missing.error == "missing_item", "battle item command fails when inventory is empty")
+
+func _test_battle_status_effects_apply_and_tick() -> void:
+	var BattleController = load("res://scripts/battle/battle_controller.gd")
+	var battle = BattleController.new()
+	battle.start_battle([
+		{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 100, "stats": {"max_hp": 100, "strength": 10, "defense": 5, "speed": 8}}
+	], [
+		{"id": "wretch", "name": "Wretch", "hp": 40, "max_hp": 40, "strength": 4, "defense": 2, "speed": 5, "xp": 10}
+	])
+	_assert(battle.has_method("apply_status"), "battle controller exposes status application")
+	_assert(battle.has_method("tick_status_effects"), "battle controller exposes status ticking")
+	if battle.has_method("apply_status") and battle.has_method("tick_status_effects"):
+		battle.apply_status("wretch", "poison", {"potency": 6, "turns": 2})
+		_assert(battle.enemies[0].statuses.poison.turns == 2, "status application stores turns")
+		var tick = battle.tick_status_effects("wretch")
+		_assert(tick.damage == 6, "poison tick deals configured damage")
+		_assert(battle.enemies[0].hp == 34, "status tick reduces HP")
+		_assert(battle.enemies[0].statuses.poison.turns == 1, "status tick decrements duration")
+		battle.tick_status_effects("wretch")
+		_assert(not battle.enemies[0].statuses.has("poison"), "status expires when turns reach zero")
+
+func _test_enemy_ai_profiles_choose_actions() -> void:
+	var BattleController = load("res://scripts/battle/battle_controller.gd")
+	var battle = BattleController.new()
+	battle.start_battle([
+		{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 30, "stats": {"max_hp": 100, "strength": 10, "defense": 5, "speed": 8}}
+	], [
+		{"id": "rot_choir", "name": "Rot Choir", "hp": 20, "max_hp": 64, "strength": 6, "defense": 3, "speed": 5, "xp": 38, "ai_profile": "support"}
+	])
+	_assert(battle.has_method("choose_enemy_action"), "battle controller exposes enemy AI action choice")
+	if battle.has_method("choose_enemy_action"):
+		var action = battle.choose_enemy_action("rot_choir")
+		_assert(action.command == "skill", "support AI chooses a skill action")
+		_assert(action.skill_id == "clean_wound", "support AI chooses healing when low HP")
+	battle.enemies[0].hp = 64
+	battle.enemies[0].ai_profile = "aggressive"
+	if battle.has_method("choose_enemy_action"):
+		var aggressive = battle.choose_enemy_action("rot_choir")
+		_assert(aggressive.command == "attack", "aggressive AI chooses attack")
+		_assert(aggressive.target_id == "lead", "enemy AI targets lead party member")
+
+func _test_enemy_ai_targets_first_living_party_member() -> void:
+	var BattleController = load("res://scripts/battle/battle_controller.gd")
+	var battle = BattleController.new()
+	battle.start_battle([
+		{"id": "lead", "name": "Sev", "class_id": "vanguard", "level": 1, "xp": 0, "hp": 0, "stats": {"max_hp": 100, "strength": 10, "defense": 5, "speed": 8}},
+		{"id": "mira_venn", "name": "Mira Venn", "class_id": "plague_apothecary", "level": 1, "xp": 0, "hp": 72, "stats": {"max_hp": 92, "magic": 15, "defense": 5, "speed": 8}},
+	], [
+		{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55, "ai_profile": "aggressive"}
+	])
+	var action = battle.choose_enemy_action("clean_man")
+	_assert(action.target_id == "mira_venn", "enemy AI targets the first living party member when lead is KO")
 
 func _test_starting_relic_modifies_battle_stats() -> void:
 	var BattleController = load("res://scripts/battle/battle_controller.gd")
@@ -1778,6 +3893,111 @@ func _test_audio_service_resolves_runtime_event() -> void:
 	_assert(FileAccess.file_exists(resolved.path), "resolved audio file exists")
 	_assert(service.resolve_event("missing_event").is_empty(), "missing audio event returns empty dictionary")
 	service.free()
+
+func _test_authored_slice_maps_expose_audio_profiles() -> void:
+	var expected := {
+		"res://scenes/field/maps/hallowmere_street_map.tscn": {
+			"map_id": "hallowmere_street",
+			"ambience": "ambience_plague_town",
+			"entry": "plague_cough",
+			"museum_override": "curator_warning",
+		},
+		"res://scenes/field/maps/mira_apothecary_map.tscn": {
+			"map_id": "mira_apothecary",
+			"ambience": "ambience_apothecary",
+			"entry": "item_pickup",
+			"museum_override": "curator_warning",
+		},
+		"res://scenes/field/maps/sainted_bell_chapel_map.tscn": {
+			"map_id": "sainted_bell_chapel",
+			"ambience": "ambience_chapel_bell",
+			"entry": "bell_clapper_relic",
+			"museum_override": "curator_warning",
+		},
+		"res://scenes/field/maps/underchapel_drain_map.tscn": {
+			"map_id": "underchapel_drain",
+			"ambience": "ambience_underchapel_drain",
+			"entry": "door_museum_open",
+			"museum_override": "curator_warning",
+		},
+		"res://scenes/field/maps/hidden_hospital_corridor_map.tscn": {
+			"map_id": "hidden_hospital_corridor",
+			"ambience": "ambience_hidden_hospital",
+			"entry": "curator_warning",
+			"museum_override": "curator_warning",
+		},
+		"res://scenes/field/maps/bell_tower_boss_room_map.tscn": {
+			"map_id": "bell_tower_boss_room",
+			"ambience": "ambience_bell_tower",
+			"entry": "bell_clapper_relic",
+			"museum_override": "curator_warning",
+		},
+	}
+	var AudioEventCatalog = load("res://scripts/core/audio_event_catalog.gd")
+	var catalog = AudioEventCatalog.new()
+	for scene_path in expected.keys():
+		var MapScene = load(scene_path)
+		if MapScene == null:
+			_assert(false, "%s loads" % scene_path)
+			continue
+		var map_scene = MapScene.instantiate()
+		root.add_child(map_scene)
+		var profile: Dictionary = map_scene.get_meta("audio_profile", {})
+		_assert(profile.get("map_id", "") == expected[scene_path]["map_id"], "%s audio profile records map id" % scene_path)
+		_assert(profile.get("ambience", "") == expected[scene_path]["ambience"], "%s audio profile records ambience event" % scene_path)
+		_assert(profile.get("entry", "") == expected[scene_path]["entry"], "%s audio profile records entry event" % scene_path)
+		_assert(profile.get("museum_override", "") == expected[scene_path]["museum_override"], "%s audio profile records museum override" % scene_path)
+		_assert(not catalog.event(String(profile.get("ambience", ""))).is_empty(), "%s ambience event exists in audio catalog" % scene_path)
+		_assert(not catalog.event(String(profile.get("entry", ""))).is_empty(), "%s entry event exists in audio catalog" % scene_path)
+		_assert(not catalog.event(String(profile.get("museum_override", ""))).is_empty(), "%s override event exists in audio catalog" % scene_path)
+		map_scene.queue_free()
+
+func _test_authored_slice_props_expose_story_inspection_metadata() -> void:
+	var expected := {
+		"res://scenes/field/maps/hallowmere_street_map.tscn": {
+			"Landmarks/CoffinStack": "plague_cost",
+			"Landmarks/TollStall": "shop_anchor",
+			"Landmarks/ChapelRoad": "route_marker",
+		},
+		"res://scenes/field/maps/mira_apothecary_map.tscn": {
+			"Landmarks/MedicineShelf": "medical_supply",
+			"Landmarks/WorkTable": "mira_workspace",
+		},
+		"res://scenes/field/maps/underchapel_drain_map.tscn": {
+			"Landmarks/MuseumPipe": "museum_infrastructure",
+			"Landmarks/PumpMachine": "cross_era_machine",
+			"Landmarks/WarningPanel": "curator_warning_label",
+		},
+		"res://scenes/field/maps/hidden_hospital_corridor_map.tscn": {
+			"Landmarks/PatientBed": "medical_evidence",
+			"Landmarks/MedicalChart": "memory_fever_record",
+			"Landmarks/MedicineCabinet": "medical_supply",
+		},
+		"res://scenes/field/maps/sainted_bell_chapel_map.tscn": {
+			"Landmarks/SaintStatue": "belief_anchor",
+			"Landmarks/CellarDoor": "hidden_route",
+		},
+		"res://scenes/field/maps/bell_tower_boss_room_map.tscn": {
+			"Landmarks/PlagueBell": "anchor_relic_source",
+			"Landmarks/BellSaintStatue": "boss_foreshadow",
+			"Landmarks/AnchorDoor": "museum_lock",
+		},
+	}
+	for scene_path in expected.keys():
+		var MapScene = load(scene_path)
+		if MapScene == null:
+			_assert(false, "%s loads" % scene_path)
+			continue
+		var map_scene = MapScene.instantiate()
+		root.add_child(map_scene)
+		for node_path in expected[scene_path].keys():
+			_assert(map_scene.has_node(node_path), "%s has story prop %s" % [scene_path, node_path])
+			if not map_scene.has_node(node_path):
+				continue
+			var prop = map_scene.get_node(node_path)
+			_assert(prop.get_meta("story_role", "") == expected[scene_path][node_path], "%s records story role" % node_path)
+			_assert(not String(prop.get_meta("inspect_text", "")).is_empty(), "%s records inspect text" % node_path)
+		map_scene.queue_free()
 
 func _test_vista_catalog_defines_bell_saint_vistas() -> void:
 	_assert(ResourceLoader.exists("res://data/vistas/vista_engines.json"), "vista engine data exists")

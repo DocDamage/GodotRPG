@@ -1,7 +1,10 @@
 /Assets/
 /_reference/
+/Extracted Assets/
+/.secrets/
 
 .godot/
 .import/
+__pycache__/
 *.tmp
 *.log

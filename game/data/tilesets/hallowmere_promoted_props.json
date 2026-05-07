@@ -1,0 +1,37 @@
+{
+  "source_library": "Assets/Cut Sprites/CuteSCKR/Medieval Plague Town Tileset",
+  "promotions": [
+    {
+      "id": "toll_stall",
+      "runtime_name": "toll_stall.png",
+      "source_sprite_id": "plague age/1/1_43",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Plague Town Tileset/plague age/1/1_43.png",
+      "output_path": "res://assets/tilesets/first_slice/hallowmere/sliced/toll_stall.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "chapel_sign",
+      "runtime_name": "chapel_sign.png",
+      "source_sprite_id": "plague age/2/2_10",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Plague Town Tileset/plague age/2/2_10.png",
+      "output_path": "res://assets/tilesets/first_slice/hallowmere/sliced/chapel_sign.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "coffin_stack",
+      "runtime_name": "coffin_stack.png",
+      "source_sprite_id": "plague age/1/1_86",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Plague Town Tileset/plague age/1/1_86.png",
+      "output_path": "res://assets/tilesets/first_slice/hallowmere/sliced/coffin_stack.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "refuse_pile",
+      "runtime_name": "refuse_pile.png",
+      "source_sprite_id": "plague age/2/2_43",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Medieval Plague Town Tileset/plague age/2/2_43.png",
+      "output_path": "res://assets/tilesets/first_slice/hallowmere/sliced/refuse_pile.png",
+      "review_status": "candidate"
+    }
+  ]
+}

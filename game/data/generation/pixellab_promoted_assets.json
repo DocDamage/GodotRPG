@@ -1,0 +1,46 @@
+{
+  "source_library": "Extracted Assets/generated/pixellab/first_slice_processed",
+  "promotions": [
+    {
+      "id": "plague_bell",
+      "runtime_name": "plague_bell.png",
+      "source_path": "C:/dev/Godot Game/Extracted Assets/generated/pixellab/first_slice_processed/plague_bell.png",
+      "output_path": "res://assets/generated/pixellab/first_slice/plague_bell.png",
+      "review_status": "approved_candidate",
+      "use": "Bell Tower boss room anchor prop"
+    },
+    {
+      "id": "bell_rope",
+      "runtime_name": "bell_rope.png",
+      "source_path": "C:/dev/Godot Game/Extracted Assets/generated/pixellab/first_slice_processed/bell_rope.png",
+      "output_path": "res://assets/generated/pixellab/first_slice/bell_rope.png",
+      "review_status": "approved_candidate",
+      "use": "Bell Tower ritual rope prop"
+    },
+    {
+      "id": "bell_clapper_relic",
+      "runtime_name": "bell_clapper_relic.png",
+      "source_path": "C:/dev/Godot Game/Extracted Assets/generated/pixellab/first_slice_processed/bell_clapper_relic.png",
+      "output_path": "res://assets/generated/pixellab/first_slice/bell_clapper_relic.png",
+      "review_status": "approved_candidate",
+      "use": "Bell Clapper anchor relic icon candidate"
+    },
+    {
+      "id": "clean_man_enemy",
+      "runtime_name": "clean_man_enemy.png",
+      "source_path": "C:/dev/Godot Game/Extracted Assets/generated/pixellab/first_slice_processed/clean_man_enemy.png",
+      "output_path": "res://assets/generated/pixellab/first_slice/clean_man_enemy.png",
+      "review_status": "approved_candidate",
+      "use": "Clean Man sanitation enemy battle sprite"
+    },
+    {
+      "id": "bell_saint_boss",
+      "runtime_name": "bell_saint_boss.png",
+      "source_path": "C:/dev/Godot Game/Extracted Assets/generated/pixellab/first_slice_processed/bell_saint_boss.png",
+      "output_path": "res://assets/generated/pixellab/first_slice/bell_saint_boss.png",
+      "review_status": "approved_candidate",
+      "use": "Bell Saint first-slice boss battle sprite"
+    }
+  ],
+  "deferred": []
+}

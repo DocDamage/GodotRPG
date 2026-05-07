@@ -1,0 +1,75 @@
+{
+  "api_base": "https://api.pixellab.ai/v2",
+  "endpoint": "/create-image-bitforge",
+  "output_root": "C:/dev/Godot Game/Extracted Assets/generated/pixellab/first_slice",
+  "processed_output_root": "C:/dev/Godot Game/Extracted Assets/generated/pixellab/first_slice_processed",
+  "shared": {
+    "negative_description": "noise texture, abstract texture, blue noise, smooth vector art, painterly illustration, blurry, anti-aliased, high resolution render, 3d render, realistic lighting, text labels, watermark, huge background, cropped object",
+    "style_description": "top-down JRPG pixel art prop, 16-bit style, crisp pixel edges, selective dark outline, medium shading, limited muted plague-town palette, transparent background, readable at game scale",
+    "use_style_references": false,
+    "style_reference_paths": [
+      "res://assets/tilesets/first_slice/chapel/sliced/saint_statue.png",
+      "res://assets/tilesets/first_slice/chapel/sliced/chapel_lantern.png",
+      "res://assets/tilesets/first_slice/hallowmere/sliced/coffin_stack.png",
+      "res://assets/tilesets/first_slice/hospital/sliced/patient_bed.png"
+    ],
+    "palette_reference_paths": [
+      "res://assets/tilesets/first_slice/chapel/sliced/saint_statue.png",
+      "res://assets/tilesets/first_slice/chapel/sliced/chapel_lantern.png",
+      "res://assets/tilesets/first_slice/hallowmere/sliced/coffin_stack.png",
+      "res://assets/tilesets/first_slice/hallowmere/sliced/refuse_pile.png",
+      "res://assets/tilesets/first_slice/hospital/sliced/patient_bed.png"
+    ],
+    "postprocess": {
+      "palette_colors": 32,
+      "alpha_threshold": 16,
+      "nearest_neighbor_scale": 1,
+      "trim_transparent_border": true
+    },
+    "image_size": {"width": 96, "height": 96},
+    "no_background": true,
+    "text_guidance_scale": 7.0,
+    "style_strength": 20.0,
+    "outline": "selective outline",
+    "shading": "medium shading",
+    "detail": "medium detail",
+    "view": "high top-down",
+    "seed": 1701
+  },
+  "requests": [
+    {
+      "id": "plague_bell",
+      "output_name": "plague_bell.png",
+      "image_size": {"width": 128, "height": 128},
+      "description": "The Last World Museum asset: one large cracked hanging medieval plague bell, clear bronze bell silhouette with open mouth at bottom, suspended from a short dark wooden beam and iron bracket, no pile of objects, no extra bells, subtle sickly green patina, ominous top-down JRPG map prop, no text, no background."
+    },
+    {
+      "id": "bell_rope",
+      "output_name": "bell_rope.png",
+      "image_size": {"width": 64, "height": 96},
+      "description": "The Last World Museum asset: a frayed hanging bell rope with a small iron hook and wrapped cloth knots, old chapel object, vertical top-down JRPG prop, no text, no background."
+    },
+    {
+      "id": "bell_clapper_relic",
+      "output_name": "bell_clapper_relic.png",
+      "image_size": {"width": 64, "height": 64},
+      "description": "The Last World Museum asset: broken bell clapper relic, dark iron core with faint pale gold edge and tiny sickly green glow, important JRPG key item icon, readable at small size, no text, no background."
+    },
+    {
+      "id": "clean_man_enemy",
+      "output_name": "clean_man_enemy.png",
+      "image_size": {"width": 96, "height": 96},
+      "init_image_path": "C:/dev/Godot Game/Assets/cleanman/clean man.png",
+      "init_image_strength": 520,
+      "description": "The Last World Museum asset: convert this reference into a single top-down JRPG pixel art enemy sprite. Preserve the sterile white sanitation suit, blank hooded mask, black rubber gloves, back-mounted tank, metal sprayer wand, clipboard tag, and unsettling hospital-cleaner silhouette. Make one humanoid only, no companion, no second person, no sword, no fantasy armor. Crisp 16-bit pixel art, selective dark outline, muted off-white cloth, dark rubber, tarnished metal, faint sickly green accents. Transparent background. No text."
+    },
+    {
+      "id": "bell_saint_boss",
+      "output_name": "bell_saint_boss.png",
+      "image_size": {"width": 160, "height": 160},
+      "init_image_path": "C:/dev/Godot Game/Assets/plaguebell/plague-bell.png",
+      "init_image_strength": 520,
+      "description": "The Last World Museum asset: convert this reference into a top-down JRPG pixel art boss sprite. Preserve the giant cracked plague bell body, embedded saint face, hanging chains, white prayer ribbons, red hospital tubing, small dangling bells, and tragic holy-horror mood. Make it readable at 160x160, crisp 16-bit pixel art, selective dark outline, muted bronze, bone white, dark iron, sickly green, and dried red accents. Transparent background. No text."
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "source_library": "Assets/Cut Sprites/CuteSCKR/Modern Waste Management Plant Pixel Art Tileset Pack",
+  "promotions": [
+    {
+      "id": "museum_pipe",
+      "runtime_name": "museum_pipe.png",
+      "source_sprite_id": "1/1_1",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Modern Waste Management Plant Pixel Art Tileset Pack/1/1_1.png",
+      "output_path": "res://assets/tilesets/first_slice/underchapel/sliced/museum_pipe.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "pump_machine",
+      "runtime_name": "pump_machine.png",
+      "source_sprite_id": "1/1_29",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Modern Waste Management Plant Pixel Art Tileset Pack/1/1_29.png",
+      "output_path": "res://assets/tilesets/first_slice/underchapel/sliced/pump_machine.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "drain_grate",
+      "runtime_name": "drain_grate.png",
+      "source_sprite_id": "1/1_4",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Modern Waste Management Plant Pixel Art Tileset Pack/1/1_4.png",
+      "output_path": "res://assets/tilesets/first_slice/underchapel/sliced/drain_grate.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "service_ladder",
+      "runtime_name": "service_ladder.png",
+      "source_sprite_id": "1/1_26",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Modern Waste Management Plant Pixel Art Tileset Pack/1/1_26.png",
+      "output_path": "res://assets/tilesets/first_slice/underchapel/sliced/service_ladder.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "warning_panel",
+      "runtime_name": "warning_panel.png",
+      "source_sprite_id": "2/2_70",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Modern Waste Management Plant Pixel Art Tileset Pack/2/2_70.png",
+      "output_path": "res://assets/tilesets/first_slice/underchapel/sliced/warning_panel.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "waste_bags",
+      "runtime_name": "waste_bags.png",
+      "source_sprite_id": "2/2_82",
+      "source_path": "C:/dev/Godot Game/Assets/Cut Sprites/CuteSCKR/Modern Waste Management Plant Pixel Art Tileset Pack/2/2_82.png",
+      "output_path": "res://assets/tilesets/first_slice/underchapel/sliced/waste_bags.png",
+      "review_status": "candidate"
+    }
+  ]
+}

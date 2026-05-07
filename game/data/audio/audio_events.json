@@ -18,6 +18,48 @@
       "path": "res://assets/audio/ui/curator_warning_01.ogg",
       "source": "C:/dev/Godot Game/Assets/sound effects/UI/synth_warning.wav"
     },
+    "door_museum_open": {
+      "layer": "Museum",
+      "bus": "Environment",
+      "path": "res://assets/audio/ui/curator_warning_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Machines/museum_door_open_placeholder.wav"
+    },
+    "ambience_plague_town": {
+      "layer": "Exhibit",
+      "bus": "Environment",
+      "path": "res://assets/audio/human/plague_cough_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Human/cough_short.wav"
+    },
+    "ambience_apothecary": {
+      "layer": "Exhibit",
+      "bus": "Environment",
+      "path": "res://assets/audio/items/item_pickup_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Items/bottle_clink_placeholder.wav"
+    },
+    "ambience_chapel_bell": {
+      "layer": "Exhibit",
+      "bus": "Environment",
+      "path": "res://assets/audio/relics/bell_clapper_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Musical Effects/brass_chime_positive.wav"
+    },
+    "ambience_underchapel_drain": {
+      "layer": "Exhibit",
+      "bus": "Environment",
+      "path": "res://assets/audio/ui/curator_warning_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Machines/sewer_machine_placeholder.wav"
+    },
+    "ambience_hidden_hospital": {
+      "layer": "Exhibit",
+      "bus": "Environment",
+      "path": "res://assets/audio/ui/curator_warning_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Horror SFX Free/hospital_buzz_placeholder.wav"
+    },
+    "ambience_bell_tower": {
+      "layer": "Exhibit",
+      "bus": "Environment",
+      "path": "res://assets/audio/relics/bell_clapper_01.ogg",
+      "source": "C:/dev/Godot Game/Assets/sound effects/Musical Effects/brass_chime_positive.wav"
+    },
     "memory_card_reveal": {
       "layer": "Museum",
       "bus": "UI",
@@ -102,6 +144,13 @@
       "ui_confirm",
       "ui_cancel",
       "curator_warning",
+      "door_museum_open",
+      "ambience_plague_town",
+      "ambience_apothecary",
+      "ambience_chapel_bell",
+      "ambience_underchapel_drain",
+      "ambience_hidden_hospital",
+      "ambience_bell_tower",
       "memory_card_reveal",
       "bell_clapper_relic",
       "plague_cough",

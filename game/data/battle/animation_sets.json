@@ -1,0 +1,614 @@
+{
+  "sev_placeholder": {
+    "frame_size": [
+      72,
+      80
+    ],
+    "states": {
+      "idle": {
+        "fps": 6,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/sev_placeholder/idle_01.png",
+          "res://assets/battle/animations/sev_placeholder/idle_02.png",
+          "res://assets/battle/animations/sev_placeholder/idle_03.png",
+          "res://assets/battle/animations/sev_placeholder/idle_04.png"
+        ]
+      },
+      "attack": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/sev_placeholder/attack_01.png",
+          "res://assets/battle/animations/sev_placeholder/attack_02.png",
+          "res://assets/battle/animations/sev_placeholder/attack_03.png",
+          "res://assets/battle/animations/sev_placeholder/attack_04.png"
+        ]
+      },
+      "hurt": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/sev_placeholder/hurt_01.png",
+          "res://assets/battle/animations/sev_placeholder/hurt_02.png",
+          "res://assets/battle/animations/sev_placeholder/hurt_03.png",
+          "res://assets/battle/animations/sev_placeholder/hurt_04.png"
+        ]
+      },
+      "cast": {
+        "fps": 9,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/sev_placeholder/cast_01.png",
+          "res://assets/battle/animations/sev_placeholder/cast_02.png",
+          "res://assets/battle/animations/sev_placeholder/cast_03.png",
+          "res://assets/battle/animations/sev_placeholder/cast_04.png"
+        ]
+      },
+      "ko": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/sev_placeholder/ko_01.png",
+          "res://assets/battle/animations/sev_placeholder/ko_02.png",
+          "res://assets/battle/animations/sev_placeholder/ko_03.png",
+          "res://assets/battle/animations/sev_placeholder/ko_04.png"
+        ]
+      },
+      "defeated": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/sev_placeholder/defeated_01.png",
+          "res://assets/battle/animations/sev_placeholder/defeated_02.png",
+          "res://assets/battle/animations/sev_placeholder/defeated_03.png",
+          "res://assets/battle/animations/sev_placeholder/defeated_04.png"
+        ]
+      }
+    }
+  },
+  "clean_man_generated": {
+    "frame_size": [
+      96,
+      120
+    ],
+    "states": {
+      "idle": {
+        "fps": 6,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/clean_man_generated/idle_01.png",
+          "res://assets/battle/animations/clean_man_generated/idle_02.png",
+          "res://assets/battle/animations/clean_man_generated/idle_03.png",
+          "res://assets/battle/animations/clean_man_generated/idle_04.png"
+        ]
+      },
+      "attack": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/clean_man_generated/attack_01.png",
+          "res://assets/battle/animations/clean_man_generated/attack_02.png",
+          "res://assets/battle/animations/clean_man_generated/attack_03.png",
+          "res://assets/battle/animations/clean_man_generated/attack_04.png"
+        ]
+      },
+      "hurt": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/clean_man_generated/hurt_01.png",
+          "res://assets/battle/animations/clean_man_generated/hurt_02.png",
+          "res://assets/battle/animations/clean_man_generated/hurt_03.png",
+          "res://assets/battle/animations/clean_man_generated/hurt_04.png"
+        ]
+      },
+      "cast": {
+        "fps": 9,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/clean_man_generated/cast_01.png",
+          "res://assets/battle/animations/clean_man_generated/cast_02.png",
+          "res://assets/battle/animations/clean_man_generated/cast_03.png",
+          "res://assets/battle/animations/clean_man_generated/cast_04.png"
+        ]
+      },
+      "ko": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/clean_man_generated/ko_01.png",
+          "res://assets/battle/animations/clean_man_generated/ko_02.png",
+          "res://assets/battle/animations/clean_man_generated/ko_03.png",
+          "res://assets/battle/animations/clean_man_generated/ko_04.png"
+        ]
+      },
+      "defeated": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/clean_man_generated/defeated_01.png",
+          "res://assets/battle/animations/clean_man_generated/defeated_02.png",
+          "res://assets/battle/animations/clean_man_generated/defeated_03.png",
+          "res://assets/battle/animations/clean_man_generated/defeated_04.png"
+        ]
+      }
+    }
+  },
+  "bell_saint_generated": {
+    "frame_size": [
+      192,
+      180
+    ],
+    "states": {
+      "idle": {
+        "fps": 6,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/bell_saint_generated/idle_01.png",
+          "res://assets/battle/animations/bell_saint_generated/idle_02.png",
+          "res://assets/battle/animations/bell_saint_generated/idle_03.png",
+          "res://assets/battle/animations/bell_saint_generated/idle_04.png"
+        ]
+      },
+      "attack": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/bell_saint_generated/attack_01.png",
+          "res://assets/battle/animations/bell_saint_generated/attack_02.png",
+          "res://assets/battle/animations/bell_saint_generated/attack_03.png",
+          "res://assets/battle/animations/bell_saint_generated/attack_04.png"
+        ]
+      },
+      "hurt": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/bell_saint_generated/hurt_01.png",
+          "res://assets/battle/animations/bell_saint_generated/hurt_02.png",
+          "res://assets/battle/animations/bell_saint_generated/hurt_03.png",
+          "res://assets/battle/animations/bell_saint_generated/hurt_04.png"
+        ]
+      },
+      "cast": {
+        "fps": 9,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/bell_saint_generated/cast_01.png",
+          "res://assets/battle/animations/bell_saint_generated/cast_02.png",
+          "res://assets/battle/animations/bell_saint_generated/cast_03.png",
+          "res://assets/battle/animations/bell_saint_generated/cast_04.png"
+        ]
+      },
+      "ko": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/bell_saint_generated/ko_01.png",
+          "res://assets/battle/animations/bell_saint_generated/ko_02.png",
+          "res://assets/battle/animations/bell_saint_generated/ko_03.png",
+          "res://assets/battle/animations/bell_saint_generated/ko_04.png"
+        ]
+      },
+      "defeated": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/bell_saint_generated/defeated_01.png",
+          "res://assets/battle/animations/bell_saint_generated/defeated_02.png",
+          "res://assets/battle/animations/bell_saint_generated/defeated_03.png",
+          "res://assets/battle/animations/bell_saint_generated/defeated_04.png"
+        ]
+      }
+    }
+  },
+  "plague_wretch": {
+    "frame_size": [
+      112,
+      120
+    ],
+    "states": {
+      "idle": {
+        "fps": 6,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/plague_wretch/idle_01.png",
+          "res://assets/battle/animations/plague_wretch/idle_02.png",
+          "res://assets/battle/animations/plague_wretch/idle_03.png",
+          "res://assets/battle/animations/plague_wretch/idle_04.png"
+        ]
+      },
+      "attack": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/plague_wretch/attack_01.png",
+          "res://assets/battle/animations/plague_wretch/attack_02.png",
+          "res://assets/battle/animations/plague_wretch/attack_03.png",
+          "res://assets/battle/animations/plague_wretch/attack_04.png"
+        ]
+      },
+      "hurt": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/plague_wretch/hurt_01.png",
+          "res://assets/battle/animations/plague_wretch/hurt_02.png",
+          "res://assets/battle/animations/plague_wretch/hurt_03.png",
+          "res://assets/battle/animations/plague_wretch/hurt_04.png"
+        ]
+      },
+      "cast": {
+        "fps": 9,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/plague_wretch/cast_01.png",
+          "res://assets/battle/animations/plague_wretch/cast_02.png",
+          "res://assets/battle/animations/plague_wretch/cast_03.png",
+          "res://assets/battle/animations/plague_wretch/cast_04.png"
+        ]
+      },
+      "ko": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/plague_wretch/ko_01.png",
+          "res://assets/battle/animations/plague_wretch/ko_02.png",
+          "res://assets/battle/animations/plague_wretch/ko_03.png",
+          "res://assets/battle/animations/plague_wretch/ko_04.png"
+        ]
+      },
+      "defeated": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/plague_wretch/defeated_01.png",
+          "res://assets/battle/animations/plague_wretch/defeated_02.png",
+          "res://assets/battle/animations/plague_wretch/defeated_03.png",
+          "res://assets/battle/animations/plague_wretch/defeated_04.png"
+        ]
+      }
+    }
+  },
+  "prayer_bound_corpse": {
+    "frame_size": [
+      104,
+      120
+    ],
+    "states": {
+      "idle": {
+        "fps": 6,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/prayer_bound_corpse/idle_01.png",
+          "res://assets/battle/animations/prayer_bound_corpse/idle_02.png",
+          "res://assets/battle/animations/prayer_bound_corpse/idle_03.png",
+          "res://assets/battle/animations/prayer_bound_corpse/idle_04.png"
+        ]
+      },
+      "attack": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/prayer_bound_corpse/attack_01.png",
+          "res://assets/battle/animations/prayer_bound_corpse/attack_02.png",
+          "res://assets/battle/animations/prayer_bound_corpse/attack_03.png",
+          "res://assets/battle/animations/prayer_bound_corpse/attack_04.png"
+        ]
+      },
+      "hurt": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/prayer_bound_corpse/hurt_01.png",
+          "res://assets/battle/animations/prayer_bound_corpse/hurt_02.png",
+          "res://assets/battle/animations/prayer_bound_corpse/hurt_03.png",
+          "res://assets/battle/animations/prayer_bound_corpse/hurt_04.png"
+        ]
+      },
+      "cast": {
+        "fps": 9,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/prayer_bound_corpse/cast_01.png",
+          "res://assets/battle/animations/prayer_bound_corpse/cast_02.png",
+          "res://assets/battle/animations/prayer_bound_corpse/cast_03.png",
+          "res://assets/battle/animations/prayer_bound_corpse/cast_04.png"
+        ]
+      },
+      "ko": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/prayer_bound_corpse/ko_01.png",
+          "res://assets/battle/animations/prayer_bound_corpse/ko_02.png",
+          "res://assets/battle/animations/prayer_bound_corpse/ko_03.png",
+          "res://assets/battle/animations/prayer_bound_corpse/ko_04.png"
+        ]
+      },
+      "defeated": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/prayer_bound_corpse/defeated_01.png",
+          "res://assets/battle/animations/prayer_bound_corpse/defeated_02.png",
+          "res://assets/battle/animations/prayer_bound_corpse/defeated_03.png",
+          "res://assets/battle/animations/prayer_bound_corpse/defeated_04.png"
+        ]
+      }
+    }
+  },
+  "rot_choir": {
+    "frame_size": [
+      104,
+      128
+    ],
+    "states": {
+      "idle": {
+        "fps": 6,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/rot_choir/idle_01.png",
+          "res://assets/battle/animations/rot_choir/idle_02.png",
+          "res://assets/battle/animations/rot_choir/idle_03.png",
+          "res://assets/battle/animations/rot_choir/idle_04.png"
+        ]
+      },
+      "attack": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/rot_choir/attack_01.png",
+          "res://assets/battle/animations/rot_choir/attack_02.png",
+          "res://assets/battle/animations/rot_choir/attack_03.png",
+          "res://assets/battle/animations/rot_choir/attack_04.png"
+        ]
+      },
+      "hurt": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/rot_choir/hurt_01.png",
+          "res://assets/battle/animations/rot_choir/hurt_02.png",
+          "res://assets/battle/animations/rot_choir/hurt_03.png",
+          "res://assets/battle/animations/rot_choir/hurt_04.png"
+        ]
+      },
+      "cast": {
+        "fps": 9,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/rot_choir/cast_01.png",
+          "res://assets/battle/animations/rot_choir/cast_02.png",
+          "res://assets/battle/animations/rot_choir/cast_03.png",
+          "res://assets/battle/animations/rot_choir/cast_04.png"
+        ]
+      },
+      "ko": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/rot_choir/ko_01.png",
+          "res://assets/battle/animations/rot_choir/ko_02.png",
+          "res://assets/battle/animations/rot_choir/ko_03.png",
+          "res://assets/battle/animations/rot_choir/ko_04.png"
+        ]
+      },
+      "defeated": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/rot_choir/defeated_01.png",
+          "res://assets/battle/animations/rot_choir/defeated_02.png",
+          "res://assets/battle/animations/rot_choir/defeated_03.png",
+          "res://assets/battle/animations/rot_choir/defeated_04.png"
+        ]
+      }
+    }
+  },
+  "bell_touched": {
+    "frame_size": [
+      112,
+      112
+    ],
+    "states": {
+      "idle": {
+        "fps": 6,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/bell_touched/idle_01.png",
+          "res://assets/battle/animations/bell_touched/idle_02.png",
+          "res://assets/battle/animations/bell_touched/idle_03.png",
+          "res://assets/battle/animations/bell_touched/idle_04.png"
+        ]
+      },
+      "attack": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/bell_touched/attack_01.png",
+          "res://assets/battle/animations/bell_touched/attack_02.png",
+          "res://assets/battle/animations/bell_touched/attack_03.png",
+          "res://assets/battle/animations/bell_touched/attack_04.png"
+        ]
+      },
+      "hurt": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/bell_touched/hurt_01.png",
+          "res://assets/battle/animations/bell_touched/hurt_02.png",
+          "res://assets/battle/animations/bell_touched/hurt_03.png",
+          "res://assets/battle/animations/bell_touched/hurt_04.png"
+        ]
+      },
+      "cast": {
+        "fps": 9,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/bell_touched/cast_01.png",
+          "res://assets/battle/animations/bell_touched/cast_02.png",
+          "res://assets/battle/animations/bell_touched/cast_03.png",
+          "res://assets/battle/animations/bell_touched/cast_04.png"
+        ]
+      },
+      "ko": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/bell_touched/ko_01.png",
+          "res://assets/battle/animations/bell_touched/ko_02.png",
+          "res://assets/battle/animations/bell_touched/ko_03.png",
+          "res://assets/battle/animations/bell_touched/ko_04.png"
+        ]
+      },
+      "defeated": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/bell_touched/defeated_01.png",
+          "res://assets/battle/animations/bell_touched/defeated_02.png",
+          "res://assets/battle/animations/bell_touched/defeated_03.png",
+          "res://assets/battle/animations/bell_touched/defeated_04.png"
+        ]
+      }
+    }
+  },
+  "slime_contradiction": {
+    "frame_size": [
+      96,
+      96
+    ],
+    "states": {
+      "idle": {
+        "fps": 6,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/slime_contradiction/idle_01.png",
+          "res://assets/battle/animations/slime_contradiction/idle_02.png",
+          "res://assets/battle/animations/slime_contradiction/idle_03.png",
+          "res://assets/battle/animations/slime_contradiction/idle_04.png"
+        ]
+      },
+      "attack": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/slime_contradiction/attack_01.png",
+          "res://assets/battle/animations/slime_contradiction/attack_02.png",
+          "res://assets/battle/animations/slime_contradiction/attack_03.png",
+          "res://assets/battle/animations/slime_contradiction/attack_04.png"
+        ]
+      },
+      "hurt": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/slime_contradiction/hurt_01.png",
+          "res://assets/battle/animations/slime_contradiction/hurt_02.png",
+          "res://assets/battle/animations/slime_contradiction/hurt_03.png",
+          "res://assets/battle/animations/slime_contradiction/hurt_04.png"
+        ]
+      },
+      "cast": {
+        "fps": 9,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/slime_contradiction/cast_01.png",
+          "res://assets/battle/animations/slime_contradiction/cast_02.png",
+          "res://assets/battle/animations/slime_contradiction/cast_03.png",
+          "res://assets/battle/animations/slime_contradiction/cast_04.png"
+        ]
+      },
+      "ko": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/slime_contradiction/ko_01.png",
+          "res://assets/battle/animations/slime_contradiction/ko_02.png",
+          "res://assets/battle/animations/slime_contradiction/ko_03.png",
+          "res://assets/battle/animations/slime_contradiction/ko_04.png"
+        ]
+      },
+      "defeated": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/slime_contradiction/defeated_01.png",
+          "res://assets/battle/animations/slime_contradiction/defeated_02.png",
+          "res://assets/battle/animations/slime_contradiction/defeated_03.png",
+          "res://assets/battle/animations/slime_contradiction/defeated_04.png"
+        ]
+      }
+    }
+  },
+  "cave_bat": {
+    "frame_size": [
+      96,
+      96
+    ],
+    "states": {
+      "idle": {
+        "fps": 6,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/cave_bat/idle_01.png",
+          "res://assets/battle/animations/cave_bat/idle_02.png",
+          "res://assets/battle/animations/cave_bat/idle_03.png",
+          "res://assets/battle/animations/cave_bat/idle_04.png"
+        ]
+      },
+      "attack": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/cave_bat/attack_01.png",
+          "res://assets/battle/animations/cave_bat/attack_02.png",
+          "res://assets/battle/animations/cave_bat/attack_03.png",
+          "res://assets/battle/animations/cave_bat/attack_04.png"
+        ]
+      },
+      "hurt": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/cave_bat/hurt_01.png",
+          "res://assets/battle/animations/cave_bat/hurt_02.png",
+          "res://assets/battle/animations/cave_bat/hurt_03.png",
+          "res://assets/battle/animations/cave_bat/hurt_04.png"
+        ]
+      },
+      "cast": {
+        "fps": 9,
+        "loop": true,
+        "frames": [
+          "res://assets/battle/animations/cave_bat/cast_01.png",
+          "res://assets/battle/animations/cave_bat/cast_02.png",
+          "res://assets/battle/animations/cave_bat/cast_03.png",
+          "res://assets/battle/animations/cave_bat/cast_04.png"
+        ]
+      },
+      "ko": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/cave_bat/ko_01.png",
+          "res://assets/battle/animations/cave_bat/ko_02.png",
+          "res://assets/battle/animations/cave_bat/ko_03.png",
+          "res://assets/battle/animations/cave_bat/ko_04.png"
+        ]
+      },
+      "defeated": {
+        "fps": 9,
+        "loop": false,
+        "frames": [
+          "res://assets/battle/animations/cave_bat/defeated_01.png",
+          "res://assets/battle/animations/cave_bat/defeated_02.png",
+          "res://assets/battle/animations/cave_bat/defeated_03.png",
+          "res://assets/battle/animations/cave_bat/defeated_04.png"
+        ]
+      }
+    }
+  }
+}

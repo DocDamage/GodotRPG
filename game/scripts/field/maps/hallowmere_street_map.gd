@@ -24,11 +24,21 @@ func _ready() -> void:
 
 
 func build_map() -> void:
+	_apply_map_metadata()
 	if get_node_or_null("GroundTiles") != null:
 		return
 	_add_ground_tiles()
 	_add_landmarks()
 	_add_collision()
+
+
+func _apply_map_metadata() -> void:
+	set_meta("audio_profile", {
+		"map_id": map_id,
+		"ambience": "ambience_plague_town",
+		"entry": "plague_cough",
+		"museum_override": "curator_warning",
+	})
 
 
 func _add_ground_tiles() -> void:
@@ -50,12 +60,19 @@ func _add_landmarks() -> void:
 	landmarks.add_child(_create_sprite_landmark("House01", "plague_town_house_01", Vector2(72, 24), Color(0.86, 0.78, 0.70, 0.95), -10))
 	landmarks.add_child(_create_sprite_landmark("House02", "plague_town_house_02", Vector2(240, 32), Color(0.78, 0.72, 0.66, 0.92), -10))
 	landmarks.add_child(_create_sprite_landmark("GraveMarker", "plague_town_grave_01", Vector2(256, 128), Color(0.65, 0.70, 0.68, 0.95), -8))
-	landmarks.add_child(_create_sprite_landmark("CoffinStack", "plague_town_coffin_01", Vector2(216, 96), Color(0.72, 0.58, 0.48, 0.95), -8))
+	landmarks.add_child(_tag_story_prop(_create_sliced_prop("CoffinStack", Vector2(216, 96), "res://assets/tilesets/first_slice/hallowmere/sliced/coffin_stack.png", 0.52, -7), "plague_cost", "Fresh coffins wait beside old mud. Hallowmere is running out of distance between sickness and burial."))
 	landmarks.add_child(_create_sprite_landmark("RoadStone", "plague_town_rock_01", Vector2(144, 120), Color(0.62, 0.58, 0.52, 0.9), -8))
 	landmarks.add_child(_create_color_landmark("TownWell", Vector2(176, 128), Vector2(24, 24), Color(0.22, 0.24, 0.22, 0.95)))
-	landmarks.add_child(_create_color_landmark("TollStall", Vector2(320, 96), Vector2(34, 22), Color(0.40, 0.22, 0.16, 0.95)))
+	var toll_stall := _create_color_landmark("TollStall", Vector2(320, 96), Vector2(34, 22), Color(0.40, 0.22, 0.16, 0.35))
+	_tag_story_prop(toll_stall, "shop_anchor", "Toll's stall looks temporary, but the same coin mark is carved into the counter in every era.")
+	toll_stall.add_child(_create_sliced_prop("TollStallSprite", Vector2.ZERO, "res://assets/tilesets/first_slice/hallowmere/sliced/toll_stall.png", 0.30, -6))
+	landmarks.add_child(toll_stall)
 	landmarks.add_child(_create_color_landmark("ApothecaryDoor", Vector2(352, 96), Vector2(22, 30), Color(0.18, 0.30, 0.22, 0.95)))
-	landmarks.add_child(_create_color_landmark("ChapelRoad", Vector2(416, 80), Vector2(38, 28), Color(0.27, 0.24, 0.29, 0.75)))
+	var chapel_road := _create_color_landmark("ChapelRoad", Vector2(416, 80), Vector2(38, 28), Color(0.27, 0.24, 0.29, 0.35))
+	_tag_story_prop(chapel_road, "route_marker", "The chapel sign has been repainted so many times the arrow points more like an accusation than a direction.")
+	chapel_road.add_child(_create_sliced_prop("ChapelSignSprite", Vector2.ZERO, "res://assets/tilesets/first_slice/hallowmere/sliced/chapel_sign.png", 0.62, -6))
+	landmarks.add_child(chapel_road)
+	landmarks.add_child(_create_sliced_prop("RefusePile", Vector2(304, 136), "res://assets/tilesets/first_slice/hallowmere/sliced/refuse_pile.png", 0.34, -7))
 	_add_atmosphere()
 
 
@@ -106,6 +123,24 @@ func _create_color_landmark(node_name: String, position: Vector2, size: Vector2,
 	marker.offset_bottom = size.y / 2.0
 	marker.color = color
 	node.add_child(marker)
+	return node
+
+
+func _create_sliced_prop(node_name: String, position: Vector2, path: String, prop_scale: float, z: int) -> Sprite2D:
+	var sprite := Sprite2D.new()
+	sprite.name = node_name
+	sprite.texture = _load_runtime_texture(path)
+	sprite.centered = true
+	sprite.position = position
+	sprite.scale = Vector2(prop_scale, prop_scale)
+	sprite.z_index = z
+	sprite.set_meta("slice_path", path)
+	return sprite
+
+
+func _tag_story_prop(node: Node, story_role: String, inspect_text: String) -> Node:
+	node.set_meta("story_role", story_role)
+	node.set_meta("inspect_text", inspect_text)
 	return node
 
 

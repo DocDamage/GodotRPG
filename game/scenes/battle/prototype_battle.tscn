@@ -2,81 +2,235 @@
 
 [ext_resource type="Script" path="res://scripts/battle/battle_screen.gd" id="1_battle"]
 
-[node name="PrototypeBattle" type="Control"]
+[node name="PrototypeBattle" type="Node2D"]
+script = ExtResource("1_battle")
+
+[node name="ActionPresentationTimer" type="Timer" parent="."]
+wait_time = 0.45
+one_shot = true
+
+[node name="EnemyActionTimer" type="Timer" parent="."]
+wait_time = 0.45
+one_shot = true
+
+[node name="ArenaCamera" type="Camera2D" parent="."]
+position = Vector2(512, 300)
+zoom = Vector2(1.08, 1.08)
+enabled = true
+
+[node name="Arena" type="Node2D" parent="."]
+
+[node name="Backdrop" type="Polygon2D" parent="Arena"]
+color = Color(0.12, 0.09, 0.11, 1)
+polygon = PackedVector2Array(0, 0, 1024, 0, 1024, 600, 0, 600)
+
+[node name="Horizon" type="Polygon2D" parent="Arena"]
+color = Color(0.22, 0.16, 0.18, 1)
+polygon = PackedVector2Array(0, 110, 1024, 70, 1024, 330, 0, 360)
+
+[node name="Floor" type="Polygon2D" parent="Arena"]
+color = Color(0.20, 0.16, 0.15, 1)
+polygon = PackedVector2Array(0, 360, 1024, 330, 1024, 600, 0, 600)
+
+[node name="Battlers" type="Node2D" parent="Arena"]
+
+[node name="PartyAnchor" type="Marker2D" parent="Arena/Battlers"]
+position = Vector2(300, 360)
+
+[node name="PartyBattler" type="Sprite2D" parent="Arena/Battlers/PartyAnchor"]
+position = Vector2(0, -38)
+scale = Vector2(2.5, 2.5)
+
+[node name="EnemyAnchor" type="Marker2D" parent="Arena/Battlers"]
+position = Vector2(724, 286)
+
+[node name="EnemyBattler" type="Sprite2D" parent="Arena/Battlers/EnemyAnchor"]
+unique_name_in_owner = true
+position = Vector2(0, -54)
+scale = Vector2(2.25, 2.25)
+
+[node name="Presentation" type="Node2D" parent="Arena"]
+
+[node name="BattleUi" type="CanvasLayer" parent="."]
+
+[node name="RootControl" type="Control" parent="BattleUi"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_battle")
 
-[node name="Backdrop" type="ColorRect" parent="."]
+[node name="TopLogPanel" type="PanelContainer" parent="BattleUi/RootControl"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 10
 anchor_right = 1.0
-anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = 28.0
+offset_right = -48.0
+offset_bottom = 86.0
 grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.11, 0.09, 0.1, 1)
 
-[node name="Margin" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 48
-theme_override_constants/margin_top = 56
-theme_override_constants/margin_right = 48
-theme_override_constants/margin_bottom = 48
-
-[node name="Stack" type="VBoxContainer" parent="Margin"]
+[node name="LogMargin" type="MarginContainer" parent="BattleUi/RootControl/TopLogPanel"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 10
 
-[node name="Combatants" type="HBoxContainer" parent="Margin/Stack"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 32
-
-[node name="PartyLabel" type="Label" parent="Margin/Stack/Combatants"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 18
-text = "Party"
-
-[node name="EnemyLabel" type="Label" parent="Margin/Stack/Combatants"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 18
-text = "Enemies"
-
-[node name="Commands" type="HBoxContainer" parent="Margin/Stack"]
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="AttackButton" type="Button" parent="Margin/Stack/Commands"]
-layout_mode = 2
-text = "Attack"
-
-[node name="DefendButton" type="Button" parent="Margin/Stack/Commands"]
-layout_mode = 2
-text = "Defend"
-
-[node name="FleeButton" type="Button" parent="Margin/Stack/Commands"]
-layout_mode = 2
-text = "Flee"
-
-[node name="LogLabel" type="Label" parent="Margin/Stack"]
+[node name="LogLabel" type="Label" parent="BattleUi/RootControl/TopLogPanel/LogMargin"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Log"
 
-[connection signal="pressed" from="Margin/Stack/Commands/AttackButton" to="." method="_on_attack_pressed"]
-[connection signal="pressed" from="Margin/Stack/Commands/DefendButton" to="." method="_on_defend_pressed"]
-[connection signal="pressed" from="Margin/Stack/Commands/FleeButton" to="." method="_on_flee_pressed"]
+[node name="BottomPanel" type="PanelContainer" parent="BattleUi/RootControl"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -190.0
+offset_right = -48.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="BattleUi/RootControl/BottomPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="UiStack" type="VBoxContainer" parent="BattleUi/RootControl/BottomPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="StatusRow" type="HBoxContainer" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="PartyStatus" type="VBoxContainer" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="PartyNameLabel" type="Label" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/PartyStatus"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Party"
+
+[node name="PartyRoleLabel" type="Label" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/PartyStatus"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Role"
+
+[node name="PartyHpBar" type="ProgressBar" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/PartyStatus"]
+unique_name_in_owner = true
+layout_mode = 2
+show_percentage = false
+
+[node name="PartyStatusEffects" type="Label" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/PartyStatus"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Status: Normal"
+
+[node name="EnemyStatus" type="VBoxContainer" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="EnemyNameLabel" type="Label" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/EnemyStatus"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Enemy"
+
+[node name="EnemyHpBar" type="ProgressBar" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/EnemyStatus"]
+unique_name_in_owner = true
+layout_mode = 2
+show_percentage = false
+
+[node name="EnemyStatusEffects" type="Label" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/StatusRow/EnemyStatus"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Status: Normal"
+
+[node name="Combatants" type="HBoxContainer" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="PartyRoster" type="VBoxContainer" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/Combatants"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="PartyLabel" type="Label" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/Combatants"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Party"
+
+[node name="EnemyLabel" type="Label" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/Combatants"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "Enemies"
+
+[node name="Commands" type="HBoxContainer" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AttackButton" type="Button" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/Commands"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Attack"
+
+[node name="SkillButton" type="Button" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/Commands"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Skill"
+
+[node name="ItemButton" type="Button" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/Commands"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Item"
+
+[node name="DefendButton" type="Button" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/Commands"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Defend"
+
+[node name="FleeButton" type="Button" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack/Commands"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Flee"
+
+[node name="TargetMenu" type="HBoxContainer" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SkillMenu" type="VBoxContainer" parent="BattleUi/RootControl/BottomPanel/Margin/UiStack"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[connection signal="pressed" from="BattleUi/RootControl/BottomPanel/Margin/UiStack/Commands/AttackButton" to="." method="_on_attack_pressed"]
+[connection signal="pressed" from="BattleUi/RootControl/BottomPanel/Margin/UiStack/Commands/SkillButton" to="." method="_on_skill_pressed"]
+[connection signal="pressed" from="BattleUi/RootControl/BottomPanel/Margin/UiStack/Commands/ItemButton" to="." method="_on_item_pressed"]
+[connection signal="pressed" from="BattleUi/RootControl/BottomPanel/Margin/UiStack/Commands/DefendButton" to="." method="_on_defend_pressed"]
+[connection signal="pressed" from="BattleUi/RootControl/BottomPanel/Margin/UiStack/Commands/FleeButton" to="." method="_on_flee_pressed"]
+[connection signal="timeout" from="ActionPresentationTimer" to="." method="_on_action_presentation_timer_timeout"]
+[connection signal="timeout" from="EnemyActionTimer" to="." method="_on_enemy_action_timer_timeout"]

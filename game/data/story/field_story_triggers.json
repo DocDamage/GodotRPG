@@ -22,6 +22,7 @@
       "id": "mira_joins",
       "dialogue_section": "plague_wing",
       "dialogue_scene": "mira_joins",
+      "recruit_party_member": "mira_venn",
       "once": true
     },
     "hidden_hospital_corridor": {

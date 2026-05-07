@@ -1,0 +1,37 @@
+{
+  "source_library": "Extracted Assets/apothecary",
+  "promotions": [
+    {
+      "id": "medicine_shelf",
+      "runtime_name": "medicine_shelf.png",
+      "source_sprite_id": "sprite_001",
+      "source_path": "C:/dev/Godot Game/Extracted Assets/apothecary/jars_pots/sprite_001.png",
+      "output_path": "res://assets/tilesets/first_slice/apothecary/sliced/medicine_shelf.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "rest_bed",
+      "runtime_name": "rest_bed.png",
+      "source_sprite_id": "sprite_006",
+      "source_path": "C:/dev/Godot Game/Extracted Assets/apothecary/furniture_fixtures/sprite_006.png",
+      "output_path": "res://assets/tilesets/first_slice/apothecary/sliced/rest_bed.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "work_table",
+      "runtime_name": "work_table.png",
+      "source_sprite_id": "sprite_009",
+      "source_path": "C:/dev/Godot Game/Extracted Assets/apothecary/furniture_fixtures/sprite_009.png",
+      "output_path": "res://assets/tilesets/first_slice/apothecary/sliced/work_table.png",
+      "review_status": "candidate"
+    },
+    {
+      "id": "boiling_basin",
+      "runtime_name": "boiling_basin.png",
+      "source_sprite_id": "sprite_025",
+      "source_path": "C:/dev/Godot Game/Extracted Assets/apothecary/jars_pots/sprite_025.png",
+      "output_path": "res://assets/tilesets/first_slice/apothecary/sliced/boiling_basin.png",
+      "review_status": "candidate"
+    }
+  ]
+}

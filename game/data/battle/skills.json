@@ -1,0 +1,29 @@
+{
+  "archive_strike": {
+    "display_name": "Archive Strike",
+    "kind": "damage",
+    "power": 10,
+    "stat": "strength",
+    "target": "enemy",
+    "animation": "archive_slash",
+    "description": "Sev strikes through a contradiction in the archive record."
+  },
+  "clean_wound": {
+    "display_name": "Clean Wound",
+    "kind": "heal",
+    "heal_hp": 35,
+    "target": "ally",
+    "animation": "field_heal",
+    "description": "A quick field treatment that restores HP."
+  },
+  "rot_needle": {
+    "display_name": "Rot Needle",
+    "kind": "damage",
+    "power": 8,
+    "stat": "magic",
+    "target": "enemy",
+    "status": {"id": "poison", "potency": 4, "turns": 2},
+    "animation": "rot_sting",
+    "description": "Mira turns sickness back against a hostile memory."
+  }
+}
