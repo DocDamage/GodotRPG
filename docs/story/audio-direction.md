@@ -38,7 +38,7 @@ The first curated pass reduced selected source audio from about 1.65 MB to about
 
 ## Bell Saint Map Audio Profiles
 
-The authored first-slice maps expose entry audio through map profiles. Current runtime event ids:
+The authored first-slice maps expose ambience and entry audio through map profiles. Current runtime event ids:
 
 - `door_museum_open`: museum exhibit transitions.
 - `ambience_plague_town`: Hallowmere street entry cue.
@@ -48,7 +48,11 @@ The authored first-slice maps expose entry audio through map profiles. Current r
 - `ambience_hidden_hospital`: Hidden Hospital Corridor entry cue.
 - `ambience_bell_tower`: Bell Tower entry cue.
 
-Some of these intentionally point at temporary OGGs until dedicated loopable ambience is selected. `AudioService.play_event()` skips missing resource paths safely, so placeholder catalog entries do not break headless tests while the audio library is still being curated.
+These currently use small generated OGG cues under `game/assets/audio/environment`. They are dedicated per map so the field layer no longer reuses generic UI, item, or relic sounds as ambience. `AudioService.play_ambience()` keeps one looped ambience player alive and swaps it when the map changes. The cues can be replaced later with mastered loopable source ambience without changing gameplay code, as long as the event ids stay stable.
+
+`AudioService.play_event()` skips missing resource paths safely, so in-progress catalog entries do not break headless tests while the audio library is still being curated.
+
+In headless test runs, `AudioService` resolves streams and configures players but does not start playback. This avoids Godot OGG playback-object leaks in CI-style runs while preserving normal playback behavior in interactive launches.
 
 ## Naming
 

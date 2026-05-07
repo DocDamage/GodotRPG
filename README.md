@@ -26,7 +26,7 @@ The slice starts with Sev's character creator, moves through the breached museum
 - FF9-style prototype battle presentation with cinematic camera, enemy AI profiles, status effects, skill menus, generated Bell Saint/Clean Man animation sets, and boss rewards.
 - Memory Card collection/equip data and Tetra-style card battle minigame foundations.
 - Save/load payload coverage for route checkpoints before and after Bell Saint completion.
-- OGG-first curated runtime audio manifest with safe handling for missing placeholder event resources.
+- OGG-first curated runtime audio manifest with dedicated first-slice map entry and ambience cues.
 
 ## Requirements
 
@@ -63,6 +63,6 @@ The converter writes selected OGGs under `game/assets/audio`.
 
 ## Remaining Slice Polish
 
-- Replace placeholder ambience event paths with dedicated loopable museum, sewer, hospital, and bell tower ambience.
+- Replace generated one-shot map cues with final mastered ambience loops once source audio is selected.
 - Manual visual QA for authored tile maps in the Godot editor, especially collision bounds and prop placement.
 - Add final production UI art pass for the reward scene, save UI, and battle command panels.

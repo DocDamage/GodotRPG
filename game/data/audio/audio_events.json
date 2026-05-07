@@ -21,44 +21,44 @@
     "door_museum_open": {
       "layer": "Museum",
       "bus": "Environment",
-      "path": "res://assets/audio/ui/curator_warning_01.ogg",
-      "source": "C:/dev/Godot Game/Assets/sound effects/Machines/museum_door_open_placeholder.wav"
+      "path": "res://assets/audio/environment/door_museum_open_01.ogg",
+      "source": "generated:clean museum door pulse with mechanical low tone"
     },
     "ambience_plague_town": {
       "layer": "Exhibit",
       "bus": "Environment",
-      "path": "res://assets/audio/human/plague_cough_01.ogg",
-      "source": "C:/dev/Godot Game/Assets/sound effects/Human/cough_short.wav"
+      "path": "res://assets/audio/environment/ambience_plague_town_01.ogg",
+      "source": "generated:damp plague town air with low bell undertone"
     },
     "ambience_apothecary": {
       "layer": "Exhibit",
       "bus": "Environment",
-      "path": "res://assets/audio/items/item_pickup_01.ogg",
-      "source": "C:/dev/Godot Game/Assets/sound effects/Items/bottle_clink_placeholder.wav"
+      "path": "res://assets/audio/environment/ambience_apothecary_01.ogg",
+      "source": "generated:warm apothecary room tone with soft bottle shimmer"
     },
     "ambience_chapel_bell": {
       "layer": "Exhibit",
       "bus": "Environment",
-      "path": "res://assets/audio/relics/bell_clapper_01.ogg",
-      "source": "C:/dev/Godot Game/Assets/sound effects/Musical Effects/brass_chime_positive.wav"
+      "path": "res://assets/audio/environment/ambience_chapel_bell_01.ogg",
+      "source": "generated:cold chapel bell resonance"
     },
     "ambience_underchapel_drain": {
       "layer": "Exhibit",
       "bus": "Environment",
-      "path": "res://assets/audio/ui/curator_warning_01.ogg",
-      "source": "C:/dev/Godot Game/Assets/sound effects/Machines/sewer_machine_placeholder.wav"
+      "path": "res://assets/audio/environment/ambience_underchapel_drain_01.ogg",
+      "source": "generated:sewer drain hum with museum machinery layer"
     },
     "ambience_hidden_hospital": {
       "layer": "Exhibit",
       "bus": "Environment",
-      "path": "res://assets/audio/ui/curator_warning_01.ogg",
-      "source": "C:/dev/Godot Game/Assets/sound effects/Horror SFX Free/hospital_buzz_placeholder.wav"
+      "path": "res://assets/audio/environment/ambience_hidden_hospital_01.ogg",
+      "source": "generated:sterile hospital fluorescent buzz"
     },
     "ambience_bell_tower": {
       "layer": "Exhibit",
       "bus": "Environment",
-      "path": "res://assets/audio/relics/bell_clapper_01.ogg",
-      "source": "C:/dev/Godot Game/Assets/sound effects/Musical Effects/brass_chime_positive.wav"
+      "path": "res://assets/audio/environment/ambience_bell_tower_01.ogg",
+      "source": "generated:bell tower grief resonance"
     },
     "memory_card_reveal": {
       "layer": "Museum",

@@ -4,6 +4,7 @@ var failures: Array[String] = []
 
 func _init() -> void:
 	_run_tests()
+	_cleanup_test_audio()
 	if failures.is_empty():
 		print("All tests passed.")
 		quit(0)
@@ -11,6 +12,11 @@ func _init() -> void:
 		for failure in failures:
 			push_error(failure)
 		quit(1)
+
+func _cleanup_test_audio() -> void:
+	var audio = root.get_node_or_null("Audio")
+	if audio and audio.has_method("stop_all"):
+		audio.stop_all()
 
 func _run_tests() -> void:
 	_test_character_creator_profile_output()
@@ -219,7 +225,9 @@ func _run_tests() -> void:
 	_test_chapter_one_dialogue_bank_data()
 	_test_content_catalog_loads_items_cards_and_dialogue()
 	_test_audio_event_catalog_defines_bell_saint_slice()
+	_test_audio_event_catalog_uses_dedicated_bell_saint_map_cues()
 	_test_audio_service_resolves_runtime_event()
+	_test_audio_service_manages_looped_ambience()
 	_test_authored_slice_maps_expose_audio_profiles()
 	_test_authored_slice_props_expose_story_inspection_metadata()
 	_test_vista_catalog_defines_bell_saint_vistas()
@@ -1603,8 +1611,10 @@ func _test_prototype_field_plays_authored_map_entry_audio() -> void:
 	field_scene.set("map_phase_id", "underchapel_drain")
 	field_scene.max_unlocked_route_index = 5
 	field_scene.load_phase_map()
+	_assert(field_scene.get("last_map_ambience_audio_event") == "ambience_underchapel_drain", "prototype field records authored map ambience cue")
 	_assert(field_scene.get("last_map_entry_audio_event") == "door_museum_open", "prototype field records authored map entry audio cue")
 	field_scene.change_to_phase("hidden_hospital_corridor", Vector2(48, 96))
+	_assert(field_scene.get("last_map_ambience_audio_event") == "ambience_hidden_hospital", "prototype field updates ambience cue after authored map change")
 	_assert(field_scene.get("last_map_entry_audio_event") == "curator_warning", "prototype field updates entry audio cue after authored map change")
 	field_scene.queue_free()
 
@@ -4042,6 +4052,25 @@ func _test_audio_event_catalog_defines_bell_saint_slice() -> void:
 	_assert(curator_voice.path.ends_with(".ogg"), "Curator voice blip uses OGG")
 	_assert(catalog.events_for_chapter("bell_saint").has("bell_clapper_relic"), "Bell Saint chapter includes relic cue")
 
+func _test_audio_event_catalog_uses_dedicated_bell_saint_map_cues() -> void:
+	var AudioEventCatalog = load("res://scripts/core/audio_event_catalog.gd")
+	var catalog = AudioEventCatalog.new()
+	var expected_paths := {
+		"door_museum_open": "res://assets/audio/environment/door_museum_open_01.ogg",
+		"ambience_plague_town": "res://assets/audio/environment/ambience_plague_town_01.ogg",
+		"ambience_apothecary": "res://assets/audio/environment/ambience_apothecary_01.ogg",
+		"ambience_chapel_bell": "res://assets/audio/environment/ambience_chapel_bell_01.ogg",
+		"ambience_underchapel_drain": "res://assets/audio/environment/ambience_underchapel_drain_01.ogg",
+		"ambience_hidden_hospital": "res://assets/audio/environment/ambience_hidden_hospital_01.ogg",
+		"ambience_bell_tower": "res://assets/audio/environment/ambience_bell_tower_01.ogg",
+	}
+	for event_id in expected_paths.keys():
+		var event: Dictionary = catalog.event(event_id)
+		_assert(event.path == expected_paths[event_id], "%s uses its dedicated first-slice map cue" % event_id)
+		_assert(String(event.path).ends_with(".ogg"), "%s uses OGG runtime audio" % event_id)
+		_assert(FileAccess.file_exists(String(event.path)), "%s runtime OGG exists" % event_id)
+		_assert(String(event.get("source", "")).begins_with("generated:"), "%s records generated cue provenance" % event_id)
+
 func _test_audio_service_resolves_runtime_event() -> void:
 	_assert(ResourceLoader.exists("res://scripts/core/audio_service.gd"), "audio service script exists")
 	var AudioServiceScript = load("res://scripts/core/audio_service.gd")
@@ -4052,6 +4081,39 @@ func _test_audio_service_resolves_runtime_event() -> void:
 	_assert(resolved.path.ends_with(".ogg"), "audio service resolves OGG path")
 	_assert(FileAccess.file_exists(resolved.path), "resolved audio file exists")
 	_assert(service.resolve_event("missing_event").is_empty(), "missing audio event returns empty dictionary")
+	service.free()
+
+func _test_audio_service_manages_looped_ambience() -> void:
+	var AudioServiceScript = load("res://scripts/core/audio_service.gd")
+	var service = AudioServiceScript.new()
+	root.add_child(service)
+	_assert(service.has_method("play_ambience"), "audio service exposes ambience playback method")
+	_assert(service.has_method("stop_ambience"), "audio service exposes ambience stop method")
+	if not service.has_method("play_ambience") or not service.has_method("stop_ambience"):
+		service.queue_free()
+		return
+	var first = service.play_ambience("ambience_underchapel_drain")
+	_assert(first is AudioStreamPlayer, "audio service creates ambience player")
+	if first is AudioStreamPlayer:
+		_assert(first.bus == "Environment", "ambience player uses configured environment bus")
+		_assert(first.stream.loop, "ambience stream is looped")
+	_assert(service.current_ambience_event_id == "ambience_underchapel_drain", "audio service records current ambience event")
+	var same = service.play_ambience("ambience_underchapel_drain")
+	_assert(same == first, "audio service reuses current ambience player for same event")
+	var second = service.play_ambience("ambience_hidden_hospital")
+	_assert(second is AudioStreamPlayer, "audio service creates replacement ambience player")
+	_assert(second != first, "audio service swaps ambience player when event changes")
+	_assert(service.current_ambience_event_id == "ambience_hidden_hospital", "audio service records replacement ambience event")
+	var one_shot = service.play_event("door_museum_open")
+	_assert(one_shot is AudioStreamPlayer, "audio service creates one-shot audio player")
+	if DisplayServer.get_name() == "headless" and one_shot is AudioStreamPlayer:
+		_assert(not one_shot.playing, "audio service does not start one-shot playback in headless tests")
+	service.stop_ambience()
+	_assert(service.current_ambience_event_id.is_empty(), "audio service clears current ambience event when stopped")
+	_assert(service.current_ambience_player == null, "audio service clears ambience player when stopped")
+	service.stop_all()
+	_assert(service.get_child_count() == 0, "audio service stop_all frees one-shot audio players")
+	root.remove_child(service)
 	service.free()
 
 func _test_authored_slice_maps_expose_audio_profiles() -> void:

@@ -46,6 +46,7 @@ var encounter_travel_pixels := 0.0
 var last_encounter_player_position := Vector2.ZERO
 var has_encounter_player_position := false
 var game_state_override = null
+var last_map_ambience_audio_event := ""
 var last_map_entry_audio_event := ""
 
 const FIRST_SLICE_ROUTE := [
@@ -401,10 +402,23 @@ func _play_audio(event_id: String) -> void:
 	if audio and audio.has_method("play_event"):
 		audio.play_event(event_id)
 
+func _play_ambience(event_id: String) -> void:
+	if not is_inside_tree():
+		return
+	var audio = get_node_or_null("/root/Audio")
+	if audio and audio.has_method("play_ambience"):
+		audio.play_ambience(event_id)
+	else:
+		_play_audio(event_id)
+
 func _play_mounted_map_entry_audio() -> void:
 	var profile := mounted_map_audio_profile()
+	var ambience_id := String(profile.get("ambience", ""))
 	var event_id := String(profile.get("entry", ""))
+	last_map_ambience_audio_event = ambience_id
 	last_map_entry_audio_event = event_id
+	if not ambience_id.is_empty():
+		_play_ambience(ambience_id)
 	if not event_id.is_empty():
 		_play_audio(event_id)
 
