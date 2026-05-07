@@ -46,6 +46,7 @@ var encounter_travel_pixels := 0.0
 var last_encounter_player_position := Vector2.ZERO
 var has_encounter_player_position := false
 var game_state_override = null
+var last_map_entry_audio_event := ""
 
 const FIRST_SLICE_ROUTE := [
 	"empty_rotunda",
@@ -116,7 +117,7 @@ func try_context_action() -> bool:
 
 func _try_interact() -> bool:
 	var targets := []
-	for node in get_tree().get_nodes_in_group("interactables"):
+	for node in _current_map_interactable_nodes():
 		if node is Node2D:
 			targets.append({"id": node.name, "position": node.global_position, "radius": 16, "node": node})
 	var target := field.find_facing_interaction(player.global_position, player.facing, targets)
@@ -131,6 +132,17 @@ func _try_interact() -> bool:
 		return true
 	return false
 
+func _current_map_interactable_nodes() -> Array:
+	var nodes := []
+	for root_path in ["MapContent/Npcs", "MapContent/Interactables"]:
+		var root_node := get_node_or_null(root_path)
+		if root_node == null:
+			continue
+		for node in root_node.get_children():
+			if node.is_in_group("interactables"):
+				nodes.append(node)
+	return nodes
+
 func load_phase_map() -> void:
 	var phase_id := map_phase_id
 	if phase_id.is_empty():
@@ -144,6 +156,7 @@ func load_phase_map() -> void:
 	steps_since_encounter_check = 0
 	_unlock_route_through(phase_id)
 	_render_map_content()
+	_play_mounted_map_entry_audio()
 	_reset_encounter_travel_tracking()
 	_render_current_objective()
 	_render_phase_metadata()
@@ -192,6 +205,7 @@ func change_to_phase(phase_id: String, spawn_position := Vector2.ZERO) -> bool:
 	_unlock_route_through(phase_id)
 	current_map = target_map
 	_render_map_content(spawn_position)
+	_play_mounted_map_entry_audio()
 	_reset_encounter_travel_tracking()
 	_render_current_objective()
 	_render_phase_metadata()
@@ -200,7 +214,6 @@ func change_to_phase(phase_id: String, spawn_position := Vector2.ZERO) -> bool:
 		status_label.text = "Entered %s." % String(current_map.get("display_name", phase_id.capitalize()))
 	_render_boss_readiness()
 	_run_entry_story_trigger(phase_id)
-	_play_audio("door_museum_open")
 	return true
 
 func is_dialogue_active() -> bool:
@@ -387,6 +400,13 @@ func _play_audio(event_id: String) -> void:
 	var audio = get_node_or_null("/root/Audio")
 	if audio and audio.has_method("play_event"):
 		audio.play_event(event_id)
+
+func _play_mounted_map_entry_audio() -> void:
+	var profile := mounted_map_audio_profile()
+	var event_id := String(profile.get("entry", ""))
+	last_map_entry_audio_event = event_id
+	if not event_id.is_empty():
+		_play_audio(event_id)
 
 func _resolve_late_bound_nodes() -> void:
 	if player == null:
@@ -588,6 +608,7 @@ func _render_map_content(spawn_override: Variant = null) -> void:
 	_render_real_tile_art(roots.real_art)
 	_render_graybox_layout(roots.graybox)
 	_move_player_to_spawn(spawn_override)
+	_render_authored_story_prop_interactions(roots.authored_map, roots.interactables)
 	for npc in current_map.get("npcs", []):
 		roots.npcs.add_child(_create_interactable_marker(npc, "npc"))
 	for interactable in current_map.get("interactables", []):
@@ -653,6 +674,28 @@ func _create_interactable_marker(entry: Dictionary, kind: String) -> Node2D:
 	var marker := MapInteractable.new()
 	marker.configure(entry, kind)
 	return marker
+
+func _render_authored_story_prop_interactions(authored_root: Node, interactables_root: Node) -> void:
+	for prop in _authored_story_props(authored_root):
+		if not prop is Node2D:
+			continue
+		var local_position: Vector2 = interactables_root.to_local(prop.global_position)
+		interactables_root.add_child(_create_interactable_marker({
+			"id": "Inspect%s" % prop.name,
+			"name": String(prop.name).capitalize(),
+			"line": String(prop.get_meta("inspect_text", "")),
+			"position": {"x": local_position.x, "y": local_position.y},
+			"story_role": String(prop.get_meta("story_role", "")),
+			"source_node": String(prop.name),
+		}, "story_prop"))
+
+func _authored_story_props(root_node: Node) -> Array[Node]:
+	var props: Array[Node] = []
+	for child in root_node.get_children():
+		if child.has_meta("inspect_text"):
+			props.append(child)
+		props.append_array(_authored_story_props(child))
+	return props
 
 func _create_transition_marker(entry: Dictionary) -> Node2D:
 	var rect := _rect_from_dict(entry.get("rect", {}))

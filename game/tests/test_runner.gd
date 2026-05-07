@@ -47,7 +47,10 @@ func _run_tests() -> void:
 	_test_prototype_field_random_encounter_payload_records_source_position()
 	_test_prototype_field_loads_saved_player_position_for_current_map()
 	_test_save_payload_roundtrip()
+	_test_save_payload_preserves_bell_saint_slice_checkpoints()
 	_test_field_movement_and_interactions()
+	_test_slice_flow_route_matches_playable_bell_saint_path()
+	_test_slice_flow_route_is_playable_and_rewarded()
 	_test_first_slice_map_catalog_defines_town_and_dungeon()
 	_test_prototype_field_resolves_first_slice_map_data()
 	_test_prototype_field_generates_first_slice_map_markers()
@@ -84,6 +87,9 @@ func _run_tests() -> void:
 	_test_prototype_field_mounts_authored_underchapel_map()
 	_test_prototype_field_mounts_authored_bell_tower_map()
 	_test_prototype_field_exposes_mounted_map_audio_profile()
+	_test_prototype_field_creates_story_prop_interactions()
+	_test_prototype_field_player_can_inspect_authored_story_prop()
+	_test_prototype_field_plays_authored_map_entry_audio()
 	_test_prototype_field_changes_maps_when_player_enters_transition()
 	_test_prototype_field_blocks_out_of_order_slice_transitions()
 	_test_field_story_trigger_catalog_maps_route_events()
@@ -823,6 +829,62 @@ func _test_save_payload_roundtrip() -> void:
 	_assert(migrated.schema_version == 1, "legacy payload migrates to current schema")
 	_assert(migrated.memory_cards.owned.is_empty(), "legacy payload gets empty memory card collection")
 
+func _test_save_payload_preserves_bell_saint_slice_checkpoints() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var SaveService = load("res://scripts/save/save_service.gd")
+	var service = SaveService.new()
+	var checkpoints := [
+		{
+			"name": "mira recruited",
+			"map_id": "chapel",
+			"position": Vector2(224, 112),
+			"party": [{"id": "lead", "hp": 100, "max_hp": 100}, {"id": "mira_venn", "hp": 84, "max_hp": 84}],
+			"inventory": {"clean_bandage": 2},
+			"memory_cards": {"owned": [], "equipped": []},
+			"flags": {"mira_venn_recruited": true}
+		},
+		{
+			"name": "before bell saint",
+			"map_id": "bell_tower_boss_room",
+			"position": Vector2(48, 96),
+			"party": [{"id": "lead", "hp": 76, "max_hp": 100}, {"id": "mira_venn", "hp": 62, "max_hp": 84}],
+			"inventory": {"clean_bandage": 1, "bitter_draught": 1},
+			"memory_cards": {"owned": [], "equipped": []},
+			"flags": {"mira_venn_recruited": true, "bell_tower_reached": true}
+		},
+		{
+			"name": "after bell saint",
+			"map_id": "truth_recovered",
+			"position": Vector2(64, 64),
+			"party": [{"id": "lead", "hp": 54, "max_hp": 100}, {"id": "mira_venn", "hp": 38, "max_hp": 84}],
+			"inventory": {"bell_clapper": 1},
+			"memory_cards": {"owned": ["bell_saint"], "equipped": ["bell_saint"]},
+			"flags": {"mira_venn_recruited": true, "boss_bell_saint_defeated": true, "chapter_01_complete": true}
+		},
+	]
+	for checkpoint in checkpoints:
+		var state = GameStateScript.new()
+		state.map_id = checkpoint.map_id
+		state.player_position = checkpoint.position
+		state.party.clear()
+		for member in checkpoint.party:
+			state.party.append(member.duplicate(true))
+		state.inventory = checkpoint.inventory.duplicate(true)
+		state.memory_cards = checkpoint.memory_cards.duplicate(true)
+		state.flags = checkpoint.flags.duplicate(true)
+		var payload = service.build_payload(state.to_save_state())
+		var restored = GameStateScript.new()
+		restored.apply_save_payload(service.migrate_payload(payload))
+		_assert(restored.map_id == checkpoint.map_id, "%s checkpoint restores map id" % checkpoint.name)
+		_assert(restored.player_position == checkpoint.position, "%s checkpoint restores position" % checkpoint.name)
+		_assert(restored.party.size() == checkpoint.party.size(), "%s checkpoint restores party size" % checkpoint.name)
+		_assert(restored.inventory == checkpoint.inventory, "%s checkpoint restores inventory" % checkpoint.name)
+		_assert(restored.memory_cards == checkpoint.memory_cards, "%s checkpoint restores memory cards" % checkpoint.name)
+		for flag_name in checkpoint.flags.keys():
+			_assert(restored.flags.get(flag_name, false) == checkpoint.flags[flag_name], "%s checkpoint restores %s flag" % [checkpoint.name, flag_name])
+		restored.free()
+		state.free()
+
 func _test_field_movement_and_interactions() -> void:
 	_assert(ResourceLoader.exists("res://scripts/field/field_controller.gd"), "field controller exists")
 	var FieldController = load("res://scripts/field/field_controller.gd")
@@ -839,6 +901,59 @@ func _test_field_movement_and_interactions() -> void:
 		{"target_map": "town", "rect": Rect2(120, 48, 32, 32), "spawn": Vector2(16, 16)}
 	])
 	_assert(transition.target_map == "town", "trigger zone resolves map transition")
+
+func _test_slice_flow_route_matches_playable_bell_saint_path() -> void:
+	_assert(ResourceLoader.exists("res://data/maps/slice_flow.json"), "map slice flow exists")
+	var file := FileAccess.open("res://data/maps/slice_flow.json", FileAccess.READ)
+	var data = JSON.parse_string(file.get_as_text())
+	var flow: Array = data.flow
+	_assert(flow.front() == "character_creator", "Bell Saint route starts at character creator")
+	_assert(flow.has("empty_rotunda"), "Bell Saint route includes Empty Rotunda")
+	_assert(flow.has("underchapel_drain"), "Bell Saint route includes Underchapel Drain")
+	_assert(flow.find("chapel") < flow.find("underchapel_drain"), "Underchapel follows chapel in slice route")
+	_assert(flow.find("underchapel_drain") < flow.find("hidden_hospital_corridor"), "hospital follows Underchapel in slice route")
+	_assert(flow.find("bell_tower_boss_room") < flow.find("battle"), "battle follows Bell Tower in slice route")
+	_assert(flow.back() == "truth_recovered", "Bell Saint route ends on truth recovered reward scene")
+
+func _test_slice_flow_route_is_playable_and_rewarded() -> void:
+	var flow_file := FileAccess.open("res://data/maps/slice_flow.json", FileAccess.READ)
+	var flow_data = JSON.parse_string(flow_file.get_as_text())
+	var flow: Array = flow_data.flow
+	var field_phases: Array[String] = []
+	for phase_id in flow:
+		if phase_id in ["character_creator", "battle", "truth_recovered"]:
+			continue
+		field_phases.append(String(phase_id))
+	var MapCatalog = load("res://scripts/field/map_catalog.gd")
+	var catalog = MapCatalog.new()
+	var adjacency := {}
+	for phase_id in field_phases:
+		var map = catalog.map_for_phase(phase_id)
+		_assert(not map.is_empty(), "%s resolves to playable map data" % phase_id)
+		if map.is_empty():
+			continue
+		adjacency[phase_id] = []
+		for transition in map.get("transitions", []):
+			adjacency[phase_id].append(String(transition.target_phase))
+	var reachable := {}
+	var queue: Array[String] = ["empty_rotunda"]
+	while not queue.is_empty():
+		var current: String = queue.pop_front()
+		if reachable.has(current):
+			continue
+		reachable[current] = true
+		for next_phase in adjacency.get(current, []):
+			if not reachable.has(next_phase):
+				queue.append(next_phase)
+	for phase_id in field_phases:
+		_assert(reachable.has(phase_id), "%s is reachable from Empty Rotunda through map transitions" % phase_id)
+	var boss_map = catalog.map_for_phase("bell_tower_boss_room")
+	_assert(boss_map.boss == "bell_saint", "Bell Tower launches Bell Saint boss")
+	var enemies_file := FileAccess.open("res://data/combat/enemies.json", FileAccess.READ)
+	var enemies = JSON.parse_string(enemies_file.get_as_text())
+	_assert(enemies.bell_saint.next_flow == "truth_recovered", "Bell Saint victory routes to truth recovered")
+	_assert(enemies.bell_saint.relic == "bell_clapper", "Bell Saint victory grants Bell Clapper")
+	_assert(enemies.bell_saint.memory_card == "bell_saint", "Bell Saint victory grants Bell Saint memory card")
 
 func _test_first_slice_map_catalog_defines_town_and_dungeon() -> void:
 	_assert(ResourceLoader.exists("res://scripts/field/map_catalog.gd"), "field map catalog exists")
@@ -1446,6 +1561,51 @@ func _test_prototype_field_exposes_mounted_map_audio_profile() -> void:
 		_assert(profile.get("map_id", "") == "underchapel_drain", "mounted audio profile comes from authored Underchapel map")
 		_assert(profile.get("ambience", "") == "ambience_underchapel_drain", "mounted audio profile includes authored ambience")
 		_assert(profile.get("museum_override", "") == "curator_warning", "mounted audio profile includes museum override")
+	field_scene.queue_free()
+
+func _test_prototype_field_creates_story_prop_interactions() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "hidden_hospital_corridor")
+	field_scene.max_unlocked_route_index = 6
+	field_scene.load_phase_map()
+	var patient_bed = field_scene.get_node_or_null("MapContent/Interactables/InspectPatientBed")
+	_assert(patient_bed != null, "prototype field creates inspect interaction for authored patient bed")
+	if patient_bed != null:
+		_assert(patient_bed.is_in_group("interactables"), "authored story prop inspect marker is interactable")
+		var result: Dictionary = patient_bed.interact()
+		_assert(result.kind == "story_prop", "authored story prop interaction keeps prop kind")
+		_assert(String(result.status).begins_with("Inspect: "), "authored story prop interaction is presented as inspection text")
+		_assert(String(result.status).contains("newer than Hallowmere"), "authored story prop interaction returns inspect text")
+		_assert(result.audio_event == "ui_confirm", "authored story prop interaction uses confirm audio")
+	field_scene.queue_free()
+
+func _test_prototype_field_player_can_inspect_authored_story_prop() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.max_unlocked_route_index = 5
+	field_scene.load_phase_map()
+	var player = field_scene.get_node("%Player")
+	player.position = Vector2(80, 72)
+	player.facing = "right"
+	_assert(field_scene.try_context_action(), "prototype field lets player inspect authored story prop through normal interact")
+	_assert(field_scene.get_node("%StatusLabel").text.contains("Inspect: "), "normal inspect interaction writes inspection status")
+	_assert(field_scene.get_node("%StatusLabel").text.contains("pipe sweats"), "normal inspect interaction shows prop inspect text")
+	field_scene.queue_free()
+
+func _test_prototype_field_plays_authored_map_entry_audio() -> void:
+	var FieldScene = load("res://scenes/field/prototype_field.tscn")
+	var field_scene = FieldScene.instantiate()
+	root.add_child(field_scene)
+	field_scene.set("map_phase_id", "underchapel_drain")
+	field_scene.max_unlocked_route_index = 5
+	field_scene.load_phase_map()
+	_assert(field_scene.get("last_map_entry_audio_event") == "door_museum_open", "prototype field records authored map entry audio cue")
+	field_scene.change_to_phase("hidden_hospital_corridor", Vector2(48, 96))
+	_assert(field_scene.get("last_map_entry_audio_event") == "curator_warning", "prototype field updates entry audio cue after authored map change")
 	field_scene.queue_free()
 
 func _test_prototype_field_changes_maps_when_player_enters_transition() -> void:

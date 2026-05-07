@@ -31,8 +31,24 @@ The Bell Saint slice currently curates:
 - Human: plague cough.
 - Combat: weapon slice, hit impact.
 - Items: item pickup.
+- Dialogue: Sev, Mira, Curator, and Toll text blips.
+- Map entry cues: museum door, plague town, apothecary, chapel bell, Underchapel Drain, hidden hospital, and bell tower.
 
 The first curated pass reduced selected source audio from about 1.65 MB to about 174 KB.
+
+## Bell Saint Map Audio Profiles
+
+The authored first-slice maps expose entry audio through map profiles. Current runtime event ids:
+
+- `door_museum_open`: museum exhibit transitions.
+- `ambience_plague_town`: Hallowmere street entry cue.
+- `ambience_apothecary`: Mira's Apothecary entry cue.
+- `ambience_chapel_bell`: Chapel of the Sainted Bell entry cue.
+- `ambience_underchapel_drain`: Underchapel Drain entry cue.
+- `ambience_hidden_hospital`: Hidden Hospital Corridor entry cue.
+- `ambience_bell_tower`: Bell Tower entry cue.
+
+Some of these intentionally point at temporary OGGs until dedicated loopable ambience is selected. `AudioService.play_event()` skips missing resource paths safely, so placeholder catalog entries do not break headless tests while the audio library is still being curated.
 
 ## Naming
 
@@ -45,5 +61,9 @@ Use stable event ids such as:
 - `weapon_slice`
 - `hit_impact`
 - `item_pickup`
+- `ambience_underchapel_drain`
+- `ambience_hidden_hospital`
+- `voice_curator`
+- `voice_mira`
 
 Gameplay code should refer to event ids, not raw files.

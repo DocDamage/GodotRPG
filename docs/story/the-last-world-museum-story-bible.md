@@ -75,6 +75,7 @@ Maps:
 - Plague town street.
 - Apothecary house.
 - Chapel.
+- Underchapel Drain.
 - Hidden hospital corridor.
 - Bell tower boss room.
 
@@ -93,11 +94,20 @@ Story flow:
 2. The Curator orders them to seal the Plague Wing.
 3. Inside, the town is trapped in the same quarantine day.
 4. The apothecary remembers dying yesterday.
-5. The party finds a hospital corridor hidden behind the chapel.
-6. The Curator claims the hospital is contamination from another exhibit.
-7. The apothecary realizes the museum has been editing the town's history.
-8. The church warden rings the plague bell.
-9. The bell transforms into The Bell Saint.
-10. After the fight, the Curator says: "Unauthorized truth recovered. Correction required."
+5. The party descends into the Underchapel Drain, where plague water, hospital waste, and museum pipes mix.
+6. The party finds a hospital corridor hidden beneath the chapel.
+7. The Curator claims the hospital is contamination from another exhibit.
+8. The apothecary realizes the museum has been editing the town's history.
+9. The church warden rings the plague bell.
+10. The bell transforms into The Bell Saint.
+11. After the fight, the Curator says: "Unauthorized truth recovered. Correction required."
 
 The player should understand immediately: this is history, but broken; fantasy, but not random; a museum, but also a prison.
+
+Runtime status:
+
+- Sev's character creator is the first playable screen.
+- The Bell Saint route is defined in both story flow and map flow data.
+- Hallowmere, Mira's Apothecary, the chapel, Underchapel Drain, hidden hospital, and Bell Tower have authored field scenes with inspectable story props.
+- Mira recruitment, Bell Saint completion flags, Bell Clapper, and The Bell Saint Memory Card are save/load covered.
+- The battle system resolves Bell Saint victory into the Truth Recovered reward scene.

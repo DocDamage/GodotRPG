@@ -17,9 +17,10 @@ func play_event(event_id: String) -> AudioStreamPlayer:
 	var event := resolve_event(event_id)
 	if event.is_empty():
 		return null
+	if not ResourceLoader.exists(event.path):
+		return null
 	var stream := load(event.path)
 	if stream == null:
-		push_warning("Audio event file not found: %s" % event.path)
 		return null
 	var player := AudioStreamPlayer.new()
 	player.stream = stream

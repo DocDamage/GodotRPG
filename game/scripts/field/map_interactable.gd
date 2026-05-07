@@ -17,6 +17,8 @@ func interact() -> Dictionary:
 	var status := line
 	if entry_kind == "npc" and not display_name.is_empty():
 		status = "%s: %s" % [display_name, line]
+	elif entry_kind == "story_prop":
+		status = "Inspect: %s" % line
 	return {
 		"type": "map_line",
 		"status": status,
