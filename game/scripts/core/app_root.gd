@@ -2,6 +2,7 @@ extends Control
 
 const CharacterCreatorScene = preload("res://scenes/character_creator/character_creator_screen.tscn")
 const TitleScreenScene = preload("res://scenes/title/title_screen.tscn")
+const PrologueCinematicScene = preload("res://scenes/cinematics/prologue_cinematic.tscn")
 const PrototypeFieldScene = preload("res://scenes/field/prototype_field.tscn")
 const PrototypeBattleScene = preload("res://scenes/battle/prototype_battle.tscn")
 const StoryFlowService = preload("res://scripts/core/story_flow_service.gd")
@@ -38,7 +39,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _advance_flow() -> void:
 	_play_audio("ui_confirm")
-	if story_flow.current_phase() == "title" or story_flow.current_phase() == "character_creator":
+	if story_flow.current_phase() == "title" or story_flow.current_phase() == "prologue" or story_flow.current_phase() == "character_creator":
 		return
 	elif story_flow.current_phase() == "truth_recovered":
 		var game_state = _game_state()
@@ -64,6 +65,16 @@ func _on_character_profile_confirmed(profile) -> void:
 
 func _on_title_new_game_requested() -> void:
 	_play_audio("ui_confirm")
+	if not story_flow.go_to_phase("prologue"):
+		story_flow.load_first_slice()
+		story_flow.go_to_phase("prologue")
+	var game_state = _game_state()
+	if game_state != null:
+		game_state.map_id = "prologue"
+	_sync_scene()
+	_update_labels()
+
+func _on_prologue_completed() -> void:
 	if not story_flow.go_to_phase("character_creator"):
 		story_flow.load_first_slice()
 		story_flow.go_to_phase("character_creator")
@@ -184,6 +195,10 @@ func _sync_scene() -> void:
 		title_scene.options_requested.connect(_on_title_status_only_requested)
 		title_scene.exit_requested.connect(_on_title_exit_requested)
 		scene_host.add_child(title_scene)
+	elif story_flow.current_phase() == "prologue":
+		var prologue_scene := PrologueCinematicScene.instantiate()
+		prologue_scene.prologue_completed.connect(_on_prologue_completed)
+		scene_host.add_child(prologue_scene)
 	elif story_flow.current_phase() == "character_creator":
 		var creator_scene := CharacterCreatorScene.instantiate()
 		creator_scene.profile_confirmed.connect(_on_character_profile_confirmed)

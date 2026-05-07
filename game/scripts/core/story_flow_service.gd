@@ -5,7 +5,7 @@ const FIRST_SLICE_PATH := "res://data/story/first_slice.json"
 
 var title := ""
 var slice_name := ""
-var phases: Array[String] = ["title", "character_creator"]
+var phases: Array[String] = ["title", "prologue", "character_creator"]
 var phase_index := 0
 var story_data: Dictionary = {}
 
@@ -17,7 +17,7 @@ func load_first_slice() -> void:
 	story_data = JSON.parse_string(file.get_as_text())
 	title = story_data.get("title", "")
 	slice_name = story_data.get("slice_name", "")
-	phases = ["title", "character_creator"]
+	phases = ["title", "prologue", "character_creator"]
 	for phase in story_data.get("flow", []):
 		phases.append(String(phase))
 	phases.append("battle")

@@ -1,0 +1,91 @@
+[gd_scene load_steps=2 format=3 uid="uid://last_world_museum_prologue"]
+
+[ext_resource type="Script" path="res://scripts/cinematics/prologue_cinematic.gd" id="1_prologue"]
+
+[node name="PrologueCinematic" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_prologue")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.025, 0.035, 0.045, 1)
+
+[node name="ParallaxLayer" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, 0)
+z_index = 1
+
+[node name="VistaPaneLayer" type="HBoxContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.18
+anchor_right = 0.95
+anchor_bottom = 0.52
+theme_override_constants/separation = 12
+
+[node name="MarcherLayer" type="Node2D" parent="."]
+unique_name_in_owner = true
+z_index = 5
+
+[node name="WeatherLayer" type="Node2D" parent="."]
+unique_name_in_owner = true
+z_index = 8
+
+[node name="TextPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.64
+anchor_right = 0.92
+anchor_bottom = 0.88
+modulate = Color(0.82, 0.92, 0.96, 0.92)
+
+[node name="TextMargin" type="MarginContainer" parent="TextPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 14
+
+[node name="CaptionLabel" type="Label" parent="TextPanel/TextMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+autowrap_mode = 3
+text = "ARCHIVE"
+
+[node name="PromptLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.58
+anchor_top = 0.90
+anchor_right = 0.94
+anchor_bottom = 0.96
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 14
+text = "Interact / Enter / Esc: Skip"
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.08
+anchor_top = 0.965
+anchor_right = 0.92
+anchor_bottom = 0.985
+mouse_filter = 2
+show_percentage = false
+value = 0.0

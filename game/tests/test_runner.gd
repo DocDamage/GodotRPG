@@ -45,10 +45,21 @@ func _run_tests() -> void:
 	_test_title_screen_options_reopen_does_not_duplicate_controls()
 	_test_title_screen_cancel_closes_submenu()
 	_test_title_screen_missing_texture_loads_null_without_error()
+	_test_prologue_cinematic_data_defines_story_march()
+	_test_prologue_cinematic_data_references_existing_assets()
+	_test_prologue_cinematic_backstory_leads_to_sev_wake()
+	_test_prologue_cinematic_scene_mounts_animated_layers()
+	_test_prologue_cinematic_finish_emits_completion()
+	_test_prologue_cinematic_caption_timing_and_progress()
+	_test_prologue_cinematic_animates_layers_during_process()
+	_test_prologue_cinematic_falls_back_when_data_is_missing()
 	_test_app_root_loads_saved_title_settings_on_boot()
 	_test_app_root_starts_on_title_screen()
-	_test_app_root_title_new_game_advances_to_character_creator()
+	_test_app_root_title_new_game_advances_to_prologue()
+	_test_app_root_prologue_completion_advances_to_character_creator()
+	_test_app_root_repeated_prologue_completion_is_stable()
 	_test_app_root_title_continue_loads_manual_slot()
+	_test_app_root_continue_bypasses_prologue()
 	_test_app_root_confirmed_creator_starts_game_flow()
 	_test_app_root_title_to_reward_flow_keeps_single_scene_mounted()
 	_test_input_map_defines_modern_controller_actions()
@@ -776,7 +787,9 @@ func _test_app_root_title_to_reward_flow_keeps_single_scene_mounted() -> void:
 	var host = app.get_node("%SceneHost")
 	_assert(host.get_child_count() == 1 and host.get_child(0).name == "TitleScreen", "title-to-slice flow starts with one mounted title scene")
 	app._on_title_new_game_requested()
-	_assert(host.get_child_count() == 1 and host.get_child(0).name == "CharacterCreatorScreen", "New Game swaps title for one character creator scene")
+	_assert(host.get_child_count() == 1 and host.get_child(0).name == "PrologueCinematic", "New Game swaps title for one prologue scene")
+	app._on_prologue_completed()
+	_assert(host.get_child_count() == 1 and host.get_child(0).name == "CharacterCreatorScreen", "prologue swaps into one character creator scene")
 	app._on_character_profile_confirmed(PlayerProfile.from_dict({"name": "Sev", "class_id": "vanguard"}))
 	_assert(host.get_child_count() == 1 and host.get_child(0).name == "PrototypeField", "creator confirmation swaps into one field scene")
 	for phase_id in [
@@ -935,6 +948,164 @@ func _test_title_screen_missing_texture_loads_null_without_error() -> void:
 	_assert(screen._load_texture("res://assets/title_screen/panes/missing.png") == null, "missing title texture returns null")
 	screen.queue_free()
 
+func _test_prologue_cinematic_data_defines_story_march() -> void:
+	_assert(FileAccess.file_exists("res://data/cinematics/prologue.json"), "prologue cinematic data exists")
+	var file := FileAccess.open("res://data/cinematics/prologue.json", FileAccess.READ)
+	if file == null:
+		return
+	var data = JSON.parse_string(file.get_as_text())
+	_assert(data is Dictionary, "prologue cinematic data parses")
+	if not data is Dictionary:
+		return
+	_assert(data.get("captions", []).size() >= 5, "prologue defines enough backstory captions")
+	_assert(data.get("vista_panes", []).size() >= 5, "prologue defines museum vista panes")
+	_assert(String(data.get("audio_event", "")) == "curator_warning", "prologue defines museum audio cue")
+
+func _test_prologue_cinematic_data_references_existing_assets() -> void:
+	var file := FileAccess.open("res://data/cinematics/prologue.json", FileAccess.READ)
+	_assert(file != null, "prologue cinematic data exists for asset validation")
+	if file == null:
+		return
+	var data = JSON.parse_string(file.get_as_text())
+	_assert(data is Dictionary, "prologue cinematic data parses for asset validation")
+	if not data is Dictionary:
+		return
+	var previous_time := -1.0
+	for caption in data.get("captions", []):
+		var time := float(caption.get("time", 0.0))
+		_assert(time >= previous_time, "prologue caption times are sorted")
+		_assert(not String(caption.get("text", "")).is_empty(), "prologue caption has readable text")
+		previous_time = time
+	for pane in data.get("vista_panes", []):
+		var texture_path := String(pane.get("texture", ""))
+		_assert(FileAccess.file_exists(texture_path), "%s prologue vista texture exists" % texture_path)
+	for layer in data.get("parallax_layers", []):
+		var texture_path := String(layer.get("texture", ""))
+		_assert(FileAccess.file_exists(texture_path), "%s prologue parallax texture exists" % texture_path)
+
+func _test_prologue_cinematic_backstory_leads_to_sev_wake() -> void:
+	var file := FileAccess.open("res://data/cinematics/prologue.json", FileAccess.READ)
+	_assert(file != null, "prologue cinematic data exists for story validation")
+	if file == null:
+		return
+	var data = JSON.parse_string(file.get_as_text())
+	_assert(data is Dictionary, "prologue cinematic data parses for story validation")
+	if not data is Dictionary:
+		return
+	var text_parts: Array[String] = []
+	for caption in data.get("captions", []):
+		text_parts.append(String(caption.get("speaker", "")))
+		text_parts.append(String(caption.get("text", "")))
+	var full_text := "\n".join(text_parts)
+	_assert(full_text.contains("Docent units one through sixteen: offline"), "prologue explains missing docents")
+	_assert(full_text.contains("Docent unit seventeen: responsive"), "prologue identifies Sev's wake state")
+	_assert(full_text.contains("western wing"), "prologue points toward the immediate breach")
+	_assert(full_text.contains("plague bell"), "prologue points toward the Plague Wing")
+	_assert(full_text.ends_with("Wake."), "prologue final line leads directly into Sev waking")
+
+func _test_prologue_cinematic_scene_mounts_animated_layers() -> void:
+	_assert(ResourceLoader.exists("res://scenes/cinematics/prologue_cinematic.tscn"), "prologue cinematic scene exists")
+	var Scene = load("res://scenes/cinematics/prologue_cinematic.tscn")
+	var cinematic = Scene.instantiate()
+	root.add_child(cinematic)
+	cinematic.ensure_rendered()
+	_assert(cinematic.name == "PrologueCinematic", "prologue scene has stable root name")
+	_assert(cinematic.get_node_or_null("ParallaxLayer") != null, "prologue mounts parallax layer")
+	_assert(cinematic.get_node("ParallaxLayer").get_child_count() >= 3, "prologue renders multiple parallax bands")
+	_assert(cinematic.get_node_or_null("VistaPaneLayer") != null, "prologue mounts Vista Gallery pane layer")
+	_assert(cinematic.get_node("VistaPaneLayer").get_child_count() >= 5, "prologue renders multiple vista panes")
+	_assert(cinematic.get_node_or_null("MarcherLayer") != null, "prologue mounts marcher layer")
+	_assert(cinematic.get_node("MarcherLayer").get_child_count() >= 3, "prologue renders marching docent silhouettes")
+	_assert(cinematic.get_node_or_null("WeatherLayer") != null, "prologue mounts weather layer")
+	_assert(cinematic.get_node("WeatherLayer").get_child_count() >= 4, "prologue renders fog/spark weather")
+	_assert(cinematic.get_node("%CaptionLabel").text.length() > 0, "prologue renders opening caption")
+	_assert(cinematic.get_node_or_null("%ProgressBar") != null, "prologue renders playback progress bar")
+	cinematic.queue_free()
+
+func _test_prologue_cinematic_finish_emits_completion() -> void:
+	var Scene = load("res://scenes/cinematics/prologue_cinematic.tscn")
+	var cinematic = Scene.instantiate()
+	root.add_child(cinematic)
+	cinematic.ensure_rendered()
+	var emitted := []
+	cinematic.prologue_completed.connect(func(): emitted.append(true))
+	cinematic.finish()
+	_assert(emitted.size() == 1, "prologue finish emits completion signal once")
+	_assert(cinematic.is_finished, "prologue records finished state")
+	cinematic.finish()
+	_assert(emitted.size() == 1, "prologue finish does not emit twice")
+	cinematic.queue_free()
+
+func _test_prologue_cinematic_caption_timing_and_progress() -> void:
+	var Scene = load("res://scenes/cinematics/prologue_cinematic.tscn")
+	var cinematic = Scene.instantiate()
+	root.add_child(cinematic)
+	cinematic.ensure_rendered()
+	var first_caption := String(cinematic.get_node("%CaptionLabel").text)
+	_assert(first_caption.contains("final collapse"), "prologue starts on first backstory caption")
+	cinematic.seek_to(6.1)
+	var later_caption := String(cinematic.get_node("%CaptionLabel").text)
+	_assert(later_caption.contains("myths, fears"), "prologue seek advances to timed caption")
+	cinematic.seek_to(13.1)
+	_assert(cinematic.caption_progress() > 0.25, "prologue exposes caption progress for QA")
+	_assert(cinematic.get_node("%ProgressBar").value > 25.0, "prologue progress bar reflects caption progress")
+	_assert(String(cinematic.get_node("%PromptLabel").text).contains("Skip"), "prologue prompt clearly exposes skip input")
+	cinematic.queue_free()
+
+func _test_prologue_cinematic_animates_layers_during_process() -> void:
+	var Scene = load("res://scenes/cinematics/prologue_cinematic.tscn")
+	var cinematic = Scene.instantiate()
+	root.add_child(cinematic)
+	cinematic.ensure_rendered()
+	var parallax = cinematic.get_node("ParallaxLayer").get_child(0)
+	var marcher = cinematic.get_node("MarcherLayer").get_child(0)
+	var weather = cinematic.get_node("WeatherLayer").get_child(0)
+	var parallax_x := float(parallax.position.x)
+	var marcher_position := Vector2(marcher.position)
+	var weather_x := float(weather.position.x)
+	cinematic._process(1.0)
+	_assert(float(parallax.position.x) != parallax_x, "prologue parallax moves during process")
+	_assert(Vector2(marcher.position) != marcher_position, "prologue marchers animate during process")
+	_assert(float(weather.position.x) != weather_x, "prologue weather moves during process")
+	cinematic.queue_free()
+
+func _test_prologue_cinematic_falls_back_when_data_is_missing() -> void:
+	var Script = load("res://scripts/cinematics/prologue_cinematic.gd")
+	var cinematic = Script.new()
+	cinematic.name = "FallbackPrologue"
+	cinematic.data_path = "res://data/cinematics/missing_prologue.json"
+	cinematic.warn_on_missing_data = false
+	var parallax := Node2D.new()
+	parallax.name = "ParallaxLayer"
+	parallax.unique_name_in_owner = true
+	cinematic.add_child(parallax)
+	var panes := HBoxContainer.new()
+	panes.name = "VistaPaneLayer"
+	panes.unique_name_in_owner = true
+	cinematic.add_child(panes)
+	var marchers := Node2D.new()
+	marchers.name = "MarcherLayer"
+	marchers.unique_name_in_owner = true
+	cinematic.add_child(marchers)
+	var weather := Node2D.new()
+	weather.name = "WeatherLayer"
+	weather.unique_name_in_owner = true
+	cinematic.add_child(weather)
+	var caption := Label.new()
+	caption.name = "CaptionLabel"
+	caption.unique_name_in_owner = true
+	cinematic.add_child(caption)
+	var prompt := Label.new()
+	prompt.name = "PromptLabel"
+	prompt.unique_name_in_owner = true
+	cinematic.add_child(prompt)
+	root.add_child(cinematic)
+	cinematic.ensure_rendered()
+	_assert(cinematic.data.get("captions", []).size() >= 1, "prologue fallback provides at least one caption")
+	_assert(caption.text.contains("Last World Museum"), "prologue fallback renders readable caption")
+	_assert(prompt.text.contains("Skip"), "prologue fallback still renders skip prompt")
+	cinematic.queue_free()
+
 func _test_app_root_loads_saved_title_settings_on_boot() -> void:
 	var AppRootScene = load("res://scenes/app/app_root.tscn")
 	var GameStateScript = load("res://scripts/core/game_state.gd")
@@ -971,7 +1142,7 @@ func _test_app_root_starts_on_title_screen() -> void:
 	app.queue_free()
 	game_state.free()
 
-func _test_app_root_title_new_game_advances_to_character_creator() -> void:
+func _test_app_root_title_new_game_advances_to_prologue() -> void:
 	var AppRootScene = load("res://scenes/app/app_root.tscn")
 	var GameStateScript = load("res://scripts/core/game_state.gd")
 	var app = AppRootScene.instantiate()
@@ -980,9 +1151,42 @@ func _test_app_root_title_new_game_advances_to_character_creator() -> void:
 	root.add_child(app)
 	app._ready()
 	app._on_title_new_game_requested()
-	_assert(app.story_flow.current_phase() == "character_creator", "title New Game advances to character creator")
-	_assert(game_state.map_id == "character_creator", "title New Game records character creator map id")
-	_assert(app.get_node("%SceneHost").get_child(0).name == "CharacterCreatorScreen", "AppRoot mounts character creator after title New Game")
+	_assert(app.story_flow.current_phase() == "prologue", "title New Game advances to prologue cinematic")
+	_assert(game_state.map_id == "prologue", "title New Game records prologue map id")
+	_assert(app.get_node("%SceneHost").get_child(0).name == "PrologueCinematic", "AppRoot mounts prologue after title New Game")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_prologue_completion_advances_to_character_creator() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app._ready()
+	app._on_title_new_game_requested()
+	app._on_prologue_completed()
+	_assert(app.story_flow.current_phase() == "character_creator", "prologue completion advances to character creator")
+	_assert(game_state.map_id == "character_creator", "prologue completion records character creator map id")
+	_assert(app.get_node("%SceneHost").get_child(0).name == "CharacterCreatorScreen", "AppRoot mounts character creator after prologue")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_repeated_prologue_completion_is_stable() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app._ready()
+	app._on_title_new_game_requested()
+	app._on_prologue_completed()
+	app._on_prologue_completed()
+	_assert(app.story_flow.current_phase() == "character_creator", "repeated prologue completion keeps character creator phase")
+	_assert(app.get_node("%SceneHost").get_child_count() == 1, "repeated prologue completion keeps one mounted scene")
+	_assert(app.get_node("%SceneHost").get_child(0).name == "CharacterCreatorScreen", "repeated prologue completion keeps character creator mounted")
 	app.queue_free()
 	game_state.free()
 
@@ -1006,6 +1210,32 @@ func _test_app_root_title_continue_loads_manual_slot() -> void:
 	_assert(app.story_flow.current_phase() == "underchapel_drain", "title Continue routes to saved phase")
 	_assert(game_state.map_id == "underchapel_drain", "title Continue restores saved map id")
 	_assert(game_state.player_position == Vector2(176, 92), "title Continue restores saved position")
+	app.queue_free()
+	game_state.free()
+	saved_state.free()
+	if previous_payload.is_empty():
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(manual_path))
+	else:
+		save_service.save_slot(manual_path, previous_payload)
+
+func _test_app_root_continue_bypasses_prologue() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var SaveService = load("res://scripts/save/save_service.gd")
+	var save_service = SaveService.new()
+	var manual_path := "user://manual_slot.save"
+	var previous_payload: Dictionary = save_service.load_slot(manual_path)
+	var saved_state = GameStateScript.new()
+	saved_state.map_id = "plague_town_street"
+	_assert(save_service.save_slot(manual_path, saved_state.to_save_state()) == OK, "continue bypass test writes manual slot")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app._ready()
+	app._on_title_continue_requested()
+	_assert(app.story_flow.current_phase() == "plague_town_street", "Continue restores saved phase instead of prologue")
+	_assert(app.get_node("%SceneHost").get_child(0).name != "PrologueCinematic", "Continue does not mount prologue")
 	app.queue_free()
 	game_state.free()
 	saved_state.free()
@@ -5436,6 +5666,7 @@ func _test_story_flow_service_loads_and_advances_slice() -> void:
 	_assert(flow.title == "The Last World Museum", "story flow loads title")
 	_assert(flow.slice_name == "The Bell Saint", "story flow loads slice name")
 	_assert(flow.current_phase() == "title", "story flow starts at title screen")
+	_assert(flow.advance() == "prologue", "story flow advances into prologue cinematic")
 	_assert(flow.advance() == "character_creator", "story flow advances into character creator")
 	flow.advance()
 	_assert(flow.current_phase() == "empty_rotunda", "story flow advances into first field phase")

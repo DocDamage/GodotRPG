@@ -1,0 +1,34 @@
+{
+  "audio_event": "curator_warning",
+  "captions": [
+    {"time": 0.0, "speaker": "ARCHIVE", "text": "After humanity's final collapse, the Last World Museum was built outside normal time."},
+    {"time": 3.0, "speaker": "CURATOR", "text": "Purpose: preserve every age of human existence from origin to ending."},
+    {"time": 6.0, "speaker": "ARCHIVE", "text": "But the museum did not preserve only facts. It preserved myths, fears, propaganda, and unfinished guilt."},
+    {"time": 9.5, "speaker": "ARCHIVE", "text": "For centuries, the museum kept history still. Then the exhibits began remembering the doors."},
+    {"time": 13.0, "speaker": "CURATOR", "text": "Contradiction levels exceed preservation limits. Docent units one through sixteen: offline."},
+    {"time": 16.0, "speaker": "ARCHIVE", "text": "Only one worker remained outside the catalog. No origin record. No exhibit tag."},
+    {"time": 19.0, "speaker": "CURATOR", "text": "Docent unit seventeen: responsive."},
+    {"time": 21.5, "speaker": "ARCHIVE", "text": "In the western wing, a plague bell rang where no bell should ring."},
+    {"time": 24.0, "speaker": "CURATOR", "text": "Wake."}
+  ],
+  "vista_panes": [
+    {"id": "museum", "texture": "res://assets/title_screen/panes/pane_museum.png", "label": "THE ROTUNDA"},
+    {"id": "plague", "texture": "res://assets/title_screen/panes/pane_plague.png", "label": "PESTILENCE"},
+    {"id": "rome", "texture": "res://assets/title_screen/panes/pane_rome.png", "label": "EMPIRE"},
+    {"id": "war", "texture": "res://assets/title_screen/panes/pane_war.png", "label": "WAR"},
+    {"id": "modern", "texture": "res://assets/title_screen/panes/pane_modern.png", "label": "THE ORDINARY WORLD"},
+    {"id": "future", "texture": "res://assets/title_screen/panes/pane_future.png", "label": "UNWRITTEN FUTURES"}
+  ],
+  "parallax_layers": [
+    {"id": "industrial_bg", "texture": "res://assets/vistas/first_slice/industrial/bg.png", "position": {"x": 0, "y": 0}, "size": {"x": 960, "y": 180}, "speed": -4.0, "modulate": [0.40, 0.48, 0.52, 0.72]},
+    {"id": "industrial_buildings", "texture": "res://assets/vistas/first_slice/industrial/far_buildings.png", "position": {"x": 0, "y": 96}, "size": {"x": 960, "y": 150}, "speed": -12.0, "modulate": [0.52, 0.68, 0.70, 0.72]},
+    {"id": "gothic_near", "texture": "res://assets/vistas/first_slice/gothic/near.png", "position": {"x": 0, "y": 210}, "size": {"x": 960, "y": 150}, "speed": -22.0, "modulate": [0.48, 0.56, 0.60, 0.78]}
+  ],
+  "weather_patches": [
+    {"id": "fog_01", "rect": {"x": 30, "y": 292, "w": 220, "h": 22}, "speed": -18.0, "color": [0.58, 0.72, 0.70, 0.14]},
+    {"id": "fog_02", "rect": {"x": 260, "y": 248, "w": 260, "h": 18}, "speed": -11.0, "color": [0.58, 0.72, 0.70, 0.12]},
+    {"id": "fog_03", "rect": {"x": 580, "y": 322, "w": 240, "h": 24}, "speed": -15.0, "color": [0.58, 0.72, 0.70, 0.13]},
+    {"id": "spark_01", "rect": {"x": 180, "y": 116, "w": 34, "h": 4}, "speed": -32.0, "color": [0.68, 0.90, 0.92, 0.22]},
+    {"id": "spark_02", "rect": {"x": 710, "y": 172, "w": 42, "h": 4}, "speed": -26.0, "color": [0.68, 0.90, 0.92, 0.18]}
+  ]
+}
