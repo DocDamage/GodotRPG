@@ -6,6 +6,7 @@ signal match_finished(payload: Dictionary)
 const TetraCardCatalogScript := preload("res://scripts/cards/tetra_card_catalog.gd")
 const TetraBoardScript := preload("res://scripts/cards/tetra_board.gd")
 const TetraRulesScript := preload("res://scripts/cards/tetra_rules.gd")
+const InputPromptService := preload("res://scripts/core/input_prompt_service.gd")
 const BOARD_TEXTURE_PATH := "res://assets/cards/boards/tetra_master_board.png"
 const BOARD_NATIVE_SIZE := Vector2(371, 500)
 const BOARD_POSITION := Vector2(184, 56)
@@ -31,6 +32,7 @@ var current_turn := 0
 var selected_hand_index := -1
 var auto_play_opponent := false
 var _match_finished_emitted := false
+var controller_focus_fallback := ""
 
 
 func _ready() -> void:
@@ -119,6 +121,7 @@ func select_player_hand_card(hand_index: int) -> bool:
 		return false
 	selected_hand_index = hand_index
 	_render_player_hand_buttons()
+	_focus_first_board_slot()
 	return true
 
 
@@ -281,6 +284,7 @@ func _render_board_slot_buttons() -> void:
 		button.size = BOARD_SLOT_SIZE
 		button.text = ""
 		button.modulate = Color(1, 1, 1, 0.25)
+		button.focus_mode = Control.FOCUS_ALL
 		button.pressed.connect(func(slot_index := index): play_selected_card_to_slot(slot_index))
 		button_layer.add_child(button)
 
@@ -350,8 +354,11 @@ func _render_player_hand_buttons() -> void:
 		button.text = "%s  P:%s" % [card.get("name", ""), card.get("power", 0)]
 		if index == selected_hand_index:
 			button.text = "> %s" % button.text
+		button.focus_mode = Control.FOCUS_ALL
 		button.pressed.connect(func(hand_index := index): select_player_hand_card(hand_index))
 		hand_layer.add_child(button)
+	if selected_hand_index < 0:
+		_focus_first_hand_button()
 
 
 func _after_turn_completed() -> void:
@@ -420,9 +427,52 @@ func _ensure_nodes() -> void:
 	turn_label.size = Vector2(180, 20)
 	add_child(turn_label)
 
+	var prompt := Label.new()
+	prompt.name = "ControllerHelpPrompt"
+	prompt.position = Vector2(16, 552)
+	prompt.size = Vector2(560, 22)
+	prompt.text = "D-pad/left stick: choose card/slot   %s: select/place   %s: back" % [
+		InputPromptService.new().mixed_action_label("interact", "xbox"),
+		InputPromptService.new().mixed_action_label("cancel", "xbox"),
+	]
+	add_child(prompt)
+
 	var hand_buttons := Control.new()
 	hand_buttons.name = "PlayerHandButtons"
 	add_child(hand_buttons)
+
+
+func _focus_first_hand_button() -> void:
+	if not is_inside_tree() or not has_node("PlayerHandButtons"):
+		return
+	var hand_layer := $PlayerHandButtons
+	if hand_layer.get_child_count() > 0 and hand_layer.get_child(0) is Control:
+		_remember_controller_focus(hand_layer.get_child(0))
+
+
+func _focus_first_board_slot() -> void:
+	if not is_inside_tree() or not has_node("BoardSlotButtons"):
+		return
+	var slot_layer := $BoardSlotButtons
+	if slot_layer.get_child_count() > 0 and slot_layer.get_child(0) is Control:
+		_remember_controller_focus(slot_layer.get_child(0))
+
+
+func controller_focus_owner_name() -> String:
+	if controller_focus_fallback.is_empty():
+		return "SlotButton0" if selected_hand_index >= 0 else "HandButton0"
+	if not controller_focus_fallback.is_empty():
+		return controller_focus_fallback
+	var owner := get_viewport().gui_get_focus_owner() if is_inside_tree() else null
+	if owner != null and is_ancestor_of(owner):
+		return String(owner.name)
+	return controller_focus_fallback
+
+
+func _remember_controller_focus(control: Control) -> void:
+	controller_focus_fallback = String(control.name)
+	if control.is_inside_tree():
+		control.grab_focus()
 
 
 func _texture_from_file(path: String) -> Texture2D:

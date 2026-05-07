@@ -5,6 +5,7 @@ signal battle_completed(payload: Dictionary)
 const BattleController = preload("res://scripts/battle/battle_controller.gd")
 const SevRecordService = preload("res://scripts/core/sev_record_service.gd")
 const ContentCatalog = preload("res://scripts/core/content_catalog.gd")
+const InputPromptService = preload("res://scripts/core/input_prompt_service.gd")
 
 @onready var party_label: Label = %PartyLabel
 @onready var enemy_label: Label = %EnemyLabel
@@ -30,6 +31,7 @@ var command_ready_override := true
 var animation_texture_cache: Dictionary = {}
 var battler_animation_time: Dictionary = {"party": 0.0, "enemy": 0.0}
 var battler_animation_index: Dictionary = {"party": 0, "enemy": 0}
+var controller_focus_fallback := ""
 
 func _ready() -> void:
 	_ensure_party_sprite()
@@ -44,8 +46,14 @@ func _ready() -> void:
 	apply_battler_animation_hooks()
 	_update_labels("The Bell Saint descends." if enemies[0].id == "bell_saint" else "A wild slime blocks the path.")
 	refresh_command_state()
+	_ensure_controller_help_prompt()
+	_configure_controller_focus()
 	if bool(enemies[0].get("boss", false)):
 		play_boss_intro()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("cancel"):
+		handle_controller_cancel()
 
 func _process(delta: float) -> void:
 	if battle.party.is_empty() or battle.enemies.is_empty():
@@ -153,13 +161,17 @@ func open_skill_menu() -> void:
 		if skill.is_empty():
 			continue
 		var button := Button.new()
+		button.name = "Skill%s" % String(skill_id).to_pascal_case()
 		button.text = _format_skill_button_text(String(skill_id), skill)
 		button.tooltip_text = _format_skill_tooltip(skill)
+		button.focus_mode = Control.FOCUS_ALL
 		button.set_meta("skill_id", String(skill_id))
 		button.set_meta("skill_animation", String(skill.get("animation", "")))
 		button.pressed.connect(Callable(self, "select_skill").bind(String(skill_id)))
 		menu.add_child(button)
 	menu.visible = true
+	if menu.get_child_count() > 0 and menu.get_child(0) is Control:
+		_remember_controller_focus(menu.get_child(0))
 
 func render_target_menu() -> void:
 	var menu = get_node_or_null("%TargetMenu")
@@ -181,6 +193,24 @@ func render_target_menu() -> void:
 		button.pressed.connect(Callable(self, "select_enemy_target").bind(index))
 		menu.add_child(button)
 	menu.visible = battle.enemies.size() > 1
+
+func handle_controller_cancel() -> bool:
+	var closed := false
+	var skill_menu = get_node_or_null("%SkillMenu")
+	if skill_menu is VBoxContainer and skill_menu.visible:
+		skill_menu.visible = false
+		closed = true
+	var target_menu = get_node_or_null("%TargetMenu")
+	if target_menu is HBoxContainer and target_menu.visible:
+		target_menu.visible = false
+		closed = true
+	if closed:
+		_play_audio("ui_cancel")
+		var attack_button = get_node_or_null("%AttackButton")
+		if attack_button is Button:
+			_remember_controller_focus(attack_button)
+		return true
+	return false
 
 func _clear_menu_children(menu: Container) -> void:
 	for child in menu.get_children():
@@ -320,6 +350,47 @@ func _apply_command_button_state() -> void:
 	var item_button = get_node_or_null("%ItemButton")
 	if item_button is Button and not disabled:
 		item_button.disabled = int(_battle_inventory().get("clean_bandage", 0)) <= 0
+
+func _configure_controller_focus() -> void:
+	for button_name in ["AttackButton", "SkillButton", "ItemButton", "DefendButton", "FleeButton"]:
+		var button = get_node_or_null("%%%s" % button_name)
+		if button is Button:
+			button.focus_mode = Control.FOCUS_ALL
+	var attack_button = get_node_or_null("%AttackButton")
+	if attack_button is Button:
+		_remember_controller_focus(attack_button)
+
+func _ensure_controller_help_prompt() -> void:
+	var root_control = get_node_or_null("BattleUi/RootControl")
+	if not root_control is Control or root_control.has_node("ControllerHelpPrompt"):
+		return
+	var prompt := Label.new()
+	prompt.name = "ControllerHelpPrompt"
+	prompt.position = Vector2(24, 12)
+	prompt.size = Vector2(760, 22)
+	prompt.text = "%s: command   %s: back   D-pad/left stick: navigate" % [
+		InputPromptService.new().mixed_action_label("interact", "xbox"),
+		InputPromptService.new().mixed_action_label("cancel", "xbox"),
+	]
+	root_control.add_child(prompt)
+
+func controller_focus_owner_name() -> String:
+	var skill_menu = get_node_or_null("%SkillMenu")
+	if skill_menu is VBoxContainer and skill_menu.visible and skill_menu.get_child_count() > 0:
+		return String(skill_menu.get_child(0).name)
+	if controller_focus_fallback.is_empty():
+		_configure_controller_focus()
+	if not controller_focus_fallback.is_empty():
+		return controller_focus_fallback
+	var owner := get_viewport().gui_get_focus_owner() if is_inside_tree() else null
+	if owner != null and is_ancestor_of(owner):
+		return String(owner.name)
+	return controller_focus_fallback
+
+func _remember_controller_focus(control: Control) -> void:
+	controller_focus_fallback = String(control.name)
+	if control.is_inside_tree():
+		control.grab_focus()
 
 func focus_camera(target: String) -> void:
 	var camera = get_node_or_null("ArenaCamera")

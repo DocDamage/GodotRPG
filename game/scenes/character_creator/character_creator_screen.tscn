@@ -383,6 +383,13 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Confirm Record"
 
+[node name="ControllerHelpPrompt" type="Label" parent="."]
+offset_left = 28.0
+offset_top = 684.0
+offset_right = 788.0
+offset_bottom = 708.0
+text = "D-pad/left stick: move focus   A / Enter: select   B / Esc: back"
+
 [connection signal="pressed" from="Margin/Layout/OptionsColumn/PronounsRow/PronounsPrevious" to="." method="_on_pronouns_previous_pressed"]
 [connection signal="pressed" from="Margin/Layout/OptionsColumn/PronounsRow/PronounsNext" to="." method="_on_pronouns_next_pressed"]
 [connection signal="pressed" from="Margin/Layout/OptionsColumn/ClassRow/ClassPrevious" to="." method="_on_class_previous_pressed"]

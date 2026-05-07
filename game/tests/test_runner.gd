@@ -35,8 +35,15 @@ func _run_tests() -> void:
 	_test_character_creator_randomize_and_reset_controls()
 	_test_character_creator_scene_has_completion_controls()
 	_test_character_creator_scene_confirm_emits_complete_profile()
+	_test_character_creator_scene_assigns_controller_focus()
+	_test_character_creator_renders_controller_help_prompt()
 	_test_app_root_confirmed_creator_starts_game_flow()
+	_test_input_map_defines_modern_controller_actions()
+	_test_input_prompt_service_formats_controller_labels()
+	_test_input_prompt_service_resolves_saved_glyph_preference()
 	_test_player_profile_persists_uncatalogued_dossier()
+	_test_accessibility_settings_persist_controller_options()
+	_test_game_state_save_roundtrip_preserves_controller_accessibility()
 	_test_sev_record_service_summarizes_creator_loadout()
 	_test_content_catalog_loads_recruitable_party_members()
 	_test_class_stats_and_leveling()
@@ -58,6 +65,7 @@ func _run_tests() -> void:
 	_test_save_payload_preserves_bell_saint_slice_checkpoints()
 	_test_save_payload_preserves_first_slice_evidence_progress()
 	_test_game_state_rebuilds_discovered_story_prop_list_from_legacy_flags()
+	_test_manual_save_slot_roundtrip_preserves_slice_state()
 	_test_field_movement_and_interactions()
 	_test_slice_flow_route_matches_playable_bell_saint_path()
 	_test_slice_flow_route_is_playable_and_rewarded()
@@ -159,6 +167,9 @@ func _run_tests() -> void:
 	_test_battle_screen_handles_party_defeat()
 	_test_battle_screen_handles_victory_presentation()
 	_test_battle_screen_exposes_skill_and_item_commands()
+	_test_battle_screen_assigns_controller_focus_to_commands()
+	_test_battle_screen_controller_cancel_closes_skill_menu()
+	_test_battle_screen_renders_controller_help_prompt()
 	_test_battle_screen_item_heals_most_wounded_living_party_member()
 	_test_battle_screen_disables_item_command_without_bandages()
 	_test_battle_screen_disables_item_command_after_last_bandage_used()
@@ -199,6 +210,8 @@ func _run_tests() -> void:
 	_test_app_root_renders_bell_saint_reward_scene()
 	_test_app_root_reward_scene_summarizes_evidence_progress()
 	_test_app_root_reward_scene_renders_acknowledgement_prompt()
+	_test_app_root_reward_scene_uses_controller_prompt()
+	_test_app_root_reward_scene_uses_saved_controller_glyph_preference()
 	_test_app_root_consumes_reward_dialogue_after_acknowledgement()
 	_test_app_root_refreshes_reward_scene_after_acknowledgement()
 	_test_dialogue_interpolation()
@@ -234,6 +247,8 @@ func _run_tests() -> void:
 	_test_tetra_play_screen_renders_hand_score_and_turn_status()
 	_test_tetra_play_screen_renders_match_over_status()
 	_test_tetra_play_screen_renders_selectable_player_hand_buttons()
+	_test_tetra_play_screen_assigns_controller_focus_to_hand()
+	_test_tetra_play_screen_renders_controller_help_prompt()
 	_test_tetra_play_screen_selects_hand_and_plays_slot()
 	_test_tetra_play_screen_player_move_can_auto_run_opponent_turn()
 	_test_tetra_play_screen_emits_match_finished_payload()
@@ -264,6 +279,14 @@ func _run_tests() -> void:
 func _assert(condition: bool, message: String) -> void:
 	if not condition:
 		failures.append(message)
+
+func _input_action_has_joy_button(action: String, button_index: JoyButton) -> bool:
+	if not InputMap.has_action(action):
+		return false
+	for event in InputMap.action_get_events(action):
+		if event is InputEventJoypadButton and event.button_index == button_index:
+			return true
+	return false
 
 func _dictionary_with_id(entries: Array, entry_id: String) -> Dictionary:
 	for entry in entries:
@@ -612,6 +635,32 @@ func _test_character_creator_scene_has_completion_controls() -> void:
 	_assert(screen.current_selection().name == "Sev", "character creator reset button restores default name")
 	screen.queue_free()
 
+func _test_character_creator_scene_assigns_controller_focus() -> void:
+	var scene = load("res://scenes/character_creator/character_creator_screen.tscn")
+	var screen = scene.instantiate()
+	root.add_child(screen)
+	_assert(screen.has_method("controller_focus_target_names"), "character creator exposes controller focus targets")
+	if screen.has_method("controller_focus_target_names"):
+		var target_names: Array = screen.controller_focus_target_names()
+		_assert(target_names.has("NameEdit"), "character creator includes name field in controller focus order")
+		_assert(target_names.has("Confirm"), "character creator includes confirm button in controller focus order")
+		_assert(target_names.size() >= 20, "character creator exposes all option buttons to controller focus")
+	_assert(screen.has_method("controller_focus_owner_name"), "character creator exposes current controller focus")
+	if screen.has_method("controller_focus_owner_name"):
+		_assert(screen.controller_focus_owner_name() == "NameEdit", "character creator starts focus on name field")
+	screen.queue_free()
+
+func _test_character_creator_renders_controller_help_prompt() -> void:
+	var scene = load("res://scenes/character_creator/character_creator_screen.tscn")
+	var screen = scene.instantiate()
+	root.add_child(screen)
+	var prompt = screen.find_child("ControllerHelpPrompt", true, false)
+	_assert(prompt is Label, "character creator renders controller help prompt")
+	if prompt is Label:
+		_assert(prompt.text.contains("A / Enter"), "character creator prompt includes confirm input")
+		_assert(prompt.text.contains("B / Esc"), "character creator prompt includes cancel input")
+	screen.queue_free()
+
 func _test_character_creator_scene_confirm_emits_complete_profile() -> void:
 	var scene = load("res://scenes/character_creator/character_creator_screen.tscn")
 	var screen = scene.instantiate()
@@ -635,6 +684,36 @@ func _test_character_creator_scene_confirm_emits_complete_profile() -> void:
 	_assert(profile.starting_memory_card == "calling_name", "confirmed profile includes memory card")
 	_assert(profile.uncatalogued_dossier.flags.has("no_exhibit_tag"), "confirmed profile includes dossier")
 	screen.queue_free()
+
+func _test_input_map_defines_modern_controller_actions() -> void:
+	for action in ["move_up", "move_down", "move_left", "move_right", "interact", "cancel", "menu", "ui_accept", "ui_cancel", "ui_up", "ui_down", "ui_left", "ui_right", "page_left", "page_right"]:
+		_assert(InputMap.has_action(action), "input map defines %s action" % action)
+	_assert(_input_action_has_joy_button("move_up", JOY_BUTTON_DPAD_UP), "move up includes d-pad up")
+	_assert(_input_action_has_joy_button("move_down", JOY_BUTTON_DPAD_DOWN), "move down includes d-pad down")
+	_assert(_input_action_has_joy_button("move_left", JOY_BUTTON_DPAD_LEFT), "move left includes d-pad left")
+	_assert(_input_action_has_joy_button("move_right", JOY_BUTTON_DPAD_RIGHT), "move right includes d-pad right")
+	_assert(_input_action_has_joy_button("interact", JOY_BUTTON_A), "interact includes south face button")
+	_assert(_input_action_has_joy_button("cancel", JOY_BUTTON_B), "cancel includes east face button")
+	_assert(_input_action_has_joy_button("page_left", JOY_BUTTON_LEFT_SHOULDER), "page left includes left shoulder")
+	_assert(_input_action_has_joy_button("page_right", JOY_BUTTON_RIGHT_SHOULDER), "page right includes right shoulder")
+
+func _test_input_prompt_service_formats_controller_labels() -> void:
+	_assert(ResourceLoader.exists("res://scripts/core/input_prompt_service.gd"), "input prompt service exists")
+	var InputPromptService = load("res://scripts/core/input_prompt_service.gd")
+	var prompts = InputPromptService.new()
+	_assert(prompts.device_family_from_name("Xbox Wireless Controller") == "xbox", "prompt service detects Xbox controllers")
+	_assert(prompts.device_family_from_name("DualSense Wireless Controller") == "playstation", "prompt service detects PlayStation controllers")
+	_assert(prompts.device_family_from_name("Nintendo Switch Pro Controller") == "switch", "prompt service detects Switch controllers")
+	_assert(prompts.action_label("interact", "xbox") == "A", "prompt service formats Xbox interact")
+	_assert(prompts.action_label("cancel", "playstation") == "Circle", "prompt service formats PlayStation cancel")
+	_assert(prompts.action_label("interact", "keyboard") == "E / Enter", "prompt service formats keyboard interact")
+
+func _test_input_prompt_service_resolves_saved_glyph_preference() -> void:
+	var InputPromptService = load("res://scripts/core/input_prompt_service.gd")
+	var prompts = InputPromptService.new()
+	_assert(prompts.resolve_glyph_family("playstation", "Xbox Wireless Controller") == "playstation", "prompt service prefers saved PlayStation glyphs")
+	_assert(prompts.resolve_glyph_family("auto", "Nintendo Switch Pro Controller") == "switch", "prompt service auto-detects Switch glyphs")
+	_assert(prompts.resolve_glyph_family("bad_value", "Xbox Wireless Controller") == "xbox", "prompt service falls back from invalid glyph preference")
 
 func _test_app_root_confirmed_creator_starts_game_flow() -> void:
 	var StoryFlowService = load("res://scripts/core/story_flow_service.gd")
@@ -669,6 +748,32 @@ func _test_player_profile_persists_uncatalogued_dossier() -> void:
 	_assert(profile.uncatalogued_dossier.tags == ["origin_echo:paper_names"], "profile loads dossier tags")
 	var saved = profile.to_dict()
 	_assert(saved.uncatalogued_dossier.flags == ["no_exhibit_tag"], "profile saves dossier flags")
+
+func _test_accessibility_settings_persist_controller_options() -> void:
+	var AccessibilitySettings = load("res://scripts/accessibility/accessibility_settings.gd")
+	var settings = AccessibilitySettings.from_dict({
+		"controller_deadzone": 0.23,
+		"controller_glyph_family": "playstation",
+	})
+	_assert(is_equal_approx(settings.controller_deadzone, 0.23), "accessibility settings load controller deadzone")
+	_assert(settings.controller_glyph_family == "playstation", "accessibility settings load controller glyph family")
+	var saved: Dictionary = settings.to_dict()
+	_assert(is_equal_approx(float(saved.controller_deadzone), 0.23), "accessibility settings save controller deadzone")
+	_assert(saved.controller_glyph_family == "playstation", "accessibility settings save controller glyph family")
+
+func _test_game_state_save_roundtrip_preserves_controller_accessibility() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var SaveService = load("res://scripts/save/save_service.gd")
+	var state = GameStateScript.new()
+	state.accessibility.controller_deadzone = 0.31
+	state.accessibility.controller_glyph_family = "switch"
+	var payload = SaveService.new().build_payload(state.to_save_state())
+	var restored = GameStateScript.new()
+	restored.apply_save_payload(SaveService.new().migrate_payload(payload))
+	_assert(is_equal_approx(restored.accessibility.controller_deadzone, 0.31), "game state save roundtrip preserves controller deadzone")
+	_assert(restored.accessibility.controller_glyph_family == "switch", "game state save roundtrip preserves controller glyph family")
+	restored.free()
+	state.free()
 
 func _test_sev_record_service_summarizes_creator_loadout() -> void:
 	_assert(ResourceLoader.exists("res://scripts/core/sev_record_service.gd"), "Sev record service exists")
@@ -1040,6 +1145,39 @@ func _test_game_state_rebuilds_discovered_story_prop_list_from_legacy_flags() ->
 	_assert(discovered.has("discovered_prop_underchapel_museum_pipe"), "legacy evidence flag rebuilds discovered story prop list")
 	_assert(discovered.has("discovered_prop_hospital_medical_chart"), "legacy hospital evidence flag rebuilds discovered story prop list")
 	restored.free()
+
+func _test_manual_save_slot_roundtrip_preserves_slice_state() -> void:
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var SaveService = load("res://scripts/save/save_service.gd")
+	var save_path := "user://test_first_slice_manual_slot.save"
+	var state = GameStateScript.new()
+	state.map_id = "truth_recovered"
+	state.player_position = Vector2(64, 64)
+	state.inventory = {"bell_clapper": 1}
+	state.memory_cards = {"owned": ["bell_saint"], "equipped": ["bell_saint"]}
+	state.party.clear()
+	state.party.append({"id": "lead", "name": "Sev"})
+	state.party.append({"id": "mira_venn", "name": "Mira Venn"})
+	state.flags = {
+		"chapter_01_complete": true,
+		"boss_bell_saint_defeated": true,
+		"discovered_prop_underchapel_museum_pipe": true,
+		"discovered_story_props": ["discovered_prop_underchapel_museum_pipe"],
+	}
+	var error = SaveService.new().save_slot(save_path, state.to_save_state())
+	_assert(error == OK, "manual save slot writes first-slice state")
+	var payload: Dictionary = SaveService.new().load_slot(save_path)
+	var restored = GameStateScript.new()
+	restored.apply_save_payload(payload)
+	_assert(restored.map_id == "truth_recovered", "manual save roundtrip restores truth recovered map")
+	_assert(restored.inventory.get("bell_clapper", 0) == 1, "manual save roundtrip restores Bell Clapper")
+	_assert(restored.memory_cards.get("owned", []).has("bell_saint"), "manual save roundtrip restores Bell Saint memory card")
+	_assert(restored.flags.get("chapter_01_complete", false), "manual save roundtrip restores chapter complete flag")
+	_assert(restored.flags.get("discovered_story_props", []).has("discovered_prop_underchapel_museum_pipe"), "manual save roundtrip restores evidence list")
+	if FileAccess.file_exists(save_path):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path))
+	restored.free()
+	state.free()
 
 func _test_field_movement_and_interactions() -> void:
 	_assert(ResourceLoader.exists("res://scripts/field/field_controller.gd"), "field controller exists")
@@ -2887,6 +3025,52 @@ func _test_battle_screen_exposes_skill_and_item_commands() -> void:
 		_assert(popup is Label, "Item command shows healing popup")
 	screen.queue_free()
 
+func _test_battle_screen_assigns_controller_focus_to_commands() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "hp": 100, "skills": ["archive_strike"], "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 8}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55}]
+	)
+	_assert(screen.has_method("controller_focus_owner_name"), "battle screen exposes current controller focus")
+	if screen.has_method("controller_focus_owner_name"):
+		_assert(screen.controller_focus_owner_name() == "AttackButton", "battle screen starts focus on Attack command")
+	var commands = ["AttackButton", "SkillButton", "ItemButton", "DefendButton", "FleeButton"]
+	for node_name in commands:
+		var button = screen.get_node_or_null("%%%s" % node_name)
+		_assert(button is Button and button.focus_mode == Control.FOCUS_ALL, "battle command %s is controller-focusable" % node_name)
+	screen.open_skill_menu()
+	_assert(screen.controller_focus_owner_name().begins_with("Skill"), "battle screen moves focus into skill menu")
+	screen.queue_free()
+
+func _test_battle_screen_controller_cancel_closes_skill_menu() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	screen.battle.start_battle(
+		[{"id": "lead", "name": "Sev", "class_id": "spellblade", "level": 1, "xp": 0, "hp": 100, "skills": ["archive_strike"], "stats": {"max_hp": 100, "strength": 12, "magic": 9, "defense": 5, "speed": 8}}],
+		[{"id": "clean_man", "name": "Clean Man", "hp": 88, "max_hp": 88, "strength": 11, "defense": 6, "speed": 8, "xp": 55}]
+	)
+	screen.open_skill_menu()
+	var menu = screen.get_node_or_null("%SkillMenu")
+	_assert(menu is VBoxContainer and menu.visible, "battle cancel test starts with skill menu open")
+	_assert(screen.handle_controller_cancel(), "battle screen handles controller cancel while submenu is open")
+	_assert(not menu.visible, "battle controller cancel hides skill menu")
+	_assert(screen.controller_focus_owner_name() == "AttackButton", "battle controller cancel returns focus to commands")
+	screen.queue_free()
+
+func _test_battle_screen_renders_controller_help_prompt() -> void:
+	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
+	var screen = BattleScene.instantiate()
+	root.add_child(screen)
+	var prompt = screen.find_child("ControllerHelpPrompt", true, false)
+	_assert(prompt is Label, "battle screen renders controller help prompt")
+	if prompt is Label:
+		_assert(prompt.text.contains("A / Enter"), "battle prompt includes confirm input")
+		_assert(prompt.text.contains("B / Esc"), "battle prompt includes cancel input")
+	screen.queue_free()
+
 func _test_battle_screen_item_heals_most_wounded_living_party_member() -> void:
 	var BattleScene = load("res://scenes/battle/prototype_battle.tscn")
 	var screen = BattleScene.instantiate()
@@ -3795,6 +3979,43 @@ func _test_app_root_reward_scene_renders_acknowledgement_prompt() -> void:
 	app.queue_free()
 	game_state.free()
 
+func _test_app_root_reward_scene_uses_controller_prompt() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	game_state.flags["pending_reward_dialogue"] = {"section": "rewards", "scene": "memory_card_unlock"}
+	app.story_flow.go_to_phase("truth_recovered")
+	app._sync_scene()
+	var prompt = app.get_node_or_null("%SceneHost/RewardScenePanel/Content/AcknowledgePrompt")
+	_assert(prompt is Label, "reward scene renders controller acknowledgement prompt")
+	if prompt is Label:
+		_assert(prompt.text.contains("A / Enter"), "reward scene prompt includes modern controller and keyboard label")
+	app.queue_free()
+	game_state.free()
+
+func _test_app_root_reward_scene_uses_saved_controller_glyph_preference() -> void:
+	var AppRootScene = load("res://scenes/app/app_root.tscn")
+	var GameStateScript = load("res://scripts/core/game_state.gd")
+	var app = AppRootScene.instantiate()
+	var game_state = GameStateScript.new()
+	game_state.accessibility.controller_glyph_family = "playstation"
+	app.game_state_override = game_state
+	root.add_child(app)
+	app.story_flow.load_first_slice()
+	game_state.flags["pending_reward_dialogue"] = {"section": "rewards", "scene": "memory_card_unlock"}
+	app.story_flow.go_to_phase("truth_recovered")
+	app._sync_scene()
+	var prompt = app.get_node_or_null("%SceneHost/RewardScenePanel/Content/AcknowledgePrompt")
+	_assert(prompt is Label, "reward scene renders saved glyph acknowledgement prompt")
+	if prompt is Label:
+		_assert(prompt.text.contains("Cross / Enter"), "reward scene prompt honors saved PlayStation glyph preference")
+	app.queue_free()
+	game_state.free()
+
 func _test_app_root_consumes_reward_dialogue_after_acknowledgement() -> void:
 	var AppRootScene = load("res://scenes/app/app_root.tscn")
 	var GameStateScript = load("res://scripts/core/game_state.gd")
@@ -4452,6 +4673,32 @@ func _test_tetra_play_screen_renders_selectable_player_hand_buttons() -> void:
 	var first_button = screen.get_node("PlayerHandButtons").get_child(0)
 	_assert(first_button.text.contains(screen.player_hand[0].name), "tetra hand button uses card name")
 	_assert(first_button.text.contains("P:"), "tetra hand button shows power")
+	screen.queue_free()
+
+func _test_tetra_play_screen_assigns_controller_focus_to_hand() -> void:
+	var scene = load("res://scenes/minigames/tetra_play_screen.tscn")
+	var screen = scene.instantiate()
+	root.add_child(screen)
+	screen.setup_new_match()
+	_assert(screen.has_method("controller_focus_owner_name"), "tetra screen exposes controller focus owner")
+	if screen.has_method("controller_focus_owner_name"):
+		_assert(screen.controller_focus_owner_name() == "HandButton0", "tetra screen starts focus on first hand card")
+	var first_button = screen.get_node("PlayerHandButtons").get_child(0)
+	_assert(first_button is Button and first_button.focus_mode == Control.FOCUS_ALL, "tetra hand card buttons are controller-focusable")
+	screen.select_player_hand_card(0)
+	_assert(screen.controller_focus_owner_name() == "SlotButton0", "tetra screen moves focus to board slots after hand selection")
+	screen.queue_free()
+
+func _test_tetra_play_screen_renders_controller_help_prompt() -> void:
+	var scene = load("res://scenes/minigames/tetra_play_screen.tscn")
+	var screen = scene.instantiate()
+	root.add_child(screen)
+	screen.setup_new_match()
+	var prompt = screen.get_node_or_null("ControllerHelpPrompt")
+	_assert(prompt is Label, "tetra screen renders controller help prompt")
+	if prompt is Label:
+		_assert(prompt.text.contains("A / Enter"), "tetra prompt includes confirm input")
+		_assert(prompt.text.contains("D-pad"), "tetra prompt names directional navigation")
 	screen.queue_free()
 
 func _test_tetra_play_screen_selects_hand_and_plays_slot() -> void:

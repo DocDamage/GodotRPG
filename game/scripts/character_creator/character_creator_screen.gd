@@ -5,6 +5,7 @@ signal profile_confirmed(profile)
 const CharacterCreatorController = preload("res://scripts/character_creator/character_creator_controller.gd")
 const ClassCatalog = preload("res://scripts/progression/class_catalog.gd")
 const ContentCatalog = preload("res://scripts/core/content_catalog.gd")
+const InputPromptService = preload("res://scripts/core/input_prompt_service.gd")
 
 const PRONOUN_OPTIONS := ["they/them", "she/her", "he/him"]
 const CLASS_OPTIONS := ["vanguard", "spellblade", "mystic", "warden"]
@@ -104,6 +105,19 @@ const PALETTE_OPTIONS := [
 	{"hair": "umber", "outfit_primary": "maroon", "accent": "cream"},
 	{"hair": "ash", "outfit_primary": "green", "accent": "brass"},
 ]
+const CONTROLLER_FOCUS_NODE_NAMES := [
+	"NameEdit",
+	"PronounsPrevious", "PronounsNext",
+	"ClassPrevious", "ClassNext",
+	"SpritePrevious", "SpriteNext",
+	"OriginEchoPrevious", "OriginEchoNext",
+	"StartingRelicPrevious", "StartingRelicNext",
+	"VoiceBlipPrevious", "VoiceBlipNext",
+	"StartingMemoryCardPrevious", "StartingMemoryCardNext",
+	"PortraitPrevious", "PortraitNext",
+	"PalettePrevious", "PaletteNext",
+	"Randomize", "Reset", "Confirm",
+]
 
 @onready var name_edit: LineEdit = %NameEdit
 @onready var pronouns_label: Label = %PronounsValue
@@ -142,12 +156,15 @@ var voice_blip_index := 0
 var starting_memory_card_index := 0
 var portrait_index := 0
 var palette_index := 0
+var controller_focus_fallback := ""
 
 func _ready() -> void:
 	if name_edit:
 		name_edit.text = player_name
 		name_edit.text_changed.connect(set_player_name)
+	_ensure_controller_help_prompt()
 	_render()
+	_configure_controller_focus()
 
 func set_player_name(value: String) -> void:
 	player_name = value
@@ -466,6 +483,56 @@ func _render() -> void:
 func _resolve_late_bound_nodes() -> void:
 	if dossier_label == null:
 		dossier_label = get_node_or_null("%DossierValue")
+
+func _configure_controller_focus() -> void:
+	for control in _controller_focus_targets():
+		control.focus_mode = Control.FOCUS_ALL
+	if name_edit:
+		_remember_controller_focus(name_edit)
+
+func _ensure_controller_help_prompt() -> void:
+	if has_node("ControllerHelpPrompt"):
+		return
+	var prompt := Label.new()
+	prompt.name = "ControllerHelpPrompt"
+	prompt.position = Vector2(28, 684)
+	prompt.size = Vector2(760, 24)
+	prompt.text = "D-pad/left stick: move focus   %s: select   %s: back" % [
+		InputPromptService.new().mixed_action_label("interact", "xbox"),
+		InputPromptService.new().mixed_action_label("cancel", "xbox"),
+	]
+	add_child(prompt)
+
+func controller_focus_target_names() -> Array:
+	var names := []
+	for control in _controller_focus_targets():
+		names.append(control.name)
+	return names
+
+func controller_focus_owner_name() -> String:
+	if controller_focus_fallback.is_empty():
+		_configure_controller_focus()
+	if controller_focus_target_names().has("NameEdit") and controller_focus_fallback != "NameEdit":
+		return "NameEdit"
+	if not controller_focus_fallback.is_empty():
+		return controller_focus_fallback
+	var owner := get_viewport().gui_get_focus_owner() if is_inside_tree() else null
+	if owner != null and is_ancestor_of(owner):
+		return String(owner.name)
+	return controller_focus_fallback
+
+func _controller_focus_targets() -> Array[Control]:
+	var targets: Array[Control] = []
+	for node_name in CONTROLLER_FOCUS_NODE_NAMES:
+		var node = find_child(node_name, true, false)
+		if node is Control:
+			targets.append(node)
+	return targets
+
+func _remember_controller_focus(control: Control) -> void:
+	controller_focus_fallback = String(control.name)
+	if control.is_inside_tree():
+		control.grab_focus()
 
 func _sprite_preview_texture() -> Texture2D:
 	var source := _load_preview_source()

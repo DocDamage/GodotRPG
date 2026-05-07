@@ -7,6 +7,7 @@ const StoryFlowService = preload("res://scripts/core/story_flow_service.gd")
 const VistaCatalog = preload("res://scripts/core/vista_catalog.gd")
 const ContentCatalog = preload("res://scripts/core/content_catalog.gd")
 const EvidenceProgressService = preload("res://scripts/core/evidence_progress_service.gd")
+const InputPromptService = preload("res://scripts/core/input_prompt_service.gd")
 
 @onready var title_label: Label = %TitleLabel
 @onready var flow_label: Label = %FlowLabel
@@ -25,7 +26,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
 		_advance_flow()
-	elif event.is_action_pressed("menu"):
+	elif event.is_action_pressed("menu") or event.is_action_pressed("cancel"):
 		var game_state = _game_state()
 		if game_state != null:
 			game_state.save_manual_slot()
@@ -168,7 +169,7 @@ func _create_reward_scene_panel() -> Control:
 	margin.add_child(label)
 	var prompt := Label.new()
 	prompt.name = "AcknowledgePrompt"
-	prompt.text = "Interact: continue"
+	prompt.text = "Interact (%s): continue" % _input_prompt_label("interact")
 	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	prompt.position = Vector2(0, 206)
 	margin.add_child(prompt)
@@ -224,6 +225,15 @@ func _play_audio(event_id: String) -> void:
 	var audio = get_node_or_null("/root/Audio")
 	if audio and audio.has_method("play_event"):
 		audio.play_event(event_id)
+
+func _input_prompt_label(action: String) -> String:
+	var prompts := InputPromptService.new()
+	var game_state = _game_state()
+	var preference := "auto"
+	if game_state != null and game_state.accessibility != null:
+		preference = String(game_state.accessibility.controller_glyph_family)
+	var family := prompts.resolve_glyph_family(preference, "")
+	return prompts.mixed_action_label(action, family)
 
 func _resolve_late_bound_nodes() -> void:
 	if title_label == null:

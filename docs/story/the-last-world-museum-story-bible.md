@@ -115,6 +115,8 @@ Runtime status:
 - Story evidence inspections now set stable `discovered_prop_*` flags, show one-time "Evidence recovered" feedback, and maintain a `discovered_story_props` list, giving later codex entries, optional dialogue, and completion checks a real evidence trail.
 - The Truth Recovered reward panel now summarizes first-slice evidence progress as `Evidence Found: found / total`, plus an `Evidence Remaining` hint for the earliest maps still missing inspected story props. This lets the chapter close reflect how much of Hallowmere's hidden record the player examined.
 - Evidence discovery is save/load covered. If an older save has individual `discovered_prop_*` flags but no `discovered_story_props` list, the game rebuilds the list when loading.
+- The first playable slice now has a modern controller baseline: left stick and D-pad movement, face-button confirm/cancel, shoulder paging actions, saved deadzone/glyph accessibility settings, prompt labels, and controller focus on the character creator, battle commands, Tetra, and reward panel.
+- Pre-playtest hardening adds visible controller help prompts, battle cancel/back behavior for submenus, and manual-slot roundtrip coverage for chapter completion, rewards, Mira, and evidence progress.
 - Hallowmere now includes additional ambient residents and a `clean_cloth` side quest from the Sick Woman that grants Clean Bandages.
 - The hidden hospital now includes Nurse Echo and a `wrong_chart` side quest that grants the Fever Charm.
 - Mira recruitment, Bell Saint completion flags, Bell Clapper, and The Bell Saint Memory Card are save/load covered.

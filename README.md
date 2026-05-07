@@ -34,6 +34,7 @@ The slice starts with Sev's character creator, moves through the breached museum
 - Save/load payload coverage for route checkpoints before and after Bell Saint completion, plus autosave feedback on the chapter reward panel.
 - First-slice navigation and encounter pacing checks for safe spawns, clear transition points, lighter hospital patrols, and a tuned Bell Saint boss.
 - OGG-first curated runtime audio manifest with dedicated first-slice map entry and ambience cues.
+- Modern controller baseline: left stick and D-pad movement, face-button confirm/cancel, shoulder paging actions, Godot UI action mappings, saved deadzone/glyph accessibility settings, controller/keyboard prompt labels, and controller focus setup for the character creator, battle commands, Tetra, and reward panel.
 
 ## Requirements
 
@@ -74,3 +75,11 @@ The converter writes selected OGGs under `game/assets/audio`.
 - Manual visual QA for authored tile maps in the Godot editor, especially prop placement and visual readability.
 - Expand the prop manifest with final collision rectangles after editor playthrough confirms walk lanes.
 - Add final production UI art pass for the reward scene, save UI, and battle command panels.
+
+## Pre-Playtest Checklist
+
+- Complete the character creator with controller only.
+- Move through Hallowmere, inspect story props, complete side quests, and enter the dungeon with controller only.
+- In battle, open skills/items, cancel back to commands, select targets, defeat Bell Saint, and read the reward panel with controller only.
+- Start a Tetra match, select a hand card, move to board slots, and play a card with controller only.
+- Save after boss completion, restart, load, and confirm Bell Clapper, Bell Saint Memory Card, Mira, evidence progress, and autosave status remain intact.
